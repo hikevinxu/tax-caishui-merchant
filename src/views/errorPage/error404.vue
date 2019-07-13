@@ -1,7 +1,7 @@
 <template>
   <div class="error404">
     <div class="header">
-      <div class="back" @click="goBack()"><img src="@/assets_zx/ic_arrow_back.png" alt=""></div>
+      <!-- <div class="back" @click="goBack()"><img src="@/assets_zx/ic_arrow_back.png" alt=""></div> -->
       404
     </div>
     <div class="picInfo">
