@@ -14,14 +14,22 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/index'
+      redirect: '/merchant-h5'
     },
     {
       path: '/merchant-h5',
       name: 'merchant-h5',
       component: () => import('../views/merchant/merchant-h5.vue'),
       meta: {
-        title: '首页'
+        title: '商户入驻'
+      }
+    },
+    {
+      path: '/certification-h5',
+      name: 'certification-h5',
+      component: () => import('../views/merchant/certification-h5.vue'),
+      meta: {
+        title: '商户入驻'
       }
     },
     {

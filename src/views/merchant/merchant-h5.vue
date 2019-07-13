@@ -1,5 +1,5 @@
 <template>
-  <div class="index">
+  <div class="merchant-h5-page">
     <div class="merchant-h5">
       <div class="merchant-h5-header">
         <div class="header">
@@ -28,10 +28,10 @@
               <van-field v-model="name" placeholder="机构名称不能为空" />
             </div>
           </div>
-          <!-- <div class="formItem">
-            <label for="name">机构类型<span class="notNull">*</span></label>
+          <div class="formItem">
+            <label for="type">机构类型<span class="notNull">*</span></label>
             <div class="input">
-                <van-field readonly v-model="name" placeholder="请选择" @click="showPicker = true"/>
+                <van-field readonly v-model="type" placeholder="请选择" @click="showPicker = true"/>
             </div>
             <div class="picker">
               <van-popup v-model="showPicker" position="bottom">
@@ -45,7 +45,7 @@
             </div>
           </div>
           <div class="formItem upload">
-            <label for="name">机构Logo<span class="notNull">*</span></label>
+            <label for="fileList">机构Logo<span class="notNull">*</span></label>
             <div class="input">
               <van-uploader v-model="fileList" multiple :max-count="2" :before-read="beforeRead" />
             </div>
@@ -55,9 +55,9 @@
             </div>
           </div>
           <div class="formItem">
-            <label for="name">所在地区<span class="notNull">*</span></label>
+            <label for="position">所在地区<span class="notNull">*</span></label>
             <div class="input">
-                <van-field readonly v-model="name" placeholder="请选择" @click="showPicker = true"/>
+                <van-field readonly v-model="position" placeholder="请选择" @click="showPicker = true"/>
             </div>
             <div class="picker">
               <van-popup v-model="showPicker" position="bottom">
@@ -71,123 +71,182 @@
             </div>
           </div>
           <div class="formItem">
-            <label for="name">地图定位<span class="notNull">*</span></label>
+            <label for="laglng">地图定位<span class="notNull">*</span></label>
             <div class="input">
-                <van-field readonly v-model="name" placeholder="请选择" @click="showMapDialog"/>
+                <van-field readonly v-model="laglng" placeholder="请选择" @click="showMapDialog"/>
             </div>
             <div class="picker">
               <van-popup v-model="showMap" position="bottom" :style="{ height: '100%' }">
                 <div id="container">
-                  <el-amap vid="amap" ref="map" vid="amapDemo" :center="center" :zoom="zoom" :plugin="plugin" :events="events"></el-amap>
-                  <el-amap-search-box class="search-box" :search-option="searchOption" :on-search-result="onSearchResult"></el-amap-search-box>
+                  <el-amap vid="amap" ref="map" :center="center" :zoom="zoom" :plugin="plugin" :events="events"></el-amap>
+                  <div class="search-box">
+                    <span class="searchIcon"><img src="@/assets/global/back.png" alt=""></span>
+                    <el-amap-search-box :search-option="searchOption" :on-search-result="onSearchResult"></el-amap-search-box>
+                  </div>
                   <div class="point"></div>
                   <div class="selectAddress">
-                    <div class="text">{{address}}</div>
-                    <div class="btn" @click="getLagLng">确定</div>
+                    <div class="inner"> 
+                      <div class="text">
+                        <span><img src="@/assets/global/back.png" alt=""></span>
+                        <div class="addressDetail">{{address}}</div>
+                      </div>
+                      <div class="btn" >
+                        <van-button type="primary" size="large" @click="getLagLng">确定使用该地址</van-button>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </van-popup>
             </div>
           </div>
           <div class="formItem">
-            <label for="name">联系人</label>
+            <label for="person">联系人</label>
             <div class="input">
-                <van-field v-model="name" placeholder="请填写联系人" />
+                <van-field v-model="person" placeholder="请填写联系人" />
             </div>
           </div>
           <div class="formItem">
-            <label for="name">联系电话<span class="notNull">*</span></label>
+            <label for="phone">联系电话<span class="notNull">*</span></label>
             <div class="input">
-                <van-field v-model="name" placeholder="联系电话不能为空" />
+                <van-field v-model="phone" placeholder="联系电话不能为空" />
             </div>
           </div>
           <div class="formItem">
-            <label for="name">QQ号</label>
+            <label for="QQAccount">QQ号</label>
             <div class="input">
-                <van-field v-model="name" placeholder="请填写QQ号" />
+                <van-field v-model="QQAccount" placeholder="请填写QQ号" />
             </div>
           </div>
           <div class="formItem">
-            <label for="name">电子邮箱</label>
+            <label for="email">电子邮箱</label>
             <div class="input">
-              <van-field v-model="name" placeholder="请填写电子邮箱" />
+              <van-field v-model="email" placeholder="请填写电子邮箱" />
             </div>
-          </div> -->
+          </div>
+          <div class="formItem textArea">
+            <label for="email">详细介绍</label>
+            <div class="input">
+              <van-field v-model="intro" type="textarea" placeholder="请输入机构详细介绍" rows="3" />
+            </div>
+          </div>
+          <div class="formItem introPic">
+            <label for="email">介绍图 <span class="warning">添加几张图片，让您的服务更受欢迎</span></label>
+            <div class="input">
+              <div class="introPicList">
+                <van-uploader v-model="fileList" multiple :max-count="8" :before-read="beforeRead" />
+              </div>
+              <div class="prompt">
+                <p>最多8张 建议尺寸: 400*400px</p>
+              </div>
+            </div>
+          </div>
+          <div class="submitbtn">
+            <van-button type="primary" size="large">下一步</van-button>
+          </div>
         </div>
       </div>
     </div>
-    <button @click="goChat">去聊天</button>
+    <!-- <button @click="goChat">去聊天</button> -->
   </div>
 </template>
 
 <script>
 import Vue from 'vue'
+import VueAMap from 'vue-amap';
 import { setCookie } from '@/utils/cookie.js'
-import { Field, Picker } from 'vant'
-Vue.use(Field).use(Picker);
+import { Field, Picker, Popup, Uploader, Toast, Button, Icon } from 'vant'
+Vue.use(VueAMap).use(Field).use(Picker).use(Popup).use(Uploader).use(Toast).use(Button).use(Icon)
+
+// 初始化高德地图的 key 和插件
+VueAMap.initAMapApiLoader({
+  key: '54f7b2ff0b18deaefc0fd1925e434ead',
+  plugin: ['AMap.Autocomplete', 'AMap.PlaceSearch', 'AMap.Scale', 'AMap.OverView', 'AMap.ToolBar', 'AMap.MapType', 'AMap.PolyEditor', 'AMap.CircleEditor', 'AMap.Geocoder', 'AMap.Geolocation'],
+  // 默认高德 sdk 版本为 1.4.4
+  v: '1.4.4'
+});
+
 export default {
   data (){
     return {
       name: '',
-    columns: ['杭州', '宁波', '温州', '嘉兴', '湖州'],
-    showPicker: false,
-    username: '',
-    password: '',
-    fileList: [],
-    phone: '',
-    showMap: false,
-    searchOption: {
-      city: '杭州',
-      citylimit: true
-    },
-    center: [121.59996, 31.197646],
-    zoom: 16,
-    events: {
-      init: (o) => {
-        console.log(o)
+      type: '',
+      position: '',
+      laglng: '',
+      person: '',
+      phone: '',
+      QQAccount: '',
+      email: '',
+      intro: '',
+      columns: ['杭州', '宁波', '温州', '嘉兴', '湖州'],
+      showPicker: false,
+      username: '',
+      password: '',
+      fileList: [],
+      phone: '',
+      showMap: false,
+      searchOption: {
+        city: '杭州',
+        citylimit: true
       },
-      'dragend': (e) => {
-        var centerPoint = self.app.$refs.map.$$getCenter()
-        self.app.center = centerPoint
-        var geocoder = new AMap.Geocoder({
-          radius: 1000,
-          extensions: 'all'
-        })
-        geocoder.getAddress(centerPoint, function(status, result){
-          if (status == 'complete') {
-            console.log(result.regeocode)
-            self.app.address = result.regeocode.formattedAddress
-          }
-        })
-      }
-    },
-    plugin: [
-      'ToolBar', 
-      {
-        pName: 'Scale',
-        events: {
-          init(o) {
-            // console.log(o);
-          }
+      center: [121.59996, 31.197646],
+      zoom: 16,
+      events: {
+        init: (o) => {
+          console.log(o)
+        },
+        'dragend': (e) => {
+          console.log(this)
+          var centerPoint = this.$refs.map.$$getCenter()
+          this.center = centerPoint
+          var geocoder = new AMap.Geocoder({
+            radius: 1000,
+            extensions: 'all'
+          })
+          geocoder.getAddress(centerPoint, (status, result) => {
+            if (status == 'complete') {
+              console.log(result.regeocode)
+              this.address = result.regeocode.formattedAddress
+            }
+          })
         }
       },
-      {
-        pName: 'Geolocation',
-        events: {
-          init(o) {
-            // o 是高德地图定位插件实例
-            o.getCurrentPosition((status, result) => {
-              if (result && result.position) {
-                self.app.center = [result.position.lng, result.position.lat];
-                console.log(self.app.center)
-                vant.Toast.clear()
-              }
-            });
+      plugin: [
+        'ToolBar', 
+        {
+          pName: 'Scale',
+          events: {
+            init(o) {
+              // console.log(o);
+            }
+          }
+        },
+        {
+          pName: 'Geolocation',
+          events: {
+            init: (o) => {
+              // o 是高德地图定位插件实例
+              o.getCurrentPosition((status, result) => {
+                if (result && result.position) {
+                  console.log(self)
+                  this.center = [result.position.lng, result.position.lat];
+                  var geocoder = new AMap.Geocoder({
+                    radius: 1000,
+                    extensions: 'all'
+                  })
+                  geocoder.getAddress(this.center, (status, result) => {
+                    if (status == 'complete') {
+                      console.log(result.regeocode)
+                      this.address = result.regeocode.formattedAddress
+                    }
+                  })
+                  Toast.clear()
+                }
+              })
+            }
           }
         }
-      }
-    ],
-    address: ''
+      ],
+      address: ''
     }
   },
   methods: {
@@ -218,14 +277,14 @@ export default {
       }
       reader.readAsDataURL(file)
       // if (file.type !== 'image/jpeg') {
-      //   vant.Toast('请上传 jpg 格式图片');
+      //   Toast('请上传 jpg 格式图片');
       //   return false;
       // }
       return true;
     },
     showMapDialog(){
       this.showMap = true;
-      vant.Toast.loading({
+      Toast.loading({
         duration: 0,       // 持续展示 toast
         forbidClick: true, // 禁用背景点击
         loadingType: 'spinner',
@@ -260,7 +319,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#app {
+.merchant-h5-page {
   background-color: #f5f5f5;
 }
 .merchant-h5-header {
@@ -271,9 +330,6 @@ export default {
 .merchant-h5-header .header .headerContent .steps .two::before {
   background: #FFAD71;
 }
-/* .enterpriseInfo {
-
-} */
 .enterpriseInfo .title {
   height: 52px;
   font-family: PingFangSC-Medium;
@@ -284,11 +340,12 @@ export default {
   margin-left: 16px;
 }
 .enterpriseInfo .form {
-  background-color: #fff;
+  background-color: #f5f5f5;
 }
 .enterpriseInfo .form .formItem {
   height: 48px;
   display: flex;
+  background-color: #fff;
 }
 .enterpriseInfo .form .formItem.upload {
   height: 104px;
@@ -297,19 +354,14 @@ export default {
   margin-top: 16px;
   flex: 0;
 }
-.enterpriseInfo .form .formItem.upload .van-uploader__upload {
-  background-color: #f5f5f5;
-  border: 0;
-}
-.enterpriseInfo .form .formItem.upload .van-uploader__upload .van-icon-plus:before {
-  content: "\F098";
-}
+.enterpriseInfo .form .formItem.introPic .prompt,
 .enterpriseInfo .form .formItem.upload .prompt {
   font-family: PingFangSC-Regular;
   font-size: 12px;
   color: rgba(0,0,0,0.26);
   text-align: left;
   line-height: 18px;
+  margin-top: 34px;
 }
 .enterpriseInfo .form .formItem.upload .prompt p {
   margin: 0;
@@ -339,32 +391,43 @@ export default {
 	max-height: 100%;
 }
 #container {
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   position: relative;
 }
 .search-box {
   position: absolute;
-  top: 25px;
-  left: 20px;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 56px;
+  background: #FFFFFF;
+  box-shadow: none;
+  border-radius: 0;
+  .el-vue-search-box-container .search-box-wrapper input {
+    height: 36px;
+    line-height: 36px;
+  }
+}
+.search-box .searchIcon {
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  img {
+    width: 100%;
+    height: 100%;
+  }
 }
 #container .el-vue-search-box-container {
 	position: absolute;
-	width: 90%;
-	left: 50%;
-	transform: translate(-50%, 0);
-}
-#container .el-vue-search-box-container .search-tips {
-	width: 100%;
-}
-#container .amap-touch-toolbar .amap-zoomcontrol {
-	bottom: 0px;
-}
-#container .amap-geolocation-con {
-	bottom: 130px!important;
-}
-#container .amap-scalecontrol {
-	left: 10px!important;
-	bottom: 100px!important;
+  width: 100%;
+  height: 56px;
+  background: #FFFFFF;
+  box-shadow: none;
+  border-radius: 0;
+  // padding-left: 48px;
 }
 .point {
 	position: absolute;
@@ -376,32 +439,145 @@ export default {
 	background-color: pink;
 }
 .selectAddress {
-	width: 300px;
-	height: 50px;
-	background-color: #fff;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 16px;
+	height: 140px;
 	position: absolute;
-  	bottom: 25px;
-  	left: 50%;
+  bottom: 24px;
+  left: 50%;
 	transform: translate(-50%, 0);
-	display: flex;
+	.inner {
+    width: 100%;
+    height: 100%;
+    background: #FFFFFF;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.12);
+    border-radius: 4px;
+    overflow: hidden;
+    .btn {
+      margin: 0 24px;
+      margin-top: 16px;
+    }
+  }
 }
 .selectAddress .text {
-	flex: 1;
+  margin: 0 24px;
+  margin-top: 24px;
+  display: flex;
+  span {
+    display: block;
+    width: 20px;
+    height: 20px;
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+  .addressDetail {
+    flex: 1;
+    min-height: 40px;
+    margin-left: 10px;
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: rgba(0,0,0,0.87);
+    text-align: left;
+    line-height: 20px;
+  }
 }
-.selectAddress .btn {
-	width: 80px;
-	height: 50px;
-	background-color: green;
+.merchant-h5-page {
+  text-align: left;
+  .form {
+    .formItem.textArea {
+      display: block;
+      margin-top: 8px;
+      height: auto;
+      label {
+        width: 100%;
+      }
+      .input {
+        width: 100%;
+      }
+    }
+    .formItem.introPic {
+      display: block;
+      margin-top: 8px;
+      height: auto;
+      label {
+        width: 100%;
+        .warning {
+          font-family: PingFangSC-Regular;
+          font-size: 12px;
+          color: rgba(0,0,0,0.26);
+          text-align: left;
+          line-height: 18px;
+          margin-left: 12px;
+        }
+      }
+      .input {
+        padding: 0 16px 8px;
+        .prompt {
+          margin-top: 8px;
+        }
+      }
+    }
+    .submitbtn {
+      padding: 24px;
+      font-family: PingFangSC-Medium;
+      font-size: 15px;
+      color: #FFFFFF;
+      text-align: center;
+      line-height: 18px;
+    }
+  }
+}
+</style>
+<style lang="scss">
+.enterpriseInfo .form .formItem.introPic .van-uploader__upload,
+.enterpriseInfo .form .formItem.upload .van-uploader__upload {
+  background-color: #f5f5f5;
+  border: 0;
+}
+.enterpriseInfo .form .formItem.introPic .van-uploader__upload .van-icon-plus:before,
+.enterpriseInfo .form .formItem.upload .van-uploader__upload .van-icon-plus:before {
+  content: "\F098";
+}
+.enterpriseInfo {
+  .van-uploader__upload {
+    width: 72px;
+    height: 72px;
+  }
+  .btn .van-button--large,
+  .submitbtn .van-button--large {
+    height: 36px;
+    border-radius: 18px;
+    line-height: 36px;
+    background-image: linear-gradient(135deg, #FFAD71 0%, #FF7F4A 100%);
+    border: 0;
+  }
+  input::-webkit-input-placeholder{
+    color: rgba(0,0,0,0.26);
+  }
+  input::-moz-placeholder{
+    color: rgba(0,0,0,0.26);      
+  }
+  input:-ms-input-placeholder{ 
+    color: rgba(0,0,0,0.26);
+  }
 }
 
-input::-webkit-input-placeholder{
-  color: rgba(0,0,0,0.26);
+#container .el-vue-search-box-container .search-tips {
+	width: 100%;
 }
-input::-moz-placeholder{
-  color: rgba(0,0,0,0.26);      
+#container .amap-touch-toolbar .amap-zoomcontrol {
+	bottom: 80px;
 }
-input:-ms-input-placeholder{ 
-  color: rgba(0,0,0,0.26);
+#container .amap-geolocation-con {
+  left: 16px!important;
+	bottom: 190px!important;
 }
-
+#container .amap-scalecontrol {
+  display: none;
+	left: 10px!important;
+	bottom: 100px!important;
+}
 </style>
