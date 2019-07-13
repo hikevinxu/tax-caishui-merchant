@@ -33,6 +33,22 @@ export default new Router({
       }
     },
     {
+      path: '/search-h5',
+      name: 'search-h5',
+      component: () => import('../views/merchant/search-h5.vue'),
+      meta: {
+        title: '商户入驻'
+      }
+    },
+    {
+      path: '/success-h5',
+      name: 'success-h5',
+      component: () => import('../views/merchant/success-h5.vue'),
+      meta: {
+        title: '商户入驻'
+      }
+    },
+    {
       path: '/netError',
       name: 'netError',
       component: () => import('../views/errorPage/netError.vue'),

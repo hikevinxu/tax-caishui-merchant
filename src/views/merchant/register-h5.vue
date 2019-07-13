@@ -42,7 +42,7 @@
 
 <script>
 export default {
-  name: 'error404',
+  name: 'register-h5',
   data(){
     return{
         phone: '',
