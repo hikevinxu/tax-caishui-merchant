@@ -1,0 +1,103 @@
+.header{
+    width: 100%;
+    height: 100px;
+}
+
+.header .headerContent{
+    height: 100%;
+    width: 272px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.header .headerContent .steps{
+    width: 48px;
+    height: 100%;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.header .headerContent .steps .number{
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #F5F5F5;
+    border: 2px solid #E0E0E0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: PingFangSC-Medium;
+    font-size: 20px;
+    color: rgba(0,0,0,0.38);
+    line-height: 30px;
+    margin-bottom: 8px;
+    position: relative;
+}
+
+.header .headerContent .steps .one{
+    background: #FFEADA !important;
+    border: 2px solid #FFCFAC !important;
+    color: #FF7F4A !important; 
+}
+
+.header .headerContent .steps .acitve{
+    color: #FF7F4A;
+}
+
+.header .headerContent .steps .two::before{
+    position: absolute;
+    display: block;
+    content: '';
+    top: 50%;
+    left: -68px;
+    width: 55px;
+    height: 1px;
+    background:  rgba(0,0,0,0.12);
+}
+
+.header .headerContent .steps .two::after{
+    position: absolute;
+    display: block;
+    content: '';
+    top: 50%;
+    right: -68px;
+    width: 55px;
+    height: 1px;
+    background:  rgba(0,0,0,0.12);
+}
+
+.header .headerContent .steps .two_search::before{
+    position: absolute;
+    display: block;
+    content: '';
+    top: 50%;
+    left: -68px;
+    width: 55px;
+    height: 1px;
+    background:  #FFAD71;
+}
+
+.header .headerContent .steps .two_search::after{
+    position: absolute;
+    display: block;
+    content: '';
+    top: 50%;
+    right: -68px;
+    width: 55px;
+    height: 1px;
+    background:  rgba(0,0,0,0.12);
+}
+
+.header .headerContent .steps span{
+    font-family: PingFangSC-Regular;
+    font-size: 12px;
+    color: rgba(0,0,0,0.60);
+    /* text-align: left; */
+    line-height: 18px;
+}
+

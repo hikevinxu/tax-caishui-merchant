@@ -17,11 +17,19 @@ export default new Router({
       redirect: '/index'
     },
     {
-      path: '/index',
-      name: 'index',
-      component: () => import('../views/index/index.vue'),
+      path: '/merchant-h5',
+      name: 'merchant-h5',
+      component: () => import('../views/merchant/merchant-h5.vue'),
       meta: {
         title: '首页'
+      }
+    },
+    {
+      path: '/register-h5',
+      name: 'register-h5',
+      component: () => import('../views/merchant/register-h5.vue'),
+      meta: {
+        title: '商户入驻'
       }
     },
     {
@@ -44,12 +52,5 @@ export default new Router({
       path: '*',
       redirect: '/404'
     }
-  ],
-  scrollBehavior(to, from, saveTop){
-    if (saveTop) {
-      return saveTop
-    } else {
-      return { x: 0, y: 0 }
-    }
-  }
+  ]
 })

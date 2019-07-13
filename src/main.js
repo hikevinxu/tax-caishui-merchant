@@ -1,12 +1,13 @@
 import Vue from 'vue'
 import 'amfe-flexible'
 import 'babel-polyfill'
-import sa from 'sa-sdk-javascript'
+// import sa from 'sa-sdk-javascript'
 import App from './App.vue'
 import router from './router/index'
 import store from './store/index'
 import '@/common/css/reset.css'
 import '@/common/css/animate.css'
+import '@/common/css/h5Header.css'
 // import VConsole from 'vconsole'
 
 Vue.config.productionTip = false
