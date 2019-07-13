@@ -69,20 +69,18 @@ textarea {
   user-select: auto; 
 }
 
+button[disabled] {
+  color: rgba(255,255,255,0.7) !important;
+  background: #E0E0E0 !important;
+  border: none !important;
+}
+
 input::-webkit-input-placeholder{
-  color: rgba(0,0,0,0.38);
+  color: rgba(0,0,0,0.26);
 }
 input::-moz-placeholder{
-  color: rgba(0,0,0,0.38);      
+  color: rgba(0,0,0,0.26);      
 }
 input:-ms-input-placeholder{ 
-  color: rgba(0,0,0,0.38); 
-}
-textarea.van-field__control {
-  -webkit-user-select:auto; /*webkit浏览器*/
-  -webkit-select-user: auto!important;
-  -khtml-user-select: auto; 
-  -moz-user-select: auto;
-  -ms-user-select: auto;
-  user-select: auto; 
+  color: rgba(0,0,0,0.26);   
 }

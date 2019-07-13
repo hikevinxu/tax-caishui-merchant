@@ -93,6 +93,28 @@
     background:  rgba(0,0,0,0.12);
 }
 
+.header .headerContent .steps .two_success::before{
+    position: absolute;
+    display: block;
+    content: '';
+    top: 50%;
+    left: -68px;
+    width: 55px;
+    height: 1px;
+    background:  #FFAD71;
+}
+
+.header .headerContent .steps .two_success::after{
+    position: absolute;
+    display: block;
+    content: '';
+    top: 50%;
+    right: -68px;
+    width: 55px;
+    height: 1px;
+    background:  #FFAD71;
+}
+
 .header .headerContent .steps span{
     font-family: PingFangSC-Regular;
     font-size: 12px;
