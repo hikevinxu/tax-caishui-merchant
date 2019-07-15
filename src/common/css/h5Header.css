@@ -39,6 +39,12 @@
     position: relative;
 }
 
+.header .headerContent .steps .number img{
+    display: block;
+    width: 23px;
+    height: 23px;
+}
+
 .header .headerContent .steps .one{
     background: #FFEADA !important;
     border: 2px solid #FFCFAC !important;
