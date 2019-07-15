@@ -8,11 +8,11 @@ import store from './store/index'
 import '@/common/css/reset.css'
 import '@/common/css/animate.css'
 import '@/common/css/h5Header.css'
-// import VConsole from 'vconsole'
+import VConsole from 'vconsole'
 
 Vue.config.productionTip = false
 /* eslint-disable no-new */
-// new VConsole()
+new VConsole()
 
 // router.beforeEach((to, from, next) => {
 //   if (to.name === 'login' && from.path !== '/' && from.name !== 'login' && from.name !== 'powerOfAttoney') {
