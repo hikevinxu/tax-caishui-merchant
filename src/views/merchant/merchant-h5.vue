@@ -76,22 +76,34 @@
                 <van-field readonly v-model="laglng" placeholder="请选择" @click="showMapDialog"/>
             </div>
             <div class="picker">
-              <van-popup v-model="showMap" position="bottom" :style="{ height: '100%' }">
-                <div id="container">
-                  <el-amap vid="amap" ref="map" :center="center" :zoom="zoom" :plugin="plugin" :events="events"></el-amap>
-                  <div class="search-box">
-                    <span class="searchIcon"><img src="@/assets/global/back.png" alt=""></span>
-                    <el-amap-search-box :search-option="searchOption" :on-search-result="onSearchResult"></el-amap-search-box>
+              <van-popup v-model="showMap" :style="{ width: '100%', height: '100%' }">
+                <div class="mapContainer">
+                  <div class="closeIcon" @click="closeMapDialog">
+                    <img src="@/assets/global/ic_white_close.png" alt="">
                   </div>
-                  <div class="point"></div>
-                  <div class="selectAddress">
-                    <div class="inner"> 
-                      <div class="text">
-                        <span><img src="@/assets/global/back.png" alt=""></span>
-                        <div class="addressDetail">{{address}}</div>
-                      </div>
-                      <div class="btn" >
-                        <van-button type="primary" size="large" @click="getLagLng">确定使用该地址</van-button>
+                  <div id="container">
+                    <el-amap vid="amap" ref="map" :center="center" :zoom="zoom" :plugin="plugin" :events="events"></el-amap>
+                    <!-- <div class="mapHeader">
+                      <span @click="closeMapDialog" class="closeIcon"><img src="@/assets/global/ic_close@3x.png" alt=""></span>
+                      <span>地图定位</span>
+                    </div> -->
+                    <div class="search-box">
+                      <span class="searchIcon"><img src="@/assets/global/ic_search@3x.png" alt=""></span>
+                      <el-amap-search-box :search-option="searchOption" :on-search-result="onSearchResult"></el-amap-search-box>
+                    </div>
+                    <div class="reGetLocation" @click="getCurrentPositionLaglng">
+                      <div :class=" getLocationLoading ? 'geo_loading' : 'geo_over'"></div>
+                    </div>
+                    <div class="point"><img src="@/assets/global/location.png" alt=""></div>
+                    <div class="selectAddress">
+                      <div class="inner"> 
+                        <div class="text">
+                          <span><img src="@/assets/global/firm_ic_address@3x.png" alt=""></span>
+                          <div class="addressDetail">{{address}}</div>
+                        </div>
+                        <div class="btn" >
+                          <van-button type="primary" size="large" @click="getLagLng">确定使用该地址</van-button>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -154,6 +166,7 @@
 import Vue from 'vue'
 import VueAMap from 'vue-amap';
 import { setCookie } from '@/utils/cookie.js'
+import { nativeHideTitleBar } from '@/utils/nativeFunction.js'
 import { Field, Picker, Popup, Uploader, Toast, Button, Icon } from 'vant'
 Vue.use(VueAMap).use(Field).use(Picker).use(Popup).use(Uploader).use(Toast).use(Button).use(Icon)
 
@@ -188,14 +201,16 @@ export default {
         city: '杭州',
         citylimit: true
       },
+      getLocationLoading: false,
+      currentPosition: false,
       center: [121.59996, 31.197646],
       zoom: 16,
       events: {
         init: (o) => {
-          console.log(o)
+          // console.log(o)
         },
         'dragend': (e) => {
-          console.log(this)
+          // console.log(this)
           var centerPoint = this.$refs.map.$$getCenter()
           this.center = centerPoint
           var geocoder = new AMap.Geocoder({
@@ -204,7 +219,7 @@ export default {
           })
           geocoder.getAddress(centerPoint, (status, result) => {
             if (status == 'complete') {
-              console.log(result.regeocode)
+              // console.log(result.regeocode)
               this.address = result.regeocode.formattedAddress
             }
           })
@@ -225,29 +240,36 @@ export default {
           events: {
             init: (o) => {
               // o 是高德地图定位插件实例
-              o.getCurrentPosition((status, result) => {
-                if (result && result.position) {
-                  console.log(self)
-                  this.center = [result.position.lng, result.position.lat];
-                  var geocoder = new AMap.Geocoder({
-                    radius: 1000,
-                    extensions: 'all'
-                  })
-                  geocoder.getAddress(this.center, (status, result) => {
-                    if (status == 'complete') {
-                      console.log(result.regeocode)
-                      this.address = result.regeocode.formattedAddress
-                    }
-                  })
-                  Toast.clear()
-                }
-              })
+              // o.getCurrentPosition((status, result) => {
+              //   if (result && result.position) {
+              //     console.log(self)
+              //     this.center = [result.position.lng, result.position.lat];
+              //     var geocoder = new AMap.Geocoder({
+              //       radius: 1000,
+              //       extensions: 'all'
+              //     })
+              //     geocoder.getAddress(this.center, (status, result) => {
+              //       console.log(status)
+              //       if (status == 'complete') {
+              //         console.log(result.regeocode)
+              //         this.address = result.regeocode.formattedAddress
+              //         this.currentPosition = true
+              //       } else if(status == 'error') {
+              //         alert("定位失败！")
+              //       }
+              //       Toast.clear()
+              //     })
+              //   }
+              // })
             }
           }
         }
       ],
       address: ''
     }
+  },
+  created() {
+    
   },
   methods: {
     goChat(){
@@ -284,15 +306,23 @@ export default {
     },
     showMapDialog(){
       this.showMap = true;
-      Toast.loading({
-        duration: 0,       // 持续展示 toast
-        forbidClick: true, // 禁用背景点击
-        loadingType: 'spinner',
-        message: '正在获取当前位置'
-      });
+      // nativeHideTitleBar({hide: true})
+      // if (!this.currentPosition) {
+      //   Toast.loading({
+      //     duration: 0,       // 持续展示 toast
+      //     forbidClick: true, // 禁用背景点击
+      //     loadingType: 'spinner',
+      //     message: '正在获取当前位置'
+      //   });
+      // }
+      this.getCurrentPositionLaglng()
+    },
+    closeMapDialog(){
+      this.showMap = false;
+      nativeHideTitleBar({hide: false})
     },
     onSearchResult(pois) {
-      console.log(pois)
+      // console.log(pois)
       if (pois.length > 0) {
         let center = {
           lng: pois[0].lng,
@@ -305,14 +335,49 @@ export default {
         })
         geocoder.getAddress(this.center, (status, result) => {
           if (status == 'complete') {
-            console.log(result.regeocode)
+            // console.log(result.regeocode)
             this.address = result.regeocode.formattedAddress
           }
         })
       }
     },
     getLagLng(){
+      // console.log(this.plugin)
+      this.closeMapDialog()
       alert('当前地址为：' + this.address + ',当前经纬度为：' + this.center)
+    },
+    getCurrentPositionLaglng(){
+      this.getLocationLoading = true
+      Toast.loading({
+        duration: 0,       // 持续展示 toast
+        forbidClick: true, // 禁用背景点击
+        loadingType: 'spinner',
+        message: '正在获取当前位置'
+      });
+      var geolocation = new AMap.Geolocation({
+        // 是否使用高精度定位，默认：true
+        enableHighAccuracy: true,
+        // 设置定位超时时间，默认：无穷大
+        timeout: 10000,
+        // 定位按钮的停靠位置的偏移量，默认：Pixel(10, 20)
+        buttonOffset: new AMap.Pixel(10, 20),
+        //  定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
+        zoomToAccuracy: true,     
+        //  定位按钮的排放位置,  RB表示右下
+        buttonPosition: 'RB'
+      })
+
+      geolocation.getCurrentPosition()
+      AMap.event.addListener(geolocation, 'complete', (data) => {
+        this.center = [data.position.lng, data.position.lat];
+        this.address = data.formattedAddress
+        this.getLocationLoading = false
+        Toast.clear()
+      })
+      AMap.event.addListener(geolocation, 'error', (data) => {
+        Toast.clear()
+        Toast.fail("获取位置信息超时")
+      })
     }
   }
 }
@@ -391,30 +456,77 @@ export default {
 	max-height: 100%;
 }
 #container {
-  width: 100vw;
-  height: 100vh;
-  position: relative;
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  right: 16px;
+  bottom: 70px;
+  .reGetLocation {
+    position: absolute;
+    left: 16px;
+    bottom: 150px;
+    .geo_loading {
+      background: #fff url(https://webapi.amap.com/theme/v1.3/loading.gif) 50% 50% no-repeat;
+      width: 35px;
+      height: 35px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+    }
+    .geo_over {
+      background: #fff url(https://webapi.amap.com/theme/v1.3/markers/b/loc_gray.png) 50% 50% no-repeat;
+      width: 35px;
+      height: 35px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+    }
+  }
 }
 .search-box {
   position: absolute;
-  top: 0px;
-  left: 0px;
-  width: 100%;
-  height: 56px;
-  background: #FFFFFF;
-  box-shadow: none;
-  border-radius: 0;
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  height: 48px;
+  margin: 0 auto;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.12);
+  border-radius: 4px;
   .el-vue-search-box-container .search-box-wrapper input {
     height: 36px;
     line-height: 36px;
   }
 }
+// .mapHeader {
+//   position: absolute;
+//   top: 0px;
+//   left: 0px;
+//   width: 100%;
+//   height: 56px;
+//   background-color: #fff;
+//   text-align: center;
+//   line-height: 56px;
+//   font-family: PingFangSC-Medium;
+//   font-size: 16px;
+//   color: rgba(0,0,0,0.87);
+//   .closeIcon {
+//     position: absolute;
+//     top: 16px;
+//     left: 16px;
+//     width: 24px;
+//     height: 24px;
+//     img {
+//       display: block;
+//       width: 100%;
+//       height: 100%;
+//     }
+//   }
+// }
 .search-box .searchIcon {
   width: 24px;
   height: 24px;
   position: absolute;
-  top: 16px;
-  left: 16px;
+  top: 12px;
+  left: 12px;
+  z-index: 100000;
   img {
     width: 100%;
     height: 100%;
@@ -423,46 +535,48 @@ export default {
 #container .el-vue-search-box-container {
 	position: absolute;
   width: 100%;
-  height: 56px;
+  height: 48px;
   background: #FFFFFF;
   box-shadow: none;
   border-radius: 0;
-  // padding-left: 48px;
 }
 .point {
 	position: absolute;
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -100%);
-	width: 10px;
-	height: 50px;
-	background-color: pink;
+	width: 20px;
+  height: 40px;
+  background-color: transparent;
+  img {
+    display: block;
+    width: 100%;
+		height: 100%;
+  }
 }
 .selectAddress {
   width: 100%;
   box-sizing: border-box;
-  padding: 0 16px;
-	height: 140px;
 	position: absolute;
-  bottom: 24px;
+  bottom: 0px;
   left: 50%;
 	transform: translate(-50%, 0);
 	.inner {
     width: 100%;
-    height: 100%;
     background: #FFFFFF;
+    padding-bottom: 16px;
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.12);
     border-radius: 4px;
     overflow: hidden;
     .btn {
-      margin: 0 24px;
+      margin: 0 16px;
       margin-top: 16px;
     }
   }
 }
 .selectAddress .text {
-  margin: 0 24px;
-  margin-top: 24px;
+  margin: 0 16px;
+  margin-top: 16px;
   display: flex;
   span {
     display: block;
@@ -482,6 +596,12 @@ export default {
     color: rgba(0,0,0,0.87);
     text-align: left;
     line-height: 20px;
+    word-break: break-all;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
   }
 }
 .merchant-h5-page {
@@ -528,6 +648,25 @@ export default {
       text-align: center;
       line-height: 18px;
     }
+    .van-popup {
+      background: none;
+    }
+    .mapContainer {
+      width: 100%;
+      height: 100%;
+      .closeIcon {
+        width: 40px;
+        height: 40px;
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translate(-50%, 0);
+        img {
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
   }
 }
 </style>
@@ -563,15 +702,44 @@ export default {
   input:-ms-input-placeholder{ 
     color: rgba(0,0,0,0.26);
   }
+  .mapContainer .amap-logo {
+    display: none;
+  }
 }
-
+#container .el-vue-search-box-container {
+  height: 100%;
+}
 #container .el-vue-search-box-container .search-tips {
 	width: 100%;
 }
 #container .amap-touch-toolbar .amap-zoomcontrol {
-	bottom: 80px;
+  display: none;
+}
+.enterpriseInfo .el-vue-search-box-container .search-box-wrapper input {
+  height: 36px;
+  line-height: 36px;
+  padding-left: 25px;
+  border-radius: 2px;
+  margin-left: 8px;
+  margin-right: 10px;
+}
+.enterpriseInfo .el-vue-search-box-container .search-box-wrapper .search-btn {
+  font-size: 15px;
+  margin-right: 10px;
+  font-family: PingFangSC-Medium;
+  font-size: 15px;
+  color: rgba(0,0,0,0.87);
+  line-height: 18px;
+  display: block;
+  height: auto;
+  text-align: center;
+  border-left: 1px solid rgba(0,0,0,0.12);
+}
+.enterpriseInfo .el-vue-search-box-container .search-tips {
+  border: 0;
 }
 #container .amap-geolocation-con {
+  display: none;
   left: 16px!important;
 	bottom: 190px!important;
 }
@@ -579,5 +747,10 @@ export default {
   display: none;
 	left: 10px!important;
 	bottom: 100px!important;
+}
+.enterpriseInfo .van-popup {
+  -webkit-transition: 0s ease-out;
+  transition: 0s ease-out;
+  -webkit-overflow-scrolling: touch;
 }
 </style>
