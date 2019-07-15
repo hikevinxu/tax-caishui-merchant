@@ -41,6 +41,9 @@
 </template>
 
 <script>
+import Vue from 'vue';
+import { Toast } from 'vant';
+Vue.use(Toast);
 export default {
   name: 'register-h5',
   data(){
@@ -111,7 +114,7 @@ export default {
     sendCode(){
         let phone = this.phone
         if(!(/^1[345678]\d{9}$/.test(phone))){
-            vant.Toast('请输入正确的手机号')
+            Toast('请输入正确的手机号')
         }else{
             this.isCode = false
             this.getCode()

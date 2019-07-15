@@ -21,11 +21,11 @@
         <div class="search-h5-content">
             <div class="form">
                 <div class="inputBox">
-                    <input v-model="value" type="text" class="adressInput" @click="showPicker = true"  readonly="readonly">
+                    <input placeholder="请选择地区" v-model="value" type="text" class="adressInput" @click="showPicker = true"  readonly="readonly">
                     <img style="display: block;width: 24px;height: 24px;margin-right: 16px;" src="@/assets/global/ic_arrow_dropdown.png" alt="">
                 </div>
                 <div class="inputBox">
-                    <input v-model="name" type="text" class="nameInput" @input="nameInput">  
+                    <input placeholder="请输入公司名称" v-model="name" type="text" class="nameInput" @input="nameInput">  
                 </div>
                 <van-popup v-model="showPicker" position="bottom">
                     <van-picker
