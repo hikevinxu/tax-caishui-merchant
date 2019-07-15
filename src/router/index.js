@@ -14,7 +14,15 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/merchant-h5'
+      redirect: '/merchantHome-h5'
+    },
+    {
+      path: '/merchantHome-h5',
+      name: 'merchantHome-h5',
+      component: () => import('../views/merchant/merchantHome-h5.vue'),
+      meta: {
+        title: '商户入驻'
+      }
     },
     {
       path: '/merchant-h5',

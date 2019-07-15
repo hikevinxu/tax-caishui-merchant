@@ -58,6 +58,7 @@ table {
 
 input {
   -webkit-user-select:auto; /*webkit浏览器*/
+  outline: none;
 }
 
 textarea {

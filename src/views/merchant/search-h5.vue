@@ -3,7 +3,9 @@
         <div class="header">
             <div class="headerContent">
                 <div class="steps">
-                    <div class="number one">1</div>
+                    <div class="number one">
+                        <img src="@/assets/global/ic_stepdone.png" alt="" srcset="">
+                    </div>
                     <span class="acitve">注册账号</span>
                 </div>
                 <div class="steps">
@@ -20,7 +22,7 @@
             <div class="form">
                 <div class="inputBox">
                     <input v-model="value" type="text" class="adressInput" @click="showPicker = true"  readonly="readonly">
-                    <img style="display: block;width: 24px;height: 24px;margin-right: 16px;" src="@/assets/global/ic_arrow_dropdown@3x.png" alt="">
+                    <img style="display: block;width: 24px;height: 24px;margin-right: 16px;" src="@/assets/global/ic_arrow_dropdown.png" alt="">
                 </div>
                 <div class="inputBox">
                     <input v-model="name" type="text" class="nameInput" @input="nameInput">  
@@ -42,11 +44,11 @@
                     <div class="companInfo">
                         <div class="info-content">
                             <div class="adress" style="margin-bottom: 4px;">
-                                <img style="display: block;width: 16px;height: 16px;margin-right: 8px;" src="@/assets/global/firm_ic_address@3x.png" alt="">
+                                <img style="display: block;width: 16px;height: 16px;margin-right: 8px;" src="@/assets/global/firm_ic_address.png" alt="">
                                 <span>{{ item.adress }}</span>
                             </div>
                             <div class="phone">
-                                <img style="display: block;width: 16px;height: 16px;margin-right: 8px;" src="@/assets/global/firm_ic_address@3x.png" alt="">
+                                <img style="display: block;width: 16px;height: 16px;margin-right: 8px;" src="@/assets/global/firm_ic_phone.png" alt="">
                                 <span>{{ item.phone }}</span>
                             </div>
                         </div>
@@ -61,15 +63,18 @@
                     </div>
                 </div>
             </div>
+            <van-loading style="width: 50px;margin-left: auto;margin-right: auto;margin-top: 16px;" v-show="loading == true" type="spinner" />
         </div>
     </div>
 </template>
 
 <script>
 import Vue from 'vue';
-import { Picker,Popup } from 'vant';
+import { Picker,Popup,Loading } from 'vant';
+import { setTimeout } from 'timers';
 Vue.use(Picker);
 Vue.use(Popup);
+Vue.use(Loading);
 export default {
   name: 'search-h5',
   data(){
@@ -81,6 +86,7 @@ export default {
         disabled: true,
         result: false,
         length: 2,
+        loading: false,
         companyList: [
             {
                 name: '杭州税牛科技有限公司',
@@ -116,18 +122,23 @@ export default {
       
     },
     nameInput(e){
-        console.log(this.name)
+        console.log(this.value)
         if(this.name != '' && this.value != ''){
-            this.disabled = true
-        }else{
             this.disabled = false
+        }else{
+            this.disabled = true
         }
     },
     search(){
+        this.loading = true
         if(this.value != '' && this.name != ''){
-            this.result = true
+            let that = this
+            setTimeout(function(){
+                that.result = true
+                that.loading = false
+            },1000)
         }else{
-            this.result = false
+           this.result = false
         }
     }
   }
