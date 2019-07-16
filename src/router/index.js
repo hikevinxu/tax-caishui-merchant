@@ -41,6 +41,14 @@ export default new Router({
       }
     },
     {
+      path: '/agreement-h5',
+      name: 'agreement-h5',
+      component: () => import('../views/merchant/agreement-h5.vue'),
+      meta: {
+        title: '用户协议'
+      }
+    },
+    {
       path: '/register-h5',
       name: 'register-h5',
       component: () => import('../views/merchant/register-h5.vue'),
@@ -62,6 +70,14 @@ export default new Router({
       component: () => import('../views/merchant/success-h5.vue'),
       meta: {
         title: '商户入驻'
+      }
+    },
+    {
+      path: '/home',
+      name: 'home',
+      component: () => import('../views/merchantPC/home.vue'),
+      meta: {
+        title: '商户主页'
       }
     },
     {

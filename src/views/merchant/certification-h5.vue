@@ -4,11 +4,15 @@
       <div class="header">
           <div class="headerContent">
               <div class="steps">
-                  <div class="number one">1</div>
+                  <div class="number one">
+                      <img src="@/assets/global/ic_stepdone.png" alt="" srcset="">
+                  </div>
                   <span class="acitve">注册账号</span>
               </div>
               <div class="steps">
-                  <div class="number one two">2</div>
+                  <div class="number one two">
+                      <img src="@/assets/global/ic_stepdone.png" alt="" srcset="">
+                  </div>
                   <span class="acitve">认领企业</span>
               </div>
               <div class="steps">
@@ -59,11 +63,11 @@
         </div>
         <div class="xieyi">
           <div class="xieyiInner">
-             <van-checkbox v-model="checked">我已阅读并同意<span>《用户服务协议》</span></van-checkbox>
+             <van-checkbox v-model="checked">我已阅读并同意<span @click="jumpAgreement">《用户服务协议》</span></van-checkbox>
           </div>
         </div>
         <div class="submitbtn">
-          <van-button type="primary" size="large">提交申请</van-button>
+          <van-button type="primary" size="large" @click="jumpNextStep">提交申请</van-button>
         </div>
       </div>
     </div>
@@ -72,8 +76,8 @@
 
 <script>
 import Vue from 'vue'
-import { Field, Picker, Popup, Uploader, Toast, Button, Checkbox } from 'vant'
-Vue.use(Field).use(Picker).use(Popup).use(Uploader).use(Toast).use(Button).use(Checkbox)
+import { Field, Uploader, Toast, Button, Checkbox } from 'vant'
+Vue.use(Field).use(Uploader).use(Toast).use(Button).use(Checkbox)
 
 export default {
   data () {
@@ -86,6 +90,12 @@ export default {
   methods: {
     beforeRead() {
       console.log(123)
+    },
+    jumpAgreement () {
+      this.$router.push('agreement-h5')
+    },
+    jumpNextStep () {
+      this.$router.push('success-h5')
     }
   }
 }

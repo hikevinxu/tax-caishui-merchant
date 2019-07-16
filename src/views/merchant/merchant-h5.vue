@@ -5,7 +5,9 @@
         <div class="header">
             <div class="headerContent">
                 <div class="steps">
-                    <div class="number one">1</div>
+                    <div class="number one">
+                      <img src="@/assets/global/ic_stepdone.png" alt="" srcset="">
+                    </div>
                     <span class="acitve">注册账号</span>
                 </div>
                 <div class="steps">
@@ -32,6 +34,9 @@
             <label for="type">机构类型<span class="notNull">*</span></label>
             <div class="input">
                 <van-field readonly v-model="type" placeholder="请选择" @click="showPicker = true"/>
+                <div class="icon">
+                  <img src="@/assets/global/ic_arrow_dropdown@3x.png" alt="">
+                </div>
             </div>
             <div class="picker">
               <van-popup v-model="showPicker" position="bottom">
@@ -58,6 +63,9 @@
             <label for="position">所在地区<span class="notNull">*</span></label>
             <div class="input">
                 <van-field readonly v-model="position" placeholder="请选择" @click="showPicker = true"/>
+                <div class="icon">
+                  <img src="@/assets/global/ic_arrow_dropdown@3x.png" alt="">
+                </div>
             </div>
             <div class="picker">
               <van-popup v-model="showPicker" position="bottom">
@@ -74,6 +82,9 @@
             <label for="laglng">地图定位<span class="notNull">*</span></label>
             <div class="input">
                 <van-field readonly v-model="laglng" placeholder="请选择" @click="showMapDialog"/>
+                <div class="icon">
+                  <img src="@/assets/global/ic_form_location.png" alt="">
+                </div>
             </div>
             <div class="picker">
               <van-popup v-model="showMap" :style="{ width: '100%', height: '100%' }">
@@ -83,18 +94,19 @@
                   </div>
                   <div id="container">
                     <el-amap vid="amap" ref="map" :center="center" :zoom="zoom" :plugin="plugin" :events="events"></el-amap>
-                    <!-- <div class="mapHeader">
-                      <span @click="closeMapDialog" class="closeIcon"><img src="@/assets/global/ic_close@3x.png" alt=""></span>
-                      <span>地图定位</span>
-                    </div> -->
                     <div class="search-box">
                       <span class="searchIcon"><img src="@/assets/global/ic_search@3x.png" alt=""></span>
                       <el-amap-search-box :search-option="searchOption" :on-search-result="onSearchResult"></el-amap-search-box>
                     </div>
                     <div class="reGetLocation" @click="getCurrentPositionLaglng">
-                      <div :class=" getLocationLoading ? 'geo_loading' : 'geo_over'"></div>
+                      <div v-if="getLocationLoading" class="geo_over">
+                        <van-loading />
+                      </div>
+                      <div v-else class="geo_over">
+                        <img src="../../assets/global/ic_map_locating.png" alt="">
+                      </div>
                     </div>
-                    <div class="point"><img src="@/assets/global/location.png" alt=""></div>
+                    <div class="point"><img src="@/assets/global/map_pin.png" alt=""></div>
                     <div class="selectAddress">
                       <div class="inner"> 
                         <div class="text">
@@ -153,12 +165,11 @@
             </div>
           </div>
           <div class="submitbtn">
-            <van-button type="primary" size="large">下一步</van-button>
+            <van-button type="primary" size="large" @click="jumpNextStep">下一步</van-button>
           </div>
         </div>
       </div>
     </div>
-    <!-- <button @click="goChat">去聊天</button> -->
   </div>
 </template>
 
@@ -167,8 +178,8 @@ import Vue from 'vue'
 import VueAMap from 'vue-amap';
 import { setCookie } from '@/utils/cookie.js'
 import { nativeHideTitleBar } from '@/utils/nativeFunction.js'
-import { Field, Picker, Popup, Uploader, Toast, Button, Icon } from 'vant'
-Vue.use(VueAMap).use(Field).use(Picker).use(Popup).use(Uploader).use(Toast).use(Button).use(Icon)
+import { Field, Picker, Popup, Uploader, Toast, Button, Icon, Loading } from 'vant'
+Vue.use(VueAMap).use(Field).use(Picker).use(Popup).use(Uploader).use(Toast).use(Button).use(Icon).use(Loading)
 
 // 初始化高德地图的 key 和插件
 VueAMap.initAMapApiLoader({
@@ -198,12 +209,12 @@ export default {
       phone: '',
       showMap: false,
       searchOption: {
-        city: '杭州',
+        city: '',
         citylimit: true
       },
       getLocationLoading: false,
       currentPosition: false,
-      center: [121.59996, 31.197646],
+      center: [116.397477,39.908692],
       zoom: 16,
       events: {
         init: (o) => {
@@ -369,6 +380,7 @@ export default {
 
       geolocation.getCurrentPosition()
       AMap.event.addListener(geolocation, 'complete', (data) => {
+        console.log(data)
         this.center = [data.position.lng, data.position.lat];
         this.address = data.formattedAddress
         this.getLocationLoading = false
@@ -378,6 +390,9 @@ export default {
         Toast.clear()
         Toast.fail("获取位置信息超时")
       })
+    },
+    jumpNextStep () {
+      this.$router.push('certification-h5')
     }
   }
 }
@@ -411,6 +426,20 @@ export default {
   height: 48px;
   display: flex;
   background-color: #fff;
+  .input {
+    position: relative;
+    .icon {
+      width: 24px;
+      height: 24px;
+      position: absolute;
+      top: 12px;
+      right: 16px;
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
 }
 .enterpriseInfo .form .formItem.upload {
   height: 104px;
@@ -465,19 +494,31 @@ export default {
     position: absolute;
     left: 16px;
     bottom: 150px;
-    .geo_loading {
-      background: #fff url(https://webapi.amap.com/theme/v1.3/loading.gif) 50% 50% no-repeat;
-      width: 35px;
-      height: 35px;
-      border: 1px solid #ccc;
-      border-radius: 3px;
-    }
+    // .geo_loading {
+    //   // background: #fff url(https://webapi.amap.com/theme/v1.3/loading.gif) 50% 50% no-repeat;
+    //   width: 40px;
+    //   height: 40px;
+    //   border: 1px solid #ccc;
+    //   border-radius: 3px;
+    //   img {
+    //     width: 24px;
+    //     height: 24px;
+    //     margin: 8px;
+    //   }
+    // }
+    .geo_loading,
     .geo_over {
-      background: #fff url(https://webapi.amap.com/theme/v1.3/markers/b/loc_gray.png) 50% 50% no-repeat;
-      width: 35px;
-      height: 35px;
-      border: 1px solid #ccc;
+      width: 40px;
+      height: 40px;
       border-radius: 3px;
+      background: #FFFFFF;
+      box-shadow: 0 8px 16px 0 rgba(0,0,0,0.12);
+      border-radius: 4px;
+      img {
+        width: 24px;
+        height: 24px;
+        margin: 8px;
+      }
     }
   }
 }
@@ -495,31 +536,6 @@ export default {
     line-height: 36px;
   }
 }
-// .mapHeader {
-//   position: absolute;
-//   top: 0px;
-//   left: 0px;
-//   width: 100%;
-//   height: 56px;
-//   background-color: #fff;
-//   text-align: center;
-//   line-height: 56px;
-//   font-family: PingFangSC-Medium;
-//   font-size: 16px;
-//   color: rgba(0,0,0,0.87);
-//   .closeIcon {
-//     position: absolute;
-//     top: 16px;
-//     left: 16px;
-//     width: 24px;
-//     height: 24px;
-//     img {
-//       display: block;
-//       width: 100%;
-//       height: 100%;
-//     }
-//   }
-// }
 .search-box .searchIcon {
   width: 24px;
   height: 24px;
@@ -560,7 +576,9 @@ export default {
 	position: absolute;
   bottom: 0px;
   left: 50%;
-	transform: translate(-50%, 0);
+  transform: translate(-50%, 0);
+  box-shadow: 0 -8px 16px 0 rgba(0,0,0,0.12);
+  border-radius: 4px;
 	.inner {
     width: 100%;
     background: #FFFFFF;
@@ -569,14 +587,14 @@ export default {
     border-radius: 4px;
     overflow: hidden;
     .btn {
-      margin: 0 16px;
+      margin: 0 12px;
       margin-top: 16px;
     }
   }
 }
 .selectAddress .text {
-  margin: 0 16px;
-  margin-top: 16px;
+  margin: 0 12px;
+  margin-top: 24px;
   display: flex;
   span {
     display: block;
@@ -589,7 +607,6 @@ export default {
   }
   .addressDetail {
     flex: 1;
-    min-height: 40px;
     margin-left: 10px;
     font-family: PingFangSC-Regular;
     font-size: 14px;
@@ -708,6 +725,10 @@ export default {
 }
 #container .el-vue-search-box-container {
   height: 100%;
+  border-radius: 4px;
+}
+#container .el-vue-search-box-container .search-box-wrapper {
+  border-radius: 4px;
 }
 #container .el-vue-search-box-container .search-tips {
 	width: 100%;
@@ -725,7 +746,7 @@ export default {
 }
 .enterpriseInfo .el-vue-search-box-container .search-box-wrapper .search-btn {
   font-size: 15px;
-  margin-right: 10px;
+  padding: 0 5px;
   font-family: PingFangSC-Medium;
   font-size: 15px;
   color: rgba(0,0,0,0.87);
@@ -747,6 +768,15 @@ export default {
   display: none;
 	left: 10px!important;
 	bottom: 100px!important;
+}
+.enterpriseInfo .van-loading__spinner {
+  width: 20px;
+  height: 20px;
+  margin: 10px;
+  color: #333!important;
+}
+.enterpriseInfo .van-overlay {
+  background-color: rgba(0,0,0,.4);
 }
 .enterpriseInfo .van-popup {
   -webkit-transition: 0s ease-out;

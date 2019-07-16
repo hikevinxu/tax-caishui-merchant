@@ -117,7 +117,9 @@ export default {
             this.getCode()
         }
     },
-    login(){}
+    login(){
+      this.$router.push('/search-h5')
+    }
   }
 }
 </script>
