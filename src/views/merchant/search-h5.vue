@@ -57,7 +57,7 @@
                 </div>
                 <div class="addNew">
                     <span class="" style="font-size: 12px;color: rgba(0,0,0,0.60);">没有找到想要认领的企业？</span>
-                    <div class="addBtn">
+                    <div class="addBtn" @click='goClaim'>
                         <span style="font-size: 12px;color: #FFFFFF;">添加企业 ></span>
                         <!-- <img src="" alt="" srcset=""> -->
                     </div>
@@ -140,6 +140,9 @@ export default {
         }else{
            this.result = false
         }
+    },
+    goClaim(){
+        this.$router.push('/merchant-h5')
     }
   }
 }
