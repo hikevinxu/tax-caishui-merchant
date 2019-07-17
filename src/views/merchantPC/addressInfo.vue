@@ -7,9 +7,33 @@
       <div class="content">
         <div class="item info">
           <div class="itemTitle">公司地址</div>
-          <div class="text">
+          <!-- <div class="text">
             <p>浙江省杭州市</p>
             <p>双龙街199号金色西溪B座</p>
+          </div> -->
+          <!-- <div class="editAddress">
+            <div class="selectCity">
+              <div class="selectItem">
+                <input type="text" readonly placeholder="请选择省份" />
+                <ul class="provinceList">
+                  <li>杭州市</li>
+                  <li>杭州市</li>
+                  <li>杭州市</li>
+                  <li>杭州市</li>
+                  <li>杭州市</li>
+                  <li>杭州市</li>
+                </ul>
+              </div>
+              <div class="selectItem city">
+                <input type="text" readonly placeholder="请选择城市" />
+              </div>
+            </div>
+            <div class="input">
+              <input type="text" placeholder="请输入详细地址" />
+            </div>
+          </div> -->
+          <div class="editAddress">
+            
           </div>
         </div>
         <div class="item map">
@@ -19,8 +43,12 @@
           </div>
         </div>
       </div>
-      <div class="">
-
+      <!-- <div class="editBtn">
+        <button>编辑地址</button>
+      </div> -->
+      <div class="saveBtn">
+        <button class="cancel">取消</button>
+        <button class="save">保存</button>
       </div>
     </div>
   </div>
@@ -91,13 +119,112 @@ export default {
           }
         }
         .map {
-          background-color: green;
+          background-color: pink;
           height: 220Px;
           margin-top: 16Px;
         }
       }
       .info {
         border-right: 1Px solid rgba(0,0,0,0.08);
+        .editAddress {
+          margin-top: 16Px;
+          .selectCity {
+            width: auto;
+            height: 40Px;
+            background-color: #fff;
+            .selectItem {
+              float: left;
+              width: 224Px;
+              height: 40Px;
+              border-radius: 4Px;
+              background: #FAFAFA;
+              position: relative;
+              input {
+                box-sizing: border-box;
+                padding: 0 16Px;
+                display: block;
+                width: 100%;
+                height: 100%;
+                font-size: 14Px;
+                background: #FAFAFA;
+                line-height: 40Px;
+                cursor: pointer;
+              }
+              .provinceList {
+                width: 100%;
+                position: absolute;
+                top: 40Px;
+                left: 0;
+                font-size: 14Px;
+                box-sizing: border-box;
+                background-color: #fff;
+                border: 1px solid #ccc;
+                border-top: 0;
+                max-height: 150Px;
+                overflow: scroll;
+                li {
+                  display: block;
+                  box-sizing: border-box;
+                  height: 40Px;
+                  width: 100%;
+                  line-height: 40Px;
+                  padding: 0 16Px;
+                }
+              }
+              .provinceList::-webkit-scrollbar {
+                display: none;
+              }
+            }
+            .selectItem.city {
+              margin-left: 8Px;
+            }
+          }
+          .input {
+            input {
+              display: block;
+              width: 456Px;
+              height: 40Px; 
+              box-sizing: border-box;
+              padding: 0 16Px;
+              font-size: 14Px;
+              background: #FAFAFA;
+              line-height: 40Px;
+              margin-top: 16Px;
+            }
+          }
+        }
+      }
+    }
+    .saveBtn,
+    .editBtn {
+      float: right;
+      button {
+        width: 96Px;
+        height: 36Px;
+        border: 0;
+        outline: none;
+        cursor: pointer;
+        background: #5AB3A4;
+        border-radius: 4Px;
+        font-family: PingFangSC-Medium;
+        font-size: 15Px;
+        color: #FFFFFF;
+        text-align: center;
+        margin-top: 40Px;
+        margin-right: 28Px;
+        line-height: 36Px;
+      }
+      .cancel {
+        border: 1px solid rgba(0,0,0,0.38);
+        color: rgba(0,0,0,0.87);
+        font-size: 15Px;
+        background: #FFF;
+      }
+      .save {
+        background: #FF7F4A;
+      }
+      button:hover {
+        background: #000;
       }
     }
   }
