@@ -80,7 +80,7 @@
       <div class="new">
         <div class="container">
           <div class="new_title">
-            <h4>当月数据</h4>
+            <h4>商家新鲜事</h4>
             <span class="date">编辑于2019.07.08</span>
           </div>
           <div class="newContent">
@@ -118,7 +118,6 @@ export default {
   .homePc {
       width: 100vw;
       height: 100vh;
-      font-size: 48PX;
       .basics {
         width: 100%;
         min-width: 1040PX;
