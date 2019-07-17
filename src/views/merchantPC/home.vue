@@ -1,8 +1,6 @@
 <template>
-  <div class="home">
-    <div class="container">
-      <button @click="toChat">去聊天</button>
-    </div>
+  <div class="home" @click="toChat">
+    goChat
   </div>
 </template>
 <script>
@@ -25,9 +23,17 @@ export default {
 </script>
 <style lang="scss">
 .home {
+  width: 100vw;
+  height: 100vh;
   font-size: 48PX;
   .container {
-    font-size: 24PX;
+    width: 100%;
+    height: 100%;
+    font-size: 36PX;
+    .slide_menu {
+      width: 200Px;
+      height: 100%;
+    }
   }
 }
 </style>

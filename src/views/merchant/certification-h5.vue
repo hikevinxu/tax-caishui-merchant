@@ -80,6 +80,7 @@ import { Field, Uploader, Toast, Button, Checkbox } from 'vant'
 Vue.use(Field).use(Uploader).use(Toast).use(Button).use(Checkbox)
 
 export default {
+  name: 'certification-h5',
   data () {
     return {
       name: '',

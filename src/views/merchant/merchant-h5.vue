@@ -30,7 +30,7 @@
               <van-field v-model="name" placeholder="机构名称不能为空" />
             </div>
           </div>
-          <div class="formItem">
+          <div class="formItem rightIcon">
             <label for="type">机构类型<span class="notNull">*</span></label>
             <div class="input">
                 <van-field readonly v-model="type" placeholder="请选择" @click="showPicker = true"/>
@@ -52,7 +52,7 @@
           <div class="formItem upload">
             <label for="fileList">机构Logo<span class="notNull">*</span></label>
             <div class="input">
-              <van-uploader v-model="fileList" multiple :max-count="2" :before-read="beforeRead" />
+              <van-uploader v-model="fileList" multiple :max-count="1" :before-read="beforeRead" />
             </div>
             <div class="prompt">
               <p>请上传图片</p>
@@ -62,23 +62,18 @@
           <div class="formItem">
             <label for="position">所在地区<span class="notNull">*</span></label>
             <div class="input">
-                <van-field readonly v-model="position" placeholder="请选择" @click="showPicker = true"/>
+                <van-field readonly v-model="position" placeholder="请选择" @click="showAreaPicker = true"/>
                 <div class="icon">
                   <img src="@/assets/global/ic_arrow_dropdown@3x.png" alt="">
                 </div>
             </div>
-            <div class="picker">
-              <van-popup v-model="showPicker" position="bottom">
-                  <van-picker
-                    show-toolbar
-                    :columns="columns"
-                    @cancel="showPicker = false"
-                    @confirm="onConfirm"
-                  />
-                </van-popup>
+            <div class="picker rightIcon">
+              <van-popup v-model="showAreaPicker" position="bottom">
+                <van-area :area-list="areaList" :columns-num="3" title="请选择" @cancel="showAreaPicker = false" @confirm="selectArea" />
+              </van-popup>
             </div>
           </div>
-          <div class="formItem">
+          <div class="formItem rightIcon">
             <label for="laglng">地图定位<span class="notNull">*</span></label>
             <div class="input">
                 <van-field readonly v-model="laglng" placeholder="请选择" @click="showMapDialog"/>
@@ -86,8 +81,8 @@
                   <img src="@/assets/global/ic_form_location.png" alt="">
                 </div>
             </div>
-            <div class="picker">
-              <van-popup v-model="showMap" :style="{ width: '100%', height: '100%' }">
+            <!-- <div class="picker">
+              <van-popup v-model="showMap" :style="{ width: '100%', height: '100%', minHeight: '100%' }">
                 <div class="mapContainer">
                   <div class="closeIcon" @click="closeMapDialog">
                     <img src="@/assets/global/ic_white_close.png" alt="">
@@ -110,7 +105,7 @@
                     <div class="selectAddress">
                       <div class="inner"> 
                         <div class="text">
-                          <span><img src="@/assets/global/firm_ic_address@3x.png" alt=""></span>
+                          <span><img src="@/assets/global/ic_form_location.png" alt=""></span>
                           <div class="addressDetail">{{address}}</div>
                         </div>
                         <div class="btn" >
@@ -121,7 +116,7 @@
                   </div>
                 </div>
               </van-popup>
-            </div>
+            </div> -->
           </div>
           <div class="formItem">
             <label for="person">联系人</label>
@@ -177,9 +172,10 @@
 import Vue from 'vue'
 import VueAMap from 'vue-amap';
 import { setCookie } from '@/utils/cookie.js'
-import { nativeHideTitleBar } from '@/utils/nativeFunction.js'
-import { Field, Picker, Popup, Uploader, Toast, Button, Icon, Loading } from 'vant'
-Vue.use(VueAMap).use(Field).use(Picker).use(Popup).use(Uploader).use(Toast).use(Button).use(Icon).use(Loading)
+import { eventManager } from '@/utils/global'
+import areaList from '@/utils/areaList'
+import { Field, Picker, Popup, Uploader, Toast, Button, Icon, Loading, Area } from 'vant'
+Vue.use(VueAMap).use(Field).use(Picker).use(Popup).use(Uploader).use(Toast).use(Button).use(Icon).use(Loading).use(Area)
 
 // 初始化高德地图的 key 和插件
 VueAMap.initAMapApiLoader({
@@ -190,6 +186,7 @@ VueAMap.initAMapApiLoader({
 });
 
 export default {
+  name: 'merchant-h5',
   data (){
     return {
       name: '',
@@ -201,8 +198,10 @@ export default {
       QQAccount: '',
       email: '',
       intro: '',
-      columns: ['杭州', '宁波', '温州', '嘉兴', '湖州'],
+      columns: [],
+      areaList: areaList,
       showPicker: false,
+      showAreaPicker: false,
       username: '',
       password: '',
       fileList: [],
@@ -280,7 +279,13 @@ export default {
     }
   },
   created() {
-    
+    window.addEventListener('resize', function () {
+     if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') {
+        window.setTimeout(function () {
+          document.activeElement.scrollIntoViewIfNeeded()
+        }, 0)
+      }
+   })
   },
   methods: {
     goChat(){
@@ -291,6 +296,10 @@ export default {
     onConfirm(val){
       console.log(val)
       this.showPicker = false
+    },
+    selectArea(val){
+      this.position = val[0].name + ' ' + val[1].name + ' ' + val[2].name
+      this.showAreaPicker = false
     },
     // 返回布尔值
     beforeRead(file) {
@@ -316,21 +325,17 @@ export default {
       return true;
     },
     showMapDialog(){
-      this.showMap = true;
-      // nativeHideTitleBar({hide: true})
-      // if (!this.currentPosition) {
-      //   Toast.loading({
-      //     duration: 0,       // 持续展示 toast
-      //     forbidClick: true, // 禁用背景点击
-      //     loadingType: 'spinner',
-      //     message: '正在获取当前位置'
-      //   });
-      // }
-      this.getCurrentPositionLaglng()
+      // this.showMap = true
+      // this.getCurrentPositionLaglng()
+      eventManager.addEvent('mapLagLng', (data) => {
+        console.log(data)
+        this.laglng = data.address
+        eventManager.removeEvent('mapLagLng')
+      })
+      this.$router.push('/map-h5')
     },
     closeMapDialog(){
-      this.showMap = false;
-      nativeHideTitleBar({hide: false})
+      this.showMap = false
     },
     onSearchResult(pois) {
       // console.log(pois)
@@ -432,8 +437,8 @@ export default {
       width: 24px;
       height: 24px;
       position: absolute;
-      top: 12px;
-      right: 16px;
+      top: 10px;
+      right: 14px;
       img {
         width: 100%;
         height: 100%;
@@ -494,18 +499,6 @@ export default {
     position: absolute;
     left: 16px;
     bottom: 150px;
-    // .geo_loading {
-    //   // background: #fff url(https://webapi.amap.com/theme/v1.3/loading.gif) 50% 50% no-repeat;
-    //   width: 40px;
-    //   height: 40px;
-    //   border: 1px solid #ccc;
-    //   border-radius: 3px;
-    //   img {
-    //     width: 24px;
-    //     height: 24px;
-    //     margin: 8px;
-    //   }
-    // }
     .geo_loading,
     .geo_over {
       width: 40px;
@@ -688,17 +681,21 @@ export default {
 }
 </style>
 <style lang="scss">
-.enterpriseInfo .form .formItem.introPic .van-uploader__upload,
-.enterpriseInfo .form .formItem.upload .van-uploader__upload {
+.merchant-h5-page .enterpriseInfo .form .formItem.introPic .van-uploader__upload,
+.merchant-h5-page .enterpriseInfo .form .formItem.upload .van-uploader__upload {
   background-color: #f5f5f5;
   border: 0;
 }
-.enterpriseInfo .form .formItem.introPic .van-uploader__upload .van-icon-plus:before,
-.enterpriseInfo .form .formItem.upload .van-uploader__upload .van-icon-plus:before {
+.merchant-h5-page .enterpriseInfo .form .formItem.introPic .van-uploader__upload .van-icon-plus:before,
+.merchant-h5-page .enterpriseInfo .form .formItem.upload .van-uploader__upload .van-icon-plus:before {
   content: "\F098";
 }
-.enterpriseInfo {
+.merchant-h5-page .enterpriseInfo {
   .van-uploader__upload {
+    width: 72px;
+    height: 72px;
+  }
+  .van-uploader__preview-image {
     width: 72px;
     height: 72px;
   }
@@ -719,24 +716,33 @@ export default {
   input:-ms-input-placeholder{ 
     color: rgba(0,0,0,0.26);
   }
+  textarea::-webkit-input-placeholder{
+    color: rgba(0,0,0,0.26);
+  }
+  textarea::-moz-placeholder{
+    color: rgba(0,0,0,0.26);      
+  }
+  textarea:-ms-input-placeholder{ 
+    color: rgba(0,0,0,0.26);
+  }
   .mapContainer .amap-logo {
     display: none;
   }
 }
-#container .el-vue-search-box-container {
+.merchant-h5-page #container .el-vue-search-box-container {
   height: 100%;
   border-radius: 4px;
 }
-#container .el-vue-search-box-container .search-box-wrapper {
+.merchant-h5-page #container .el-vue-search-box-container .search-box-wrapper {
   border-radius: 4px;
 }
-#container .el-vue-search-box-container .search-tips {
+.merchant-h5-page #container .el-vue-search-box-container .search-tips {
 	width: 100%;
 }
-#container .amap-touch-toolbar .amap-zoomcontrol {
+.merchant-h5-page #container .amap-touch-toolbar .amap-zoomcontrol {
   display: none;
 }
-.enterpriseInfo .el-vue-search-box-container .search-box-wrapper input {
+.merchant-h5-page .enterpriseInfo .el-vue-search-box-container .search-box-wrapper input {
   height: 36px;
   line-height: 36px;
   padding-left: 25px;
@@ -744,7 +750,7 @@ export default {
   margin-left: 8px;
   margin-right: 10px;
 }
-.enterpriseInfo .el-vue-search-box-container .search-box-wrapper .search-btn {
+.merchant-h5-page .enterpriseInfo .el-vue-search-box-container .search-box-wrapper .search-btn {
   font-size: 15px;
   padding: 0 5px;
   font-family: PingFangSC-Medium;
@@ -756,31 +762,44 @@ export default {
   text-align: center;
   border-left: 1px solid rgba(0,0,0,0.12);
 }
-.enterpriseInfo .el-vue-search-box-container .search-tips {
+.merchant-h5-page .enterpriseInfo .el-vue-search-box-container .search-tips {
   border: 0;
 }
-#container .amap-geolocation-con {
+.merchant-h5-page #container .amap-geolocation-con {
   display: none;
   left: 16px!important;
 	bottom: 190px!important;
 }
-#container .amap-scalecontrol {
+.merchant-h5-page #container .amap-scalecontrol {
   display: none;
 	left: 10px!important;
 	bottom: 100px!important;
 }
-.enterpriseInfo .van-loading__spinner {
+.merchant-h5-page .enterpriseInfo .van-loading__spinner {
   width: 20px;
   height: 20px;
   margin: 10px;
   color: #333!important;
 }
-.enterpriseInfo .van-overlay {
+.merchant-h5-page .enterpriseInfo .van-overlay {
   background-color: rgba(0,0,0,.4);
 }
-.enterpriseInfo .van-popup {
+.merchant-h5-page .enterpriseInfo .van-popup {
   -webkit-transition: 0s ease-out;
   transition: 0s ease-out;
   -webkit-overflow-scrolling: touch;
+}
+.merchant-h5-page .van-cell:not(:last-child)::after {
+  border: 0;
+}
+.merchant-h5-page .form .formItem .input .van-cell {
+  padding-left: 0;
+}
+.merchant-h5-page .form .formItem.rightIcon .input .van-cell {
+  padding-right: 44px;
+  padding-left: 0;
+}
+.merchant-h5-page .form .formItem.textArea .input .van-cell {
+  padding-left: 16px;
 }
 </style>

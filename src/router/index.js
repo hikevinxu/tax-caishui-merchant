@@ -49,6 +49,14 @@ export default new Router({
       }
     },
     {
+      path: '/map-h5',
+      name: 'map-h5',
+      component: () => import('../views/merchant/map-h5.vue'),
+      meta: {
+        title: '地图'
+      }
+    },
+    {
       path: '/register-h5',
       name: 'register-h5',
       component: () => import('../views/merchant/register-h5.vue'),
@@ -73,12 +81,17 @@ export default new Router({
       }
     },
     {
-      path: '/home',
-      name: 'home',
-      component: () => import('../views/merchantPC/home.vue'),
-      meta: {
-        title: '商户主页'
-      }
+      path: '/mainFrame',
+      name: 'mainFrame',
+      component: () => import('../components/merchantPC/mainFrame.vue'),
+      children: [{
+        path: '/home',
+        name: 'home',
+        component: () => import('../views/merchantPC/home.vue'),
+        meta: {
+          title: '商户主页'
+        }
+      }]
     },
     {
       path: '/login',
