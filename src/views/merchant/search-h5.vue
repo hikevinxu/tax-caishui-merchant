@@ -28,12 +28,7 @@
                     <input placeholder="请输入公司名称" v-model="name" type="text" class="nameInput" @input="nameInput">  
                 </div>
                 <van-popup v-model="showPicker" position="bottom">
-                    <van-picker
-                        show-toolbar
-                        :columns="columns"
-                        @cancel="showPicker = false"
-                        @confirm="onConfirm"
-                    />
+                    <van-area :area-list="areaList" value="110000" @confirm="onConfirm" />
                 </van-popup>
                 <button id="search" :disabled="disabled" @click="search">搜索企业</button>
             </div>
@@ -69,9 +64,12 @@
 </template>
 
 <script>
+import AreaList from '@/common/js/area'
 import Vue from 'vue';
 import { Picker,Popup,Loading } from 'vant';
 import { setTimeout } from 'timers';
+import { Area } from 'vant';
+Vue.use(Area);
 Vue.use(Picker);
 Vue.use(Popup);
 Vue.use(Loading);
@@ -82,10 +80,10 @@ export default {
         value: '',
         name: '',
         showPicker: false,
-        columns: ['杭州', '宁波', '温州', '嘉兴', '湖州'],
         disabled: true,
         result: false,
         length: 2,
+        areaList: AreaList,
         loading: false,
         companyList: [
             {
@@ -111,15 +109,15 @@ export default {
   },
   methods: {
     onConfirm(value) {
-      this.value = value;
-      this.showPicker = false;
-      console.log(this.value)
-      if(this.name != ''){
-          this.disabled = false
-      }else{
-          this.disabled = true
-      }
-      
+        console.log(value)
+        this.value = value[0].name + value[1].name + value[2].name
+        console.log(this.value)
+        this.showPicker = false;
+        if(this.name != ''){
+            this.disabled = false
+        }else{
+            this.disabled = true
+        }
     },
     nameInput(e){
         console.log(this.value)

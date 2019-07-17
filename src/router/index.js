@@ -81,6 +81,14 @@ export default new Router({
       }
     },
     {
+      path: '/login',
+      name: 'logn',
+      component: () => import('../views/merchantPC/login.vue'),
+      meta: {
+        title: '财税鱼登录'
+      }
+    },
+    {
       path: '/netError',
       name: 'netError',
       component: () => import('../views/errorPage/netError.vue'),
