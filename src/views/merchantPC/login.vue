@@ -1,6 +1,7 @@
 <template>
   <div class="loginPc">
     <div class="loginPc_container">
+        <head-nav id="mainHeader"></head-nav>
         <div class="login_form">
             <div class="form">
                 <h4 style="font-size: 20PX;color: rgba(0,0,0,0.87);">登录财税鱼</h4>
@@ -33,9 +34,12 @@
   </div>
 </template>
 <script>
-
+import headNav from '@/components/merchantPC/headNav.vue'
 export default {
   name: 'login',
+  components: {
+    headNav
+  },
   data(){
     return {
         phone: '',
