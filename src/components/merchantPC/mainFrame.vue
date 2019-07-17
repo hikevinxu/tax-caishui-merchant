@@ -41,6 +41,7 @@ export default {
     background: rgba(0,0,0,0.04);
     padding-top: 96Px;
     padding-left: 212Px;
+    padding-right: 28Px;
   }
 }
 </style>
