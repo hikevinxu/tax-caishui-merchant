@@ -10,7 +10,7 @@
 export default {
   data () {
     return {
-      keepAlive: ['certification-h5']
+      keepAlive: ['certification-h5', 'merchant-h5']
     }
   }
 }

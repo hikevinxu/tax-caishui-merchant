@@ -4,6 +4,7 @@ module.exports = {
     'postcss-pxtorem': {
       rootValue: 36,
       propWhiteList: [],
+      selectorBlackList: ['.el-'],
       minPixelValue: 2
     }
   }
