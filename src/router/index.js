@@ -84,14 +84,64 @@ export default new Router({
       path: '/mainFrame',
       name: 'mainFrame',
       component: () => import('../components/merchantPC/mainFrame.vue'),
-      children: [{
-        path: '/home',
-        name: 'home',
-        component: () => import('../views/merchantPC/home.vue'),
-        meta: {
-          title: '商户主页'
+      children: [
+        {
+          path: '/home',
+          name: 'home',
+          component: () => import('../views/merchantPC/home.vue'),
+          meta: {
+            title: '商户主页'
+          }
+        },
+        {
+          path: '/basicInfo',
+          name: 'basicInfo',
+          component: () => import('../views/merchantPC/basicInfo.vue'),
+          meta: {
+            title: '基本资料'
+          }
+        },
+        {
+          path: '/addressInfo',
+          name: 'addressInfo',
+          component: () => import('../views/merchantPC/addressInfo.vue'),
+          meta: {
+            title: '地址信息'
+          }
+        },
+        {
+          path: '/publicityFigure',
+          name: 'publicityFigure',
+          component: () => import('../views/merchantPC/publicityFigure.vue'),
+          meta: {
+            title: '宣传图片'
+          }
+        },
+        {
+          path: '/mainBusiness',
+          name: 'mainBusiness',
+          component: () => import('../views/merchantPC/mainBusiness.vue'),
+          meta: {
+            title: '主营业务管理'
+          }
+        },
+        {
+          path: '/recordsCenter',
+          name: 'recordsCenter',
+          component: () => import('../views/merchantPC/home.vue'),
+          meta: {
+            title: '数据中心'
+          }
+        },
+        {
+          path: '/messageCenter',
+          name: 'messageCenter',
+          component: () => import('../views/merchantPC/messageCenter.vue'),
+          meta: {
+            title: '消息中心'
+          }
         }
-      }]
+      ]
     },
     {
       path: '/login',
