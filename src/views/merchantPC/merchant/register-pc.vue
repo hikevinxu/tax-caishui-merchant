@@ -57,9 +57,7 @@
 </template>
 <script>
 import headNav from '@/components/merchantPC/headNav.vue'
-import Vue from 'vue';
-import { Toast } from 'vant';
-Vue.use(Toast);
+
 export default {
   name: 'login',
   components: {
@@ -130,14 +128,19 @@ export default {
     sendCode(){
         let phone = this.phone
         if(!(/^1[345678]\d{9}$/.test(phone))){
-            Toast('请输入正确的手机号')
+            this.$message({
+              message: '请输入正确的手机号',
+              type: 'error',
+              showClose: true,
+              duration: 1000
+            })
         }else{
             this.isCode = false
             this.getCode()
         }
     },
     login(){
-      this.$router.push('/search-h5')
+      this.$router.push('/home')
     }
   }
 }
@@ -178,7 +181,7 @@ export default {
                         margin-left: auto;
                         margin-right: auto;
                         .steps{
-                            width: 48PX;
+                            width: 60PX;
                             height: 100%;
                             display: flex;
                             flex-flow: column;
@@ -375,9 +378,9 @@ export default {
                                 display: flex;
                                 align-items: center;
                                 justify-content: center;
-                                border: 1PX solid rgba(0,0,0,0.60);
+                                border: 1PX solid rgba(0,0,0,0.20);
                                 font-size: 13PX;
-                                color: rgba(0,0,0,0.60);
+                                color: rgba(0,0,0,0.20);
                             }
                             .isCode{
                                 background: #FAFAFA;
