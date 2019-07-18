@@ -1,6 +1,6 @@
 <template>
-  <div class="registerPc">
-    <div class="registerPc_container">
+  <div class="searchPc">
+    <div class="searchPc_container">
         <head-nav id="mainHeader"></head-nav>
         <div class="registerContent">
             <div class="header">
@@ -10,34 +10,12 @@
                         <span class="active">注册账号</span>
                     </div>
                     <div class="steps">
-                        <div class="numberPC two">2</div>
-                        <span>认领企业</span>
+                        <div class="numberPC one two_search">2</div>
+                        <span class="active">认领企业</span>
                     </div>
                     <div class="steps">
                         <div class="numberPC">3</div>
                         <span>提交资质</span>
-                    </div>
-                </div>
-            </div>
-            <div class="register_form">
-                <h4>注册账号</h4>
-                <div class="form">
-                    <div class="inputBox">
-                        <img src="@/assets/globalPc/ic_form_cellnum.png" alt="">
-                        <input type="text" v-model="phone" class="phoneInput" maxlength="11" placeholder="账号使用手机号" @input="phoneInput" >
-                    </div>
-                    <div class="code">
-                        <div class="codeInputBox">
-                            <img src="@/assets/globalPc/ic_form_cellnum.png" alt="">
-                            <input type="text" v-model="code" class="codeInput" maxlength="4" placeholder="验证码" @input="codeInput">
-                        </div>
-                        <span v-show="codeStart == true" class="codeStart">获取验证码</span>
-                        <span v-show="isCode == true && codeStart == false" class="isCode"  @click="sendCode">获取验证码</span>
-                        <span class="count" v-show="isCode == false && codeStart == false">{{ count }}s后获取</span>
-                    </div>
-                    <div class="inputBox">
-                        <img src="@/assets/globalPc/ic_form_password.png" alt="">
-                        <input type="text" v-model="password" class="passwordInput" maxlength="11" placeholder="密码, 6～16位数字字母组合" @input="passwordInput" >
                     </div>
                 </div>
             </div>
@@ -65,93 +43,77 @@ export default {
   },
   data(){
     return {
-        phone: '',
-        password: '',
-        codeStart: true,
-        isCode: true,
-        count: 0,
-        disabled_code: true,
+        value: '',
+        name: '',
+        showPicker: false,
         disabled: true,
-        code: '',
-        timer: null,
+        result: false,
+        length: 2,
+        areaList: AreaList,
+        loading: false,
+        companyList: [
+            {
+                name: '杭州税牛科技有限公司',
+                adress: '浙江省杭州市西湖区双龙街199号金色西溪B座8楼',
+                phone: '0571-29182721'
+            },
+            {
+                name: '杭州税牛科技有限公司',
+                adress: '浙江省杭州市西湖区双龙街199号金色西溪B座8楼',
+                phone: '0571-29182721'
+            },
+            {
+                name: '杭州税牛科技有限公司',
+                adress: '浙江省杭州市西湖区双龙街199号金色西溪B座8楼',
+                phone: '0571-29182721'
+            }
+        ]
     }
   },
   methods: {
-    getCode(){
-        let time = 60
-        if(!this.timer){
-            this.count = time
-            this.timer = setInterval(() => {
-               if(this.count > 0 && this.count <= time){
-                   this.count -- 
-                   console.log(this.count)
-               }else{
-                   clearInterval(this.timer);
-                   this.timer = null; 
-                   this.isCode = true
-                   this.sendIng = false
-               }
+    // onConfirm(value) {
+    //     console.log(value)
+    //     this.value = value[0].name + value[1].name + value[2].name
+    //     console.log(this.value)
+    //     this.showPicker = false;
+    //     if(this.name != ''){
+    //         this.disabled = false
+    //     }else{
+    //         this.disabled = true
+    //     }
+    // },
+    nameInput(e){
+        console.log(this.value)
+        if(this.name != '' && this.value != ''){
+            this.disabled = false
+        }else{
+            this.disabled = true
+        }
+    },
+    search(){
+        this.loading = true
+        if(this.value != '' && this.name != ''){
+            let that = this
+            setTimeout(function(){
+                that.result = true
+                that.loading = false
             },1000)
-        }
-    },
-    phoneInput(e){
-        console.log(this.phone)
-        this.codeStart = false
-        if(this.phone == ''){
-            this.codeStart = true
-            this.disabled = true
         }else{
-            this.codeStart = false
-            if(this.code != '' && this.password != ''){
-                this.disabled = false
-            }else{
-                this.disabled = true
-            }
+           this.result = false
         }
     },
-    passwordInput(e){
-        console.log(this.code)
-        if(this.code != '' && this.phone != '' && this.password != ''){
-            this.disabled = false
-        }else{
-            this.disabled = true
-        }
-    },
-    codeInput(e){
-        console.log(this.code)
-        if(this.code != '' && this.phone != '' && this.password != ''){
-            this.disabled = false
-        }else{
-            this.disabled = true
-        }
-    },
-    sendCode(){
-        let phone = this.phone
-        if(!(/^1[345678]\d{9}$/.test(phone))){
-            this.$message({
-              message: '请输入正确的手机号',
-              type: 'error',
-              showClose: true,
-              duration: 1000
-            })
-        }else{
-            this.isCode = false
-            this.getCode()
-        }
-    },
-    login(){
-      this.$router.push('/home')
+    goClaim(){
+        this.$router.push('/merchant-h5')
     }
   }
 }
 </script>
 <style lang="scss" scoped>
-    .registerPc{
+    .searchPc{
         width: 100%;
         // height: 100%;
         min-height: 100vh;
-        
-        .registerPc_container{
+        .searchPc_container{
             position: relative;
             width: 100%;
             // height: 100%;
@@ -283,118 +245,6 @@ export default {
                                 color: rgba(0,0,0,0.60);
                                 /* text-align: left; */
                                 line-height: 18PX;
-                            }
-                        }
-                    }
-                }
-                .register_form{
-                    width: 100%;
-                    margin-top: 8PX;
-                    background: #FFFFFF;
-                    height: 400PX;
-                    padding-top: 40PX;
-                    border-radius: 4PX;
-                    h4{
-                        font-size: 20PX;
-                        color: rgba(0,0,0,0.87);
-                        display: block;
-                        text-align: center;
-                        width: 312PX;
-                        margin-left: auto;
-                        margin-right: auto;
-                    }
-                    .form{
-                        width: 312PX;
-                        margin-left: auto;
-                        margin-right: auto;
-                        margin-top: 24PX;
-                        .inputBox,.code{
-                            width: 100%;
-                            margin-bottom: 16PX;
-                        }
-                        .inputBox{
-                            height: 40PX;
-                            display: flex;
-                            align-items: center;
-                            justify-content: flex-start;
-                            background: #FAFAFA;
-                            border-radius: 4PX;
-                            img{
-                                display: block;
-                                margin-left: 12PX;
-                                margin-right: 12PX;
-                                width: 24PX;
-                                height: 24PX;
-                            }
-                            input{
-                                display: block;
-                                outline: none;
-                                border: none;
-                                background: #FAFAFA;
-                                height: 40PX;
-                                line-height: 40PX;
-                                width: 84%;
-                                font-size: 14PX;
-                                color: rgba(0,0,0,0.60);
-                            }
-                        }
-                        .code{
-                            display: flex;
-                            align-items: center;
-                            justify-content: space-between;
-                            .codeInputBox{
-                                width: 216PX;
-                                height: 40PX;
-                                display: flex;
-                                align-items: center;
-                                justify-content: flex-start;
-                                background: #FAFAFA;
-                                border-radius: 4PX;
-                                img{
-                                    display: block;
-                                    margin-left: 12PX;
-                                    margin-right: 12PX;
-                                    width: 24PX;
-                                    height: 24PX;
-                                }
-                                input{
-                                    display: block;
-                                    outline: none;
-                                    border: none;
-                                    background: #FAFAFA;
-                                    height: 40PX;
-                                    line-height: 40PX;
-                                    width: 84%;
-                                    font-size: 14PX;
-                                    color: rgba(0,0,0,0.60);
-                                }
-                            }
-                            .codeStart,.count{
-                                background: #FAFAFA;
-                                border: 1PX solid #FFAD71;
-                                border-radius: 4PX;
-                                width: 88PX;
-                                height: 40PX;
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                                border: 1PX solid rgba(0,0,0,0.20);
-                                font-size: 13PX;
-                                color: rgba(0,0,0,0.20);
-                            }
-                            .isCode{
-                                background: #FAFAFA;
-                                border: 1PX solid #FFAD71;
-                                border-radius: 4PX;
-                                width: 88PX;
-                                height: 40PX;
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                                // border: 1PX solid rgba(0,0,0,0.60);
-                                font-size: 13PX;
-                                color: #FFAD71;
-                                cursor: pointer;
                             }
                         }
                     }
