@@ -2,6 +2,7 @@
   <div class="loginPc">
     <div class="loginPc_container">
         <head-nav id="mainHeader"></head-nav>
+        <img class="title" src="@/assets/globalPc/title.png" alt="" srcset="">
         <div class="login_form">
             <div class="form">
                 <h4 style="font-size: 20PX;color: rgba(0,0,0,0.87);">登录财税鱼</h4>
@@ -66,9 +67,17 @@ export default {
             // height: 100%;
             min-height: 100vh;
             min-width: 1440PX;
-            background: url(../../assets/globalPc/bg_slide1.jpg) no-repeat;
+            background: url(../../assets/globalPc/bg.jpg) no-repeat;
             background-size: cover;
             background-position: 50%;
+            .title{
+                display: block;
+                position: absolute;
+                top: 32%;
+                width: 440PX;
+                height: 200PX;
+                left: 310PX;
+            }
             .login_form{
                 width: 392PX;
                 height: 295PX;
@@ -78,6 +87,7 @@ export default {
                 background: linear-gradient(-45deg, rgba(255,255,255,0.95) 0%, #FFFFFF 100%);
                 padding-top: 32PX;
                 padding-bottom: 33PX;
+                
                 .form{
                     width: 312PX;
                     margin-left: auto;

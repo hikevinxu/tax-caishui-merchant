@@ -57,21 +57,21 @@
           <div class="dataBox">
             <span class="data_number">3816</span>
             <div class="data_text">
-              <img src="@/assets/globalPc/firm_ic_phone@3x.png" alt="">
+              <img src="@/assets/globalPc/ic_b_data_phone.png" alt="">
               <span>电话咨询量</span>
             </div>
           </div>
           <div class="dataBox center">
             <span class="data_number">625</span>
             <div class="data_text">
-              <img src="@/assets/globalPc/firm_ic_phone@3x.png" alt="">
+              <img src="@/assets/globalPc/ic_b_data_im.png" alt="">
               <span>IM咨询量</span>
             </div>
           </div>
           <div class="dataBox">
             <span class="data_number" style="color: #5AB3A4;">11862</span>
             <div class="data_text">
-              <img src="@/assets/globalPc/firm_ic_phone@3x.png" alt="">
+              <img src="@/assets/globalPc/ic_b_data_view.png" alt="">
               <span>浏览量</span>
             </div>
           </div>
@@ -97,11 +97,11 @@ export default {
     return {
       tagList: ['12年知名品牌','专业团队','屎霸贾亚洲','上班按摩陈立农'],
       imgList: [
-        {src: require('../../assets/globalPc/bg_slide1.jpg')},
-        {src: require('../../assets/globalPc/bg_slide1.jpg')},
-        {src: require('../../assets/globalPc/bg_slide1.jpg')},
-        {src: require('../../assets/globalPc/bg_slide1.jpg')},
-        {src: require('../../assets/globalPc/bg_slide1.jpg')}
+        {src: require('../../assets/globalPc/bg.jpg')},
+        {src: require('../../assets/globalPc/bg.jpg')},
+        {src: require('../../assets/globalPc/bg.jpg')},
+        {src: require('../../assets/globalPc/bg.jpg')},
+        {src: require('../../assets/globalPc/bg.jpg')}
         ]
     }
   },
