@@ -1,25 +1,12 @@
-let getters = {
-  doneTodos: state => {
-    return state.todos.filter(todo => todo.done)
-  },
-  getCount: state => {
-    return state.count
-  },
-  getPreUrl: state => {
-    return state.preUrl
-  },
-  getToken: state => {
-    let token = localStorage.getItem('token')
-    return token
-  },
-  getJumpUrl: state => {
-    let jumpUrl = localStorage.getItem('jumpUrl')
-    return jumpUrl
-  },
-  getPayInfo: state => {
-    let payInfo = localStorage.getItem('payInfo')
-    return payInfo
-  }
+/**
+ * @module vuex/getters
+ */
+export default {
+  /**
+   * Get the state for temporary data what you had store
+   * @param state - from vuex/state
+   * @example let state = store.getters.temporaryData
+   */
+  temporaryData: (state) => { return state.temporaryData },
+  allChartData: (state) => { return state.allChartData },
 }
-
-export default getters

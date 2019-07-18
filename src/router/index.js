@@ -128,7 +128,7 @@ export default new Router({
         {
           path: '/recordsCenter',
           name: 'recordsCenter',
-          component: () => import('../views/merchantPC/home.vue'),
+          component: () => import('../views/merchantPC/recordsCenter.vue'),
           meta: {
             title: '数据中心'
           }
