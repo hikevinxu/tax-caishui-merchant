@@ -155,16 +155,17 @@ export default new Router({
       path: '/register-pc',
       name: 'register-pc',
       component: () => import('../views/merchantPC/merchant/register-pc.vue'),
-      children: [
-        {
-          path: '/register-pc',
-          name: 'register-pc',
-          component: () => import('../views/merchantPC/merchant/register-pc.vue'),
-          meta: {
-            title: '注册'
-          }
-        }
-      ]
+      meta: {
+        title: '注册'
+      }
+    },
+    {
+      path: '/search-pc',
+      name: 'search-pc',
+      component: () => import('../views/merchantPC/merchant/search-pc.vue'),
+      meta: {
+        title: '认领企业'
+      }
     },
     {
       path: '/netError',
