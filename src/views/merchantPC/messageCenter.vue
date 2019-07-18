@@ -12,11 +12,14 @@ export default {
 
     }
   },
+  created() {
+    console.log(this.$store.state)
+  },
   methods: {
     toChat: function(){
       setCookie('uid', '15515268707')
       setCookie("sdktoken", "b3e8d33f9cfbc94f4ea0e8b41c41fb1c")
-      window.open('./IM/im/main.html')
+      window.location.href = window.location.protocol+"//"+window.location.host + '/IM/im/main.html'
     }
   }
 }
