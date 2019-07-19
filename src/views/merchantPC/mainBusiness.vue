@@ -204,7 +204,8 @@ export default {
   border-color: #5AB3A4;
 }
 .el-dialog{
-  width: 60%;
+  width: 70%;
+  min-width: 750PX;
 }
 .mainBusinesss {
   width: 100vw;

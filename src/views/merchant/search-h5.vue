@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import AreaList from '@/common/js/area'
+import areaList from '@/utils/areaList'
 import Vue from 'vue';
 import { Picker,Popup,Loading } from 'vant';
 import { setTimeout } from 'timers';
@@ -83,7 +83,7 @@ export default {
         disabled: true,
         result: false,
         length: 2,
-        areaList: AreaList,
+        areaList: areaList,
         loading: false,
         companyList: [
             {
