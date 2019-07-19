@@ -26,6 +26,7 @@
                         <img src="@/assets/globalPc/ic_form_cellnum.png" alt="">
                         <input type="text" v-model="phone" class="phoneInput" maxlength="11" placeholder="账号使用手机号" @input="phoneInput" >
                     </div>
+                    <span class="phoneExplain">该手机号将作为商户登录账号</span>
                     <div class="code">
                         <div class="codeInputBox">
                             <img src="@/assets/globalPc/ic_form_cellnum.png" alt="">
@@ -39,6 +40,7 @@
                         <img src="@/assets/globalPc/ic_form_password.png" alt="">
                         <input type="text" v-model="password" class="passwordInput" maxlength="11" placeholder="密码, 6～16位数字字母组合" @input="passwordInput" >
                     </div>
+                    <button id="register" :disabled="disabled" @click="login">注 册</button>
                 </div>
             </div>
         </div>
@@ -140,7 +142,7 @@ export default {
         }
     },
     login(){
-      this.$router.push('/home')
+      this.$router.push('/search-pc')
     }
   }
 }
@@ -338,6 +340,13 @@ export default {
                                 color: rgba(0,0,0,0.60);
                             }
                         }
+                        .phoneExplain{
+                            display: block;
+                            margin-bottom: 16PX;
+                            font-size: 12PX;
+                            color: rgba(0,0,0,0.60);
+                            margin-left: 30PX;
+                        }
                         .code{
                             display: flex;
                             align-items: center;
@@ -396,6 +405,21 @@ export default {
                                 color: #FFAD71;
                                 cursor: pointer;
                             }
+                        }
+                        #register{
+                            display: block;
+                            width: 312PX;
+                            height: 36PX;
+                            line-height: 36PX;
+                            text-align: center;
+                            outline: none;
+                            border: none;
+                            font-size: 15PX;
+                            color: #FFFFFF;
+                            background: linear-gradient(135deg, #FFAD71 0%, #FF7F4A 100%);
+                            border-radius: 4PX;
+                            margin-top: 32PX;
+                            cursor: pointer;
                         }
                     }
                 }
