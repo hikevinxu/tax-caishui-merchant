@@ -168,6 +168,22 @@ export default new Router({
       }
     },
     {
+      path: '/merchant-pc',
+      name: 'merchant-pc',
+      component: () => import('../views/merchantPC/merchant/merchant-pc.vue'),
+      meta: {
+        title: '认领企业'
+      }
+    },
+    {
+      path: '/certification-pc',
+      name: 'certification-pc',
+      component: () => import('../views/merchantPC/merchant/certification-pc.vue'),
+      meta: {
+        title: '资质认证'
+      }
+    },
+    {
       path: '/netError',
       name: 'netError',
       component: () => import('../views/errorPage/netError.vue'),
