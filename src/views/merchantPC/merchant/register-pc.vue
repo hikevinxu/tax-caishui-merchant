@@ -152,7 +152,12 @@ export default {
         width: 100%;
         // height: 100%;
         min-height: 100vh;
-        
+        #mainHeader{
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 999;
+        }
         .registerPc_container{
             position: relative;
             width: 100%;
@@ -165,10 +170,17 @@ export default {
             background-position: 50%;
             // padding-bottom: 90PX;
             .registerContent{
+                box-sizing: border-box;
                 width: 808PX;
-                margin-top: 50PX;
+                height: 100vh;
                 margin-left: auto;
                 margin-right: auto;
+                padding-top: 100PX;
+                padding-bottom: 100PX;
+                overflow: scroll;
+                &::-webkit-scrollbar {
+                    display: none;
+                }
                 .header{
                     width: 100%;
                     height: 100PX;
@@ -293,7 +305,7 @@ export default {
                     width: 100%;
                     margin-top: 8PX;
                     background: #FFFFFF;
-                    height: 400PX;
+                    height: 600PX;
                     padding-top: 40PX;
                     border-radius: 4PX;
                     h4{

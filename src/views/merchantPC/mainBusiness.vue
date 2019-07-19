@@ -152,7 +152,7 @@ export default {
         }
       ],
       listLoading: false,
-      dialogPvVisible: true,
+      dialogPvVisible: false,
       options: [{
           value: '选项1',
           label: '黄金糕'

@@ -20,7 +20,10 @@
             </div>
             <div class="line">
               <span class="label">联系电话</span>
-              <span class="content">{{ phone }}</span>
+              <!-- <span class="content">{{ phone }}</span> -->
+              <div class="phoneList">
+                <span class="phone" v-for="(item,index) in phoneList" :key="index">{{item.phone}}</span>
+              </div>
             </div>
             <div class="line">
               <span class="label">品牌标签</span>
@@ -177,7 +180,7 @@ export default {
             font-size: 14PX;
             color: rgba(0,0,0,0.60);
             height: 40PX;
-            line-height: 40PX;
+            // line-height: 40PX;
           }
           .img{
             width: 72PX;
@@ -191,18 +194,34 @@ export default {
             font-size: 14PX;
             color: #000000;
             height: 40PX;
-            line-height: 40PX;
+            // line-height: 40PX;
           }
           .tagList{
             width: 380PX;
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: flex-start;
             flex-wrap: wrap;
             height: 40PX;
             .tag{
               padding: 2PX 4PX 2PX 4PX;
               font-size: 11PX;
+              color: #000000;
+              border: 1PX solid rgba(0,0,0,0.60);
+              border-radius: 2PX;
+              margin-right: 8PX;
+            }
+          }
+          .phoneList{
+            width: 380PX;
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+            height: 40PX;
+            .phone{
+              padding: 2PX 4PX 2PX 4PX;
+              font-size: 14PX;
               color: #000000;
               border: 1PX solid rgba(0,0,0,0.60);
               border-radius: 2PX;
@@ -301,6 +320,7 @@ export default {
           font-size: 14PX;
           color: #000000;
           margin-left: 32PX;
+          resize:none;
         }
       }
       .compile{

@@ -184,6 +184,14 @@ export default new Router({
       }
     },
     {
+      path: '/success-pc',
+      name: 'success-pc',
+      component: () => import('../views/merchantPC/merchant/success-pc.vue'),
+      meta: {
+        title: '成功'
+      }
+    },
+    {
       path: '/netError',
       name: 'netError',
       component: () => import('../views/errorPage/netError.vue'),

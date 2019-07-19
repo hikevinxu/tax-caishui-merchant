@@ -59,7 +59,7 @@
                         <span class="label">企业全称</span>
                         <input type="text" v-model="phone" class="phoneInput" maxlength="11" placeholder="请输入企业名称" @input="phoneInput" >
                     </div>
-                    <button class="search" :disabled="disabled">搜索企业</button>
+                    <button @click="searchFirst" class="search" :disabled="disabled">搜索企业</button>
                 </div>
                 <div class="form_search" v-show="isSearch">
                     <div class="form_content">
@@ -104,7 +104,7 @@
                             <span class="addCompany" style="font-size: 12PX;color: #FFFFFF;">添加企业 ></span>
                         </div>
                     </div>
-                    <div class="resoult_content">
+                    <div class="resoult_content" v-show="!noData">
                         <span class="label">为您找到以下企业({{num}})</span>
                         <div class="companyList">
                             <div class="company" v-for="(item,index) in companyList" :key="index">
@@ -124,6 +124,10 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="noData" v-show="noData">
+                        <img src="@/assets/globalPc/img_nonsearch.png" alt="" srcset="">
+                        <span>没有搜索到企业</span>
                     </div>
                 </div>
             </div>
@@ -215,7 +219,8 @@ export default {
         value: '',
         value1: '',
         value2: '',
-        isSearch: true,
+        isSearch: false,
+        noData: false,
         num: 1,
     }
   },
@@ -229,6 +234,14 @@ export default {
             this.disabled = false
         }else{
             this.disabled = true
+        }
+    },
+    searchFirst(){
+        this.isSearch = true;
+        if(this.companyList.length == 0){
+            this.noData = true
+        }else{
+            this.noData = false
         }
     },
     search(){
@@ -254,6 +267,12 @@ export default {
         width: 100%;
         // height: 100%;
         min-height: 100vh;
+        #mainHeader{
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 999;
+        }
         .searchPc_container{
             position: relative;
             width: 100%;
@@ -264,12 +283,20 @@ export default {
             background: url(../../../assets/globalPc/bg.jpg) no-repeat;
             background-size: cover;
             background-position: 50%;
-            padding-bottom: 100PX;
+            // padding-bottom: 100PX;
+            // background: #F5F5F5;
             .registerContent{
+                box-sizing: border-box;
                 width: 808PX;
-                margin-top: 50PX;
+                height: 100vh;
                 margin-left: auto;
                 margin-right: auto;
+                padding-top: 100PX;
+                padding-bottom: 100PX;
+                overflow: scroll;
+                &::-webkit-scrollbar {
+                    display: none;
+                }
                 .header{
                     width: 100%;
                     height: 100PX;
@@ -613,8 +640,25 @@ export default {
                                 }
                             }
                         }
+                        .noData{
+                            width: 360PX;
+                            display: flex;
+                            align-items: center;
+                            // justify-content: center;
+                            flex-flow: column;
+                            img{
+                                display: block;
+                                width: 80PX;
+                                height: 80PX;
+                                margin-bottom: 8PX;
+                                margin-top: 60PX;
+                            }
+                            span{
+                                font-size: 12PX;
+                                color: rgba(0,0,0,0.26);
+                            }
+                        }
                     }
-                    
                 }
             }
             .footer{
