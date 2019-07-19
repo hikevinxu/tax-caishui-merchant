@@ -35,8 +35,8 @@ export default {
     left: 0;
   }
   #mainContent {
-    min-height: 100vh;
-    min-width: 100vw;
+    // min-height: 100vh;
+    // min-width: 100vw;
     box-sizing: border-box;
     background: rgba(0,0,0,0.04);
     padding-top: 96Px;
