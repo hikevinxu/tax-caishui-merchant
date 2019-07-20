@@ -4,7 +4,7 @@ import 'babel-polyfill'
 // import sa from 'sa-sdk-javascript'
 import App from './App.vue'
 import router from './router/index'
-// import store from './store/store'
+import store from './store/store'
 import '@/common/css/reset.css'
 import '@/common/css/animate.css'
 import '@/common/css/h5Header.css'
@@ -27,21 +27,14 @@ Vue.config.productionTip = false
 /* eslint-disable no-new */
 // new VConsole()
 
-// router.beforeEach((to, from, next) => {
-//   if (to.name === 'login' && from.path !== '/' && from.name !== 'login' && from.name !== 'powerOfAttoney') {
-//     let jumpUrl = {
-//       path: from.path,
-//       query: from.query
-//     }
-//     let jumpUrlString = JSON.stringify(jumpUrl)
-//     store.dispatch('save_jumpUrl', jumpUrlString)
-//   }
-//   /* 路由发生变化修改页面title */
-//   if (to.meta.title) {
-//     document.title = to.meta.title
-//   }
-//   next()
-// })
+router.beforeEach((to, from, next) => {
+  store.dispatch('save_activeLi', to.path)
+  /* 路由发生变化修改页面title */
+  if (to.meta.title) {
+    document.title = to.meta.title
+  }
+  next()
+})
 
 // sa.init({
 //   // 测试地址：
