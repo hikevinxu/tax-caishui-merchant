@@ -1,7 +1,7 @@
 import axios from 'axios'
 import Vue from 'vue'
 import router from '@/router/index'
-import store from '@/store/index'
+// import store from '@/store/index'
 // import qs from 'qs'
 import { Toast } from 'vant'
 import { Message, MessageBox } from 'element-ui'
