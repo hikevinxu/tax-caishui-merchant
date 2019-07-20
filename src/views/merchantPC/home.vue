@@ -11,33 +11,33 @@
         <div class="basicContent">
           <div class="company">
             <div class="logo">
-              <img src="@/assets/globalPc/qrcode.png" alt="" class="compay_logo">
+              <img :src="logo" alt="" class="compay_logo">
               <img class="tagImg" src="@/assets/globalPc/ic_list_tag.png" alt="">
             </div>
             <div class="information">
-              <h2 class="name">杭州税牛科技有限公司</h2>
+              <h2 class="name">{{ name }}</h2>
               <div class="tagList">
-                <span class="tag" v-for="(item,index) in tagList" :key="index">{{ item }}</span>
+                <span class="tag" v-for="(item,index) in brandTags" :key="index">{{ item }}</span>
               </div>
               <div class="infoLine">
                 <img src="@/assets/globalPc/firm_ic_time@3x.png" alt="">
-                <span>服务时间 | 工作日 9:00～18:00</span>
+                <span>{{ workTime }}</span>
               </div>
               <div class="infoLine">
                 <img src="@/assets/globalPc/firm_ic_address@3x.png" alt="">
-                <span>浙江省杭州市西湖区双龙街199号金色西溪B座8楼</span>
+                <span>{{ adress }}</span>
               </div>
               <div class="infoLine">
                 <img src="@/assets/globalPc/firm_ic_phone@3x.png" alt="">
-                <span>0571-29282111    0571-29298980</span>
+                <span style="margin-right: 8PX" v-for="(item,index) in phones" :key="index">{{item}}</span>
               </div>
             </div>
           </div>
           <div class="company_img_list">
             <div class="img_content">
               <div class="imgBox">
-                <div class="img" v-for="(item,index) in imgList" :key="index">
-                  <img :src="item.src" alt="" srcset="">
+                <div class="img" v-for="(item,index) in publicityImgs" :key="index">
+                  <img :src="item.img" alt="" srcset="">
                 </div>
               </div>
               <div class="bg"></div>
@@ -97,22 +97,92 @@
 </template>
 <script>
 import { setCookie } from '@/utils/cookie.js'
+import api from '@/api/api'
 export default {
   data(){
     return {
-      tagList: ['12年知名品牌','专业团队','屎霸贾亚洲','上班按摩陈立农'],
-      imgList: [
-        {src: require('../../assets/globalPc/bg.jpg')},
-        {src: require('../../assets/globalPc/bg.jpg')},
-        {src: require('../../assets/globalPc/bg.jpg')},
-        {src: require('../../assets/globalPc/bg.jpg')},
-        {src: require('../../assets/globalPc/bg.jpg')}
+      name: '',
+      logo: '../..',
+      brandTags: [],
+      adress: '',
+      workTime: '',
+      phones: [],
+      publicityImgs: [
       ],
+      
       newContent: '因电信快带故障，座机无法正常使用，业务联系情拨打18728276262。造成不便，敬请谅解！因电信快带故障，座机无法正常使用，业务联系情拨打18728276262。造成不便，敬请谅解！',
       edit: false
     }
   },
+  created(){
+    this.getInfo()
+    this.getIm()
+  },
   methods: {
+    getInfo(){
+      api.companyInfo().then(res => {
+        console.log(res)
+        if(res.code == 0){
+          let data = res.data
+          this.name = data.name
+          this.brandTags = data.brandTags
+          this.adress = data.address
+          this.workTime = data.workTime
+          this.phones = data.phones
+          this.logo = data.logo
+          this.publicityImgs = data.publicityImgs
+        }
+      })
+    },
+    getIm(){
+      let times = new Date().getTime();
+      let time = this.msToDate(times).withoutTime
+      let data = {
+        time: time,
+        type: 'month'
+      }
+      api.statisic(data).then(res => {
+        console.log(res)
+        if(res.code == 0){
+          let data = res.data
+
+        } 
+      })
+    },
+    msToDate (msec) {
+        let datetime = new Date(msec);
+        let year = datetime.getFullYear();
+        let month = datetime.getMonth();
+        let date = datetime.getDate();
+        let hour = datetime.getHours();
+        let minute = datetime.getMinutes();
+        let second = datetime.getSeconds();
+
+        let result1 = year + 
+                    '-' + 
+                    ((month + 1) >= 10 ? (month + 1) : '0' + (month + 1)) + 
+                    '-' + 
+                    ((date + 1) < 10 ? '0' + date : date) + 
+                    ' ' + 
+                    ((hour + 1) < 10 ? '0' + hour : hour) +
+                    ':' + 
+                    ((minute + 1) < 10 ? '0' + minute : minute) + 
+                    ':' + 
+                    ((second + 1) < 10 ? '0' + second : second);
+
+        let result2 = year + 
+                    '-' + 
+                    ((month + 1) >= 10 ? (month + 1) : '0' + (month + 1)) + 
+                    '-' + 
+                    ((date + 1) < 10 ? '0' + date : date);
+
+        let result = {
+            hasTime: result1,
+            withoutTime: result2
+        };
+
+        return result;
+    },
     save(){
       this.edit = false
     },
