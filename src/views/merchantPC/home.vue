@@ -83,9 +83,14 @@
             <h4>商家新鲜事</h4>
             <span class="date">编辑于2019.07.08</span>
           </div>
-          <div class="newContent">
-            <p>因电信快带故障，座机无法正常使用，业务联系情拨打18728276262。造成不便，敬请谅解！因电信快带故障，座机无法正常使用，业务联系情拨打18728276262。造成不便，敬请谅解！</p>
+          <div class="newContent" @click="edit = true">
+            <p v-show="!edit">{{newContent}}</p>
+            <textarea v-show="edit" class="text" v-model="newContent" name="" id="" cols="30" rows="10"></textarea>
           </div>
+          <span v-show="edit" slot="footer" class="dialog-footer">
+            <el-button type="success" @click="save()">保存</el-button>
+            <el-button @click="edit = false">取消</el-button>
+          </span>
         </div>
       </div>
   </div>
@@ -102,15 +107,15 @@ export default {
         {src: require('../../assets/globalPc/bg.jpg')},
         {src: require('../../assets/globalPc/bg.jpg')},
         {src: require('../../assets/globalPc/bg.jpg')}
-        ]
+      ],
+      newContent: '因电信快带故障，座机无法正常使用，业务联系情拨打18728276262。造成不便，敬请谅解！因电信快带故障，座机无法正常使用，业务联系情拨打18728276262。造成不便，敬请谅解！',
+      edit: false
     }
   },
   methods: {
-    toChat: function(){
-      setCookie('uid', '15515268707')
-      setCookie("sdktoken", "b3e8d33f9cfbc94f4ea0e8b41c41fb1c")
-      window.open('./IM/im/main.html')
-    }
+    save(){
+      this.edit = false
+    },
   }
 }
 </script>
@@ -118,6 +123,7 @@ export default {
   .homePc {
       width: 100vw;
       height: 100vh;
+      padding-bottom: 30PX;
       .basics {
         width: 100%;
         min-width: 1040PX;
@@ -355,10 +361,10 @@ export default {
       .new{
         width: 100%;
         min-width: 1040PX;
-        height: 144PX;
+        min-height: 144PX;
         background: #ffffff;
         box-shadow: 0 4PX 8PX 0 rgba(0,0,0,0.04);
-        padding-bottom: 32PX;
+        padding-bottom: 16PX;
         padding-top: 24PX;
         .container{
           width: 93.84%;
@@ -397,6 +403,27 @@ export default {
               color: rgba(0,0,0,0.60);
               line-height: 18PX;
             }
+            .text{
+              display: block;
+              width: 90%;
+              height: 100%;
+              margin-left: auto;
+              margin-right: auto;
+              font-size: 14PX;
+              color: rgba(0,0,0,0.60);
+              line-height: 18PX;
+              outline: none;
+              resize: none;
+              border: none;
+              background: #FAFAFA;
+            }
+          }
+          .dialog-footer{
+            width: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            margin-top: 16PX;
           }
         }
       }
