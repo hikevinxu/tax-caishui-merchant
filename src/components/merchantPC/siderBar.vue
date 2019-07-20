@@ -37,6 +37,7 @@
   </div>
 </template>
 <script>
+import router from '../../router/index.js'
 export default {
   name: 'siderBar',
   data(){
@@ -44,15 +45,23 @@ export default {
       activeMenu: ''
     }
   },
-  created() {
+  created () {
     this.activeMenu = this.$route.path
+    router.beforeEach((to,from,next) => {
+      this.activeMenu = to.path ? to.path : this.$route.path
+      next()
+    })
+    let that = this
+    window.addEventListener("popstate", function() {
+      that.activeMenu = that.$route.path
+    }, false)
   },
   methods: {
     handleOpen(key, keyPath) {
-      console.log(key, keyPath);
+      console.log(key, keyPath)
     },
     handleClose(key, keyPath) {
-      console.log(key, keyPath);
+      console.log(key, keyPath)
     }
   }
 }

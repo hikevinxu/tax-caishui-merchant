@@ -8,7 +8,7 @@ import store from './store/store'
 import '@/common/css/reset.css'
 import '@/common/css/animate.css'
 import '@/common/css/h5Header.css'
-import ElementUI from 'element-ui';
+import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 // import VConsole from 'vconsole'
 
@@ -26,15 +26,6 @@ Vue.use(ElementUI)
 Vue.config.productionTip = false
 /* eslint-disable no-new */
 // new VConsole()
-
-router.beforeEach((to, from, next) => {
-  store.dispatch('save_activeLi', to.path)
-  /* 路由发生变化修改页面title */
-  if (to.meta.title) {
-    document.title = to.meta.title
-  }
-  next()
-})
 
 // sa.init({
 //   // 测试地址：
@@ -56,5 +47,6 @@ router.beforeEach((to, from, next) => {
 
 new Vue({
   router,
+  store,
   render: h => h(App)
 }).$mount('#app')
