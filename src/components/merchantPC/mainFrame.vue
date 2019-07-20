@@ -33,6 +33,7 @@ export default {
     position: fixed;
     top: 0;
     left: 0;
+    z-index: 1999;
   }
   #mainContent {
     // min-height: 100vh;
