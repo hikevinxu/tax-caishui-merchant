@@ -28,16 +28,15 @@ export default {
     position: fixed;
     top: 0;
     left: 0;
+    z-index: 200;
   }
   #mainSider {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 1999;
+    z-index: 199;
   }
   #mainContent {
-    // min-height: 100vh;
-    // min-width: 100vw;
     box-sizing: border-box;
     background: rgba(0,0,0,0.04);
     padding-top: 96Px;
