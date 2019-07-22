@@ -55,21 +55,21 @@
         </div>
         <div class="dataContent">
           <div class="dataBox">
-            <span class="data_number">3816</span>
+            <span class="data_number">{{ statisicData.phoneCount }}</span>
             <div class="data_text">
               <img src="@/assets/globalPc/ic_b_data_phone.png" alt="">
               <span>电话咨询量</span>
             </div>
           </div>
           <div class="dataBox center">
-            <span class="data_number">625</span>
+            <span class="data_number">{{ statisicData.imCount }}</span>
             <div class="data_text">
               <img src="@/assets/globalPc/ic_b_data_im.png" alt="">
               <span>IM咨询量</span>
             </div>
           </div>
           <div class="dataBox">
-            <span class="data_number" style="color: #5AB3A4;">11862</span>
+            <span class="data_number" style="color: #5AB3A4;">{{ statisicData.viewCount }}</span>
             <div class="data_text">
               <img src="@/assets/globalPc/ic_b_data_view.png" alt="">
               <span>浏览量</span>
@@ -81,11 +81,11 @@
         <div class="container">
           <div class="new_title">
             <h4>商家新鲜事</h4>
-            <span class="date">编辑于2019.07.08</span>
+            <span class="date">编辑与{{ notice.modifyTime }}</span>
           </div>
           <div class="newContent" @click="edit = true">
-            <p v-show="!edit">{{newContent}}</p>
-            <textarea v-show="edit" class="text" v-model="newContent" name="" id="" cols="30" rows="10"></textarea>
+            <p v-show="!edit">{{ notice.content }}</p>
+            <textarea v-show="edit" class="text" v-model="notice.content" name="" id="" cols="30" rows="10"></textarea>
           </div>
           <span v-show="edit" slot="footer" class="dialog-footer">
             <el-button type="success" @click="save()">保存</el-button>
@@ -102,15 +102,15 @@ export default {
   data(){
     return {
       name: '',
-      logo: '../..',
+      logo: '',
       brandTags: [],
       adress: '',
       workTime: '',
       phones: [],
       publicityImgs: [
       ],
-      
-      newContent: '因电信快带故障，座机无法正常使用，业务联系情拨打18728276262。造成不便，敬请谅解！因电信快带故障，座机无法正常使用，业务联系情拨打18728276262。造成不便，敬请谅解！',
+      statisicData: {},
+      notice: {},
       edit: false
     }
   },
@@ -131,6 +131,7 @@ export default {
           this.phones = data.phones
           this.logo = data.logo
           this.publicityImgs = data.publicityImgs
+          this.notice = data.notice
         }
       })
     },
@@ -145,7 +146,7 @@ export default {
         console.log(res)
         if(res.code == 0){
           let data = res.data
-
+          this.statisicData = data
         } 
       })
     },
@@ -157,7 +158,6 @@ export default {
         let hour = datetime.getHours();
         let minute = datetime.getMinutes();
         let second = datetime.getSeconds();
-
         let result1 = year + 
                     '-' + 
                     ((month + 1) >= 10 ? (month + 1) : '0' + (month + 1)) + 
@@ -184,7 +184,33 @@ export default {
         return result;
     },
     save(){
-      this.edit = false
+      
+      let data = {
+        content: this.notice.content
+      }
+      console.log(data)
+      api.noticeUpdate(data).then(res => {
+        console.log(res)
+        if(res.code == 0){
+          this.$message({
+            message: '保存成功',
+            type: 'success',
+            showClose: true,
+            duration: 1000
+          })
+          this.edit = false
+          this.getInfo()
+        }else{
+          this.$message({
+            message: '保存失败',
+            type: 'error',
+            showClose: true,
+            duration: 1000
+          })
+          this.edit = false
+          this.getInfo()
+        }
+      })
     },
   }
 }
