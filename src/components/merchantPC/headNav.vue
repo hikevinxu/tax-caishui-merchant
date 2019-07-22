@@ -1,6 +1,8 @@
 <template>
   <div class="header">
-    <div class="logo"></div>
+    <div class="logo">
+      <img src="@/assets/globalPc/logo.png" alt="">
+    </div>
     <div class="merchantBtn">
       <button>商户入驻</button>
     </div>
@@ -28,7 +30,11 @@ export default {
     width: 160Px;
     height: 40Px;
     margin: 20Px 0 0 24Px;
-    background: rgba(0,0,0,0.04);
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
   }
   .merchantBtn {
     float: right;
