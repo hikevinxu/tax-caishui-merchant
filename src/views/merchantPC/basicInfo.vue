@@ -6,35 +6,35 @@
           <div class="infoContent">
             <div class="line">
               <span class="label">公司名称</span>
-              <span class="content">{{ company }}</span>
+              <span class="content">{{ name }}</span>
             </div>
             <div class="line">
               <span class="label">公司LOGO</span>
               <div class="img">
-                <img :src="companyLogo" alt="" srcset="">
+                <img :src="logo" alt="" srcset="">
               </div>
             </div>
             <div class="line">
               <span class="label">工作时间</span>
-              <span class="content">{{ companyDate }}</span>
+              <span class="content">{{ workTime }}</span>
             </div>
             <div class="line">
               <span class="label">联系电话</span>
               <!-- <span class="content">{{ phone }}</span> -->
               <div class="phoneList">
-                <span class="phone" v-for="(item,index) in phoneList" :key="index">{{item.phone}}</span>
+                <span class="phone" v-for="(item,index) in phonesList" :key="index">{{item.phone}}</span>
               </div>
             </div>
             <div class="line">
               <span class="label">品牌标签</span>
               <div class="tagList">
-                <span class="tag" v-for="(item,index) in tag" :key="index">{{item.tag}}</span>
+                <span class="tag" v-for="(item,index) in brandTagsList" :key="index">{{item.tag}}</span>
               </div>
             </div>
           </div>
           <div class="introduction">
             <span class="label">公司介绍</span>
-            <p>多年的发展，公司已成为集研发、销售、生产和服务于一体的现代高科技企业，在北京、深圳等地拥有多家子公司，构筑了面向全国的经营和服务网络，涵盖智能建筑、信息化、信息安全、云计算与大数据、智慧化应用、网络可视化和特种通信等业务领域，涉及政府、公安、检察院、司法、文教、交通、能源、金融、电信和企业等行业应用。</p>
+            <p>{{introduce}}</p>
           </div>
           <span class="compile" @click="compile = true">编辑信息</span>
       </div>
@@ -43,36 +43,49 @@
           <div class="line oneline">
             <span class="label">公司名称</span>
             <div class="inputBox">
-              <input type="text" @input="nameInput" v-model="company">
+              <input type="text" v-model="name">
             </div>
           </div>
           <div class="line">
             <span class="label">公司LOGO</span>
               <div class="imgContent">
-                <img :src="companyLogo" alt="" srcset="">
-                <span class="logo">上传</span>
+                <img :src="logo" alt="" srcset="">
+                <!-- <span class="logo">上传</span> -->
+                <el-upload
+                  class="upload-demo"
+                  action=""
+                  :http-request="upload"
+                  :multiple="false"
+                  :show-file-list="false">
+                  <span class="logo">上传</span>
+                  <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
+                </el-upload>
               </div>
           </div>
           <div class="line oneline">
             <span class="label">工作时间</span>
             <div class="inputBox">
-              <input type="text" @input="nameInput" v-model="companyDate">
+              <input type="text" v-model="workTime">
             </div>
           </div>
           <div class="line">
             <span class="label">联系电话</span>
             <div class="phoneContent">
-              <div class="inputBox phone" v-for="(item,index) in phoneList" :key="index">
+              <div class="inputBox phone" v-for="(item,index) in phonesList" :key="index">
                 <input type="text" v-model="item.phone">
+                <span @click="deletePhone(item,index)" style="width:16PX;height: 16PX;display: flex;margin-right: 8PX;cursor: pointer;">
+                  <img style="width: 100%; height: 100%;" src="@/assets/globalPc/ic_b_deletelist.png" alt="">
+                </span>
               </div>
               <span class="add" @click="add">添加</span>
             </div>
           </div>
           <div class="line">
-            <span class="label">联系电话</span>
+            <span class="label">品牌标签</span>
             <div class="tagContent">
-              <div class="inputBox tagInput" v-for="(item,index) in tag" :key="index">
+              <div class="inputBox tagInput" v-for="(item,index) in brandTagsList" :key="index">
                 <input type="text" v-model="item.tag">
+                <!-- <img @clcik="deleteTag(item,index)" style="width:16PX;height: 16PX;display: block;margin-right: 8PX;cursor: pointer;" src="@/assets/globalPc/ic_b_deletelist.png" alt=""> -->
               </div>
             </div>
           </div>
@@ -90,46 +103,163 @@
   </div>
 </template>
 <script>
-
-import { setCookie } from '@/utils/cookie.js'
+import api from '@/api/api'
 export default {
   data(){
     return {
-      company: '杭州税牛科技有限公司',
-      companyLogo: require('../../assets/globalPc/qrcode.png'),
-      companyDate: '工作日9:00～18:00',
-      tag: [
-        {tag:'12年知名品牌'},
-        {tag:'12年知名品牌'}
-      ],
-      introduce: '多年的发展，公司已成为集研发、销售、生产和服务于一体的现代高科技企业，在北京、深圳等地拥有多家子公司，构筑了面向全国的经营和服务网络，涵盖智能建筑、信息化、信息安全、云计算与大数据、智慧化应用、网络可视化和特种通信等业务领域，涉及政府、公安、检察院、司法、文教、交通、能源、金融、电信和企业等行业应用。',
-      phone: '0571-928378176',
+      name: '',
+      logo: require('../../assets/globalPc/qrcode.png'),
+      workTime: '',
+      brandTags: ['12年知名品牌','12年知名品牌'],
+      brandTagsList: [],
+      introduce: '',
       compile: false,
-      phoneList: [
-        {
-          phone: '0571-928378176'
-        },
-        {
-          phone: '0571-928378176'
-        }
-      ]
+      phonesList: [],
+      phones: [],
+      files: [],
+      fileId: '',
     }
   },
+  created(){
+    this.getBaseInfo()
+  },
   methods: {
-    nameInput(){},
+    upload (files) {
+      let formData = new FormData()
+      formData.append('files', files.file)
+      api.fileupload(formData).then(res => {
+        if (res.code == 0) {
+          console.log(res)
+          this.fileId =  res.data[0].fileId
+          let reader = new FileReader();
+          let file = files.file
+          let imgUrlBase64
+          if(file){
+            imgUrlBase64 = reader.readAsDataURL(file);
+            reader.onload = (e) => {
+              this.logo = reader.result
+              console.log(reader.result)
+            }
+          }
+        }
+      }).catch(err => {
+        this.$message.error('上传失败，请重新上传')
+      })
+    },
+    getBaseInfo(){
+      api.baseInfo().then(res => {
+        console.log(res)
+        if(res.code == 0){
+          let data = res.data
+          this.name = data.name
+          this.brandTagsList = []
+          this.brandTags = []
+          for (let i = 0; i < data.brandTags.length; i++) {
+            let tag = data.brandTags[i];
+            let json ={
+              tag: tag
+            }
+            this.brandTagsList.push(json)
+          }
+          this.adress = data.address
+          this.workTime = data.workTime
+          this.phonesList = []
+          this.phones = []
+          for (let i = 0; i < data.phones.length; i++) {
+            let phone = data.phones[i];
+            let json ={
+              phone: phone
+            }
+            this.phonesList.push(json)
+          }
+          this.logo = data.logo
+          this.introduce = data.introduce
+        }
+      })
+    },
     add(){
       let json = {
         phone: ''
       }
-      if(this.phoneList.length >=3){
-        console.log(this.phoneList)
+      if(this.phonesList.length >=3){
+        console.log(this.phonesList)
+        this.$message({
+          message: '最多填写三个电话',
+          type: 'warning',
+          showClose: true,
+          duration: 1000
+        })
       }else{
-        this.phoneList.push(json)
+        this.phonesList.push(json)
       }
     },
+    deletePhone(item,index){
+      console.log(index)
+      if(this.phonesList.length <= 1){
+        this.$message({
+          message: '号码至少保留一个',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+      }else{
+        this.$confirm('确认删除此号码?', '提示', {}).then(() => {
+          this.phonesList.splice(index,1)
+          console.log(this.phonesList)
+        })
+      }
+    },
+    deleteTag(item,index){
+
+    },
     save(){
-      this.compile = false
-      console.log(this.phoneList)
+      console.log(this.fileId)
+      if(this.fileId == ''){
+        console.log(this.logo)
+      }else{
+        this.logo = this.fileId
+      }
+      //标签数据处理
+      for (let i = 0; i < this.brandTagsList.length; i++) {
+        this.brandTagsList[i].tag;
+        this.brandTags.push(this.brandTagsList[i].tag)
+      }
+      //电话数据处理
+      for (let i = 0; i < this.phonesList.length; i++) {
+        this.phonesList[i].phone;
+        this.phones.push(this.phonesList[i].phone)
+      }
+      let data = {
+        brandTags: this.brandTags,
+        introduce: this.introduce,
+        logo: this.logo,
+        name: this.name,
+        phones: this.phones,
+        workTime: this.workTime
+      }
+      console.log(data)
+      api.baseUpdate(data).then(res => {
+        console.log(res)
+        if(res.code == 0){
+          this.$message({
+            message: '保存成功',
+            type: 'success',
+            showClose: true,
+            duration: 1000
+          })
+          this.compile = false
+          this.getBaseInfo()
+        }else{
+          this.$message({
+            message: '保存失败',
+            type: 'error',
+            showClose: true,
+            duration: 1000
+          })
+          this.compile = false
+          this.getBaseInfo()
+        }
+      })
     }
   }
 }
@@ -321,6 +451,7 @@ export default {
           color: #000000;
           margin-left: 32PX;
           resize:none;
+          line-height: 24PX;
         }
       }
       .compile{

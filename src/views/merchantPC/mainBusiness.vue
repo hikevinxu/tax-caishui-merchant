@@ -46,7 +46,7 @@
           </el-table-column>
 
         </el-table>
-        <pagination :total="total" :page.sync="pageNum" :limit.sync="pageSize" @pagination="getList" />
+        <!-- <pagination :total="total" :page.sync="pageNum" :limit.sync="pageSize" @pagination="getList" /> -->
         
         <el-dialog :visible.sync="dialogPvVisible" title="添加业务">
           <div class="choseBusiness">
@@ -122,6 +122,7 @@
   </div>
 </template>
 <script>
+import api from '@/api/api'
 import Pagination from '@/components/Pagination'
 export default {
   name: 'mainBusinesss',
@@ -178,8 +179,19 @@ export default {
       title: ''
     }
   },
+  created(){
+    this.getList()
+  },
   methods: {
-    getList(){},
+    getList(){
+      let listQuery = {
+        pageNum: 1,
+        pageSize: 20
+      }
+      api.serviceList(listQuery).then(res => {
+        console.log(res)
+      })
+    },
     handleFetchPv(){
       this.dialogPvVisible = true
     },
@@ -216,7 +228,7 @@ export default {
     // height: 199PX;
     background: #ffffff;
     box-shadow: 0 4PX 8PX 0 rgba(0,0,0,0.04);
-    // padding-bottom: 40PX;
+    padding-bottom: 40PX;
     padding-top: 24PX;
     margin-bottom: 16PX;
     .business_title{
