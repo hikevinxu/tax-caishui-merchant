@@ -92,5 +92,13 @@ export default {
    */
   serviceChangeShelf (data) {
     return fetchPost('/service/change_shelf', data)
+  },
+  /**
+   * 服务删除
+   * @function refreshToken
+   * @type 'POST'
+   */
+  serviceDelete (data) {
+    return fetchPost('/service/delete', data)
   }
 }

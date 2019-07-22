@@ -39,6 +39,7 @@
             <template slot-scope="scope">
               <el-button style="margin-left: 12PX;" type="success" size="small" @click="handleUpdate(scope.row)">编辑</el-button>
               <el-button v-show="scope.row.shelf == false" style="margin-left: 12PX;" type="warning" size="small" @click="changeShelfUp(scope.row)">上架</el-button>
+              <el-button v-show="scope.row.shelf == false" style="margin-left: 12PX;" type="danger" size="small" @click="serviceDelete(scope.row)">删除</el-button>
               <el-button v-show="scope.row.shelf == true" style="margin-left: 12PX;" type="danger" size="small" @click="changeShelfDown(scope.row)">下架</el-button>
             </template>
           </el-table-column>
@@ -139,7 +140,7 @@
           <div class="choseBusiness">
             <div class="title" style="font-size: 14PX;color: rgba(0,0,0,0.60);">选择业务</div>
             <div class="selectLine">
-              <el-select style="width: 33%" @change="getType3" v-model="value3" placeholder="请选择">
+              <el-select :disabled='disabled' style="width: 33%" @change="getType3" v-model="value3" placeholder="请选择">
                 <el-option
                   v-for="item in options1"
                   :key="item.code"
@@ -149,7 +150,7 @@
                 </el-option>
               </el-select>
 
-              <el-select style="width: 33%" @change="getType4" v-model="value4" placeholder="请选择">
+              <el-select :disabled='disabled' style="width: 33%" @change="getType4" v-model="value4" placeholder="请选择">
                 <el-option
                   v-for="item in options5"
                   :key="item.code"
@@ -158,7 +159,7 @@
                 </el-option>
               </el-select>
 
-              <el-select v-show="showOptions4" style="width: 33%" v-model="value5" placeholder="请选择">
+              <el-select :disabled='disabled' v-show="showOptions4" style="width: 33%" v-model="value5" placeholder="请选择">
                 <el-option
                   v-for="item in options6"
                   :key="item.code"
@@ -250,9 +251,9 @@ export default {
   },
   data(){
     return {
-      total: 200,
+      total: 0,
       pageNum: 1,
-      pageSize: 20,
+      pageSize: 10,
       fileId: '',
       fileIdDetail: '',
       list: [
@@ -306,6 +307,7 @@ export default {
       detailImgUpload: false,
       detailImg: '',
       id: '',
+      disabled: false,
       updeteData: {
         code: '',
         id: '',
@@ -383,7 +385,7 @@ export default {
         parentCode: ''
       }
       api.serviceType().then(res => {
-        console.log(res)
+        // console.log(res)
         if(res.code == 0){
           this.options1 = res.data
         }
@@ -394,7 +396,7 @@ export default {
         parentCode: this.value
       }
       api.serviceType(data).then(res => {
-        console.log(res)
+        // console.log(res)
         if(res.code == 0){
           this.options2 = res.data
         }
@@ -405,7 +407,7 @@ export default {
         parentCode: this.value1
       }
       api.serviceType(data).then(res => {
-        console.log(res)
+        // console.log(res)
         if(res.code == 0){
           if(res.data.length > 0){
             this.options3 = res.data
@@ -423,7 +425,7 @@ export default {
         parentCode: this.value3
       }
       api.serviceType(data).then(res => {
-        console.log(res)
+        // console.log(res)
         if(res.code == 0){
           this.options5 = res.data
         }
@@ -434,7 +436,7 @@ export default {
         parentCode: this.value4
       }
       api.serviceType(data).then(res => {
-        console.log(res)
+        // console.log(res)
         if(res.code == 0){
           if(res.data.length > 0){
             this.options6 = res.data
@@ -604,7 +606,7 @@ export default {
                 }
                 this.createData.introduceContent = JSON.stringify(introduceContent)
                 console.log(this.createData)
-                // this.submitUpdate(this.createData)
+                this.submitUpdate(this.createData)
               }else{
                 this.$message({
                   message: '请填写数据后保存',
@@ -625,7 +627,7 @@ export default {
               }
               console.log(introduceContent)
               this.createData.introduceContent = JSON.stringify(introduceContent)
-              // this.submitUpdate(this.createData)
+              this.submitUpdate(this.createData)
             }
           }else{
             this.$message({
@@ -641,14 +643,21 @@ export default {
               if(this.value5 != ''){
                 this.createData.code = this.value5
                 this.createData.id = this.id
-                let introduceContent = {
-                  introduceImg: this.fileId,
-                  detailJump: true,
-                  detailTitle: this.detailTitle,
-                  detailImg: this.fileIdDetail
+                let introduceContent = {}
+                introduceContent.detailJump = true
+                if(this.fileId == ''){
+                  introduceContent.introduceImg = this.introduceImg
+                }else{
+                  introduceContent.introduceImg = this.fileId
                 }
+                if(this.fileIdDetail == ''){
+                  introduceContent.detailImg = this.detailImg
+                }else{
+                  introduceContent.detailImg = this.fileIdDetail
+                }
+                console.log(introduceContent)
                 this.createData.introduceContent = JSON.stringify(introduceContent)
-                // this.submitUpdate(this.createData)
+                this.submitUpdate(this.createData)
               }else{
                 this.$message({
                   message: '请填写数据后保存',
@@ -660,14 +669,21 @@ export default {
             }else{
               this.createData.code = this.value4
               this.createData.id = this.id
-              let introduceContent = {
-                introduceImg: this.fileId,
-                detailJump: true,
-                detailTitle: this.detailTitle,
-                detailImg: this.fileIdDetail
+              let introduceContent = {}
+              introduceContent.detailJump = true
+              if(this.fileId == ''){
+                introduceContent.introduceImg = this.introduceImg
+              }else{
+                introduceContent.introduceImg = this.fileId
               }
+              if(this.fileIdDetail == ''){
+                introduceContent.detailImg = this.detailImg
+              }else{
+                introduceContent.detailImg = this.fileIdDetail
+              }
+              console.log(introduceContent)
               this.createData.introduceContent = JSON.stringify(introduceContent)
-              // this.submitUpdate(this.createData)
+              this.submitUpdate(this.createData)
             }
           }else{
             this.$message({
@@ -751,6 +767,7 @@ export default {
     handleUpdate(row){
       this.dialogUpdate = true
       this.id = row.id
+      this.disabled = true
       console.log(row)
 
       //获取三个下拉框里面的数据
@@ -862,7 +879,33 @@ export default {
         })
       })
     },
-    deleteRowData(){}
+    serviceDelete(row){
+      let data = {
+        id: row.id
+      }
+      data = qs.stringify(data)
+      this.$confirm('确认删除该业务?', '提示', {}).then(() => {
+        api.serviceDelete(data).then(res => {
+          if(res.code == 0){
+            this.$message({
+              message: '删除成功',
+              type: 'success',
+              showClose: true,
+              duration: 1000
+            })
+            this.getList()
+          }else{
+            this.$message({
+              message: '删除失败',
+              type: 'error',
+              showClose: true,
+              duration: 1000
+            })
+            this.getList()
+          }
+        })
+      })
+    }
   }
 }
 </script>
