@@ -56,9 +56,41 @@ export default {
   /**
    * 公司基础信息保存
    * @function refreshToken
-   * @type 'GET'
+   * @type 'POST'
    */
   serviceList (data) {
-    return fetchGet('/service/list', data)
+    return fetchPost('/service/list', data)
+  },
+  /**
+   * 服务类型数据
+   * @function refreshToken
+   * @type 'GET'
+   */
+  serviceType (data) {
+    return fetchGet('/service/service_types', data)
+  },
+  /**
+   * 服务保存
+   * @function refreshToken
+   * @type 'POST'
+   */
+  serviceSave (data) {
+    return fetchPost('/service/add', data)
+  },
+  /**
+   * 服务编辑
+   * @function refreshToken
+   * @type 'POST'
+   */
+  serviceUpdate (data) {
+    return fetchPost('/service/update', data)
+  },
+  /**
+   * 服务上下架
+   * @function refreshToken
+   * @type 'POST'
+   */
+  serviceChangeShelf (data) {
+    return fetchPost('/service/change_shelf', data)
   }
 }

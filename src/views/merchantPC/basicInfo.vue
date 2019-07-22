@@ -42,9 +42,7 @@
         <div class="infoContent">
           <div class="line oneline">
             <span class="label">公司名称</span>
-            <div class="inputBox">
-              <input type="text" v-model="name">
-            </div>
+            <span class="content">{{ name }}</span>
           </div>
           <div class="line">
             <span class="label">公司LOGO</span>
@@ -65,7 +63,7 @@
           <div class="line oneline">
             <span class="label">工作时间</span>
             <div class="inputBox">
-              <input type="text" v-model="workTime">
+              <input maxlength="40" type="text" v-model="workTime">
             </div>
           </div>
           <div class="line">
