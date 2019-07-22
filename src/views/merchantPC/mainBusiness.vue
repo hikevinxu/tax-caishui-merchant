@@ -253,7 +253,7 @@ export default {
     return {
       total: 0,
       pageNum: 1,
-      pageSize: 10,
+      pageSize: 20,
       fileId: '',
       fileIdDetail: '',
       list: [
@@ -655,6 +655,7 @@ export default {
                 }else{
                   introduceContent.detailImg = this.fileIdDetail
                 }
+                introduceContent.detailTitle = this.detailTitle
                 console.log(introduceContent)
                 this.createData.introduceContent = JSON.stringify(introduceContent)
                 this.submitUpdate(this.createData)
@@ -681,9 +682,10 @@ export default {
               }else{
                 introduceContent.detailImg = this.fileIdDetail
               }
+              introduceContent.detailTitle = this.detailTitle
               console.log(introduceContent)
               this.createData.introduceContent = JSON.stringify(introduceContent)
-              this.submitUpdate(this.createData)
+              // this.submitUpdate(this.createData)
             }
           }else{
             this.$message({
@@ -935,7 +937,8 @@ export default {
 }
 .mainBusinesss {
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
+  padding-bottom: 20PX;
   .business{
     width: 100%;
     min-width: 1040PX;

@@ -19,7 +19,7 @@ axios.defaults.baseURL = 'http://tax-caishui-merchant.int.anniu-inc.com'
 // 线上环境地址
 // axios.defaults.baseURL = 'https://wap-api.wei.taxlioner.com'
 // 本地环境地址
-// axios.defaults.baseURL = 'http://172.100.13.113:8082'
+// axios.defaults.baseURL = 'http://172.100.11.27:8080'
 
 // POST传参序列化(添加请求拦截器)
 axios.interceptors.request.use((config) => {

@@ -152,6 +152,14 @@ export default new Router({
       }
     },
     {
+      path: '/reset',
+      name: 'reset',
+      component: () => import('../views/merchantPC/reset.vue'),
+      meta: {
+        title: '重置密码'
+      }
+    },
+    {
       path: '/register-pc',
       name: 'register-pc',
       component: () => import('../views/merchantPC/merchant/register-pc.vue'),
