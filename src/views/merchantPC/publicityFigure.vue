@@ -4,52 +4,129 @@
       <div class="title">宣传图片</div>
       <div class="uploadImgList">
         <el-upload
-          :class="fileList.length >= 8 ? 'disabled' : ''"
-          action="https://jsonplaceholder.typicode.com/posts/"
+          :class="imgTotal >= 8 ? 'disabled' : ''"
+          action=""
           list-type="picture-card"
-          multiple
+          :multiple="false"
           :limit="8"
           :file-list="fileList"
           :on-remove="handleRemove"
-          :on-success="handleSuccess">
+          :http-request="upload">
           <i class="el-icon-plus"></i>
         </el-upload>
-        <div class="imgTotal">已添加图片 5/8 张</div>
+        <div class="imgTotal">已添加图片 {{ imgTotal }}/8 张</div>
       </div>
     </div>
   </div>
 </template>
 <script>
-
+import api from '@/api/api'
+import qs from 'qs'
 import { setCookie } from '@/utils/cookie.js'
 export default {
   data(){
     return {
-      imgTotal: 4,
-      fileList: []
+      imgTotal: 0,
+      fileList: [],
+      fileId: ''
     }
   },
+  created(){
+    this.getImglist();
+  },
   methods: {
-    toChat: function(){
-      setCookie('uid', '15515268707')
-      setCookie("sdktoken", "b3e8d33f9cfbc94f4ea0e8b41c41fb1c")
-      // window.open('./IM/im/main.html')
-      window.location.href = window.location.protocol+"//"+window.location.host + '/IM/im/main.html'
+    //上传图片
+    upload (files) {
+      let formData = new FormData()
+      formData.append('files', files.file)
+      api.fileupload(formData).then(res => {
+        if (res.code == 0) {
+          console.log(res)
+          this.fileId =  res.data[0].fileId
+          let data = {
+            img: this.fileId
+          }
+          data = qs.stringify(data)
+          api.publictyImgAdd(data).then(res => {
+            if(res.code == 0){
+              console.log(res)
+              this.$message({
+                message: '添加成功',
+                type: 'success',
+                showClose: true,
+                duration: 1000
+              })
+              this.getImglist()
+            }else{
+              this.$message({
+                message: '添加失败',
+                type: 'error',
+                showClose: true,
+                duration: 1000
+              })
+              this.getImglist()
+            }
+          })
+        }
+      }).catch(err => {
+        this.$message.error('上传失败，请重新上传')
+      })
     },
-    handleRemove () {
-
+    getImglist(){
+      api.publictyImgList().then(res => {
+        console.log(res)
+        if(res.code == 0){
+          let fileList = []
+          if(res.data.length > 0){
+            this.imgTotal = res.data.length
+          }
+          for (let i = 0; i < res.data.length; i++) {
+            let img = res.data[i].img;
+            let uid = res.data[i].id
+            let json = {
+              uid: uid,
+              url: img
+            }
+            fileList.push(json)
+          }
+          this.fileList = fileList
+        }
+      })
     },
-    handleSuccess (res, file, fileList) {
-      console.log(res)
-      console.log(file)
-      console.log(fileList)
-      this.fileList = fileList
-      console.log(this.fileList)
+    handleRemove (res, file, fileList) {
+      console.log(res.uid)
+      let data = {
+        imgid: res.uid
+      }
+      data = qs.stringify(data)
+      api.publictyImgDelete(data).then(res => {
+        if(res.code == 0){
+          console.log(res)
+          this.$message({
+            message: '删除成功',
+            type: 'success',
+            showClose: true,
+            duration: 1000
+          })
+          this.getImglist()
+        }else{
+          this.$message({
+            message: '删除失败',
+            type: 'error',
+            showClose: true,
+            duration: 1000
+          })
+          this.getImglist()
+        }
+      })
     }
   }
 }
 </script>
 <style lang="scss">
+.is-ready{
+  display: none !important;
+}
 .publictyFigure {
   width: 100vw;
   height: 100vh;

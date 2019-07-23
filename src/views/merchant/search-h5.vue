@@ -32,7 +32,7 @@
                 </van-popup>
                 <button id="search" :disabled="disabled" @click="search">搜索企业</button>
             </div>
-            <div class="company-content" v-show="result == true">
+            <div class="company-content" v-show="result == false">
                 <div class="title">为您找到以下企业({{ length }})</div>
                 <div class="companyList" v-for="(item,index) in companyList" :key="index">
                     <h4 class="cpmpanyName">{{ item.name }}</h4>
@@ -49,6 +49,10 @@
                         </div>
                         <div class="conpanyBtn">认领</div>
                     </div>
+                </div>
+                <div class="load_more" @click="loadingMore">
+                    <span v-show="!loading_more">点击加载更多</span>
+                    <van-loading style="width: 10px;" v-show="loading_more == true" type="spinner" />
                 </div>
                 <div class="addNew">
                     <span class="" style="font-size: 12px;color: rgba(0,0,0,0.60);">没有找到想要认领的企业？</span>
@@ -85,6 +89,7 @@ export default {
         length: 2,
         areaList: areaList,
         loading: false,
+        loading_more: false,
         companyList: [
             {
                 name: '杭州税牛科技有限公司',
@@ -138,6 +143,31 @@ export default {
         }else{
            this.result = false
         }
+    },
+    loadingMore(){
+        let companyList = [
+            {
+                name: '杭州税牛科技有限公司',
+                adress: '浙江省杭州市西湖区双龙街199号金色西溪B座8楼',
+                phone: '0571-29182721'
+            },
+            {
+                name: '杭州税牛科技有限公司',
+                adress: '浙江省杭州市西湖区双龙街199号金色西溪B座8楼',
+                phone: '0571-29182721'
+            },
+            {
+                name: '杭州税牛科技有限公司',
+                adress: '浙江省杭州市西湖区双龙街199号金色西溪B座8楼',
+                phone: '0571-29182721'
+            }
+        ]
+        this.loading_more = true
+        setTimeout(res => {
+            this.companyList = this.companyList.concat(companyList)
+            this.loading_more = false
+        },1000)
+
     },
     goClaim(){
         this.$router.push('/merchant-h5')
@@ -284,6 +314,24 @@ export default {
         font-size: 13px;
         color: #FF7F4A;
         text-align: center;
+    }
+
+    .search-h5-content .company-content .load_more{
+        width: 312px;
+        margin-left: auto;
+        margin-right: auto;
+        display: flex;
+        height: 40px;
+        flex-flow: column;
+        align-items: center;
+        justify-content: center;
+        // margin-top: 16px;
+        border-bottom: 1px solid rgba(0,0,0,0.04);
+        cursor: pointer;
+        span{
+            font-size: 14px;
+            color: rgba(0,0,0,0.60);
+        }
     }
 
     .search-h5-content .company-content .addNew{

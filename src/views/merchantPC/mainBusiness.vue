@@ -230,6 +230,7 @@
 import api from '@/api/api'
 import qs from 'qs'
 import Pagination from '@/components/Pagination'
+import { parse } from 'path';
 export default {
   name: 'mainBusinesss',
   components: { Pagination },
@@ -801,9 +802,10 @@ export default {
       //单选框复选框赋值
       if(row.introduceType == 'text'){
         this.radio = '1'
-        // this.introduceContent = 
+        this.introduceContent = row.introduceContent
       }else{
         this.radio = '2'
+        row.introduceContent = JSON.parse(row.introduceContent)
         this.introduceImg = row.introduceContent.introduceImg
         this.introduceImgUpload = true
         // console.log(this.introduceImg)

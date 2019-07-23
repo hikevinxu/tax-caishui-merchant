@@ -54,6 +54,30 @@ export default {
     return fetchPost('/company/basic/update', data)
   },
   /**
+   * 宣传图片list
+   * @function refreshToken
+   * @type 'GET'
+   */
+  publictyImgList () {
+    return fetchGet('/company/publicityImg/list')
+  },
+  /**
+   * 宣传图片上传
+   * @function refreshToken
+   * @type 'GET'
+   */
+  publictyImgAdd (data) {
+    return fetchPost('/company/publicityImg/add', data)
+  },
+  /**
+   * 宣传图片上传
+   * @function refreshToken
+   * @type 'GET'
+   */
+  publictyImgDelete (data) {
+    return fetchPost('/company/publicityImg/delete', data)
+  },
+  /**
    * 公司基础信息保存
    * @function refreshToken
    * @type 'POST'
