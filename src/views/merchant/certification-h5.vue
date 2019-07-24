@@ -28,13 +28,13 @@
         <div class="formItem">
           <label for="name">工商注册号<span class="notNull">*</span></label>
           <div class="input">
-            <van-field v-model="name" placeholder="工商注册号不能为空" />
+            <van-field v-model="businessLicenseNo" placeholder="工商注册号不能为空" />
           </div>
         </div>
         <div class="formItem upload">
           <label for="fileList">营业执照<span class="notNull">*</span></label>
           <div class="input">
-            <van-uploader v-model="fileList" multiple :max-count="2" :before-read="beforeRead" />
+            <van-uploader v-model="fileList" multiple :max-count="1" :after-read="upload"/>
           </div>
           <div class="prompt">
             <p>请上传营业执照</p>
@@ -44,7 +44,7 @@
         <div class="formItem upload">
           <label for="fileList">法人手持身份证照片<span class="notNull">*</span></label>
           <div class="input">
-            <van-uploader v-model="fileList" multiple :max-count="2" :before-read="beforeRead" />
+            <van-uploader v-model="fileList1" multiple :max-count="1" :after-read="upload1"/>
           </div>
           <div class="prompt">
             <p>请上传营业执照</p>
@@ -54,7 +54,7 @@
         <div class="formItem upload">
           <label for="fileList">资质证书</label>
           <div class="input">
-            <van-uploader v-model="fileList" multiple :max-count="2" :before-read="beforeRead" />
+            <van-uploader v-model="fileList2" multiple :max-count="1" :after-read="upload2"/>
           </div>
           <div class="prompt">
             <p>可上传其他资质</p>
@@ -76,27 +76,105 @@
 
 <script>
 import Vue from 'vue'
+import api from '@/api/apiH5'
+import apiPC from '@/api/api'
 import { Field, Uploader, Toast, Button, Checkbox } from 'vant'
+import { setTimeout } from 'timers';
 Vue.use(Field).use(Uploader).use(Toast).use(Button).use(Checkbox)
 
 export default {
   name: 'certification-h5',
   data () {
     return {
-      name: '',
+      businessLicenseNo: '',
       fileList: [],
+      fileId: '',
+      fileList1: [],
+      fileId1: '',
+      fileList2: [],
+      fileId2: '',
       checked: true
     }
   },
+  created(){
+    this.getCertificationStatus();
+  },
   methods: {
+    getCertificationStatus(){
+      api.getCertificationStatus().then(res => {
+        console.log(res)
+        if(res.code == 0){
+          if(res.data.status == 102){
+            // this.$router.push({
+            //     path: '/success-h5',
+            //     query: {
+            //       status: res.data.status,
+            //     }
+            // })
+            alert('审核中')
+          }
+        }
+      })
+    },
     beforeRead() {
       console.log(123)
+    },
+    upload(file){
+      let formData = new FormData()
+      formData.append('files', file.file)
+      apiPC.fileupload(formData).then(res => {
+        if (res.code == 0) {
+          console.log(res)
+          this.fileId =  res.data[0].fileId
+        }
+      }).catch(err => {
+        this.$message.error('上传失败，请重新上传')
+      })
+    },
+    upload1(file){
+      let formData = new FormData()
+      formData.append('files', file.file)
+      apiPC.fileupload(formData).then(res => {
+        if (res.code == 0) {
+          console.log(res)
+          this.fileId1 =  res.data[0].fileId
+        }
+      }).catch(err => {
+        this.$message.error('上传失败，请重新上传')
+      })
+    },
+    upload2(file){
+      let formData = new FormData()
+      formData.append('files', file.file)
+      apiPC.fileupload(formData).then(res => {
+        if (res.code == 0) {
+          console.log(res)
+          this.fileId2 =  res.data[0].fileId
+        }
+      }).catch(err => {
+        this.$message.error('上传失败，请重新上传')
+      })
     },
     jumpAgreement () {
       this.$router.push('agreement-h5')
     },
     jumpNextStep () {
-      this.$router.push('success-h5')
+      // this.$router.push('success-h5')
+      let data = {
+        businessLicenseNo: this.businessLicenseNo,
+        businessLicenseImg: this.fileId,
+        handheldIdCardImg: this.fileId1,
+        otherCertificateImg: this.fileId2
+      }
+      console.log(data)
+      api.merchantSaveCertification(data).then(res => {
+        if(res.code == 0){
+          Toast('保存成功')
+          setTimeout(res => {
+            this.$router.push('success-h5')
+          },1000)
+        }
+      })
     }
   }
 }

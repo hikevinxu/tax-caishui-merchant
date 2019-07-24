@@ -32,8 +32,9 @@
                             <img src="@/assets/globalPc/ic_form_cellnum.png" alt="">
                             <input type="text" v-model="code" class="codeInput" maxlength="4" placeholder="验证码" @input="codeInput">
                         </div>
+                        <div id="captcha"></div>
                         <span v-show="codeStart == true" class="codeStart">获取验证码</span>
-                        <span v-show="isCode == true && codeStart == false" class="isCode"  @click="sendCode">获取验证码</span>
+                        <span v-show="isCode == true && codeStart == false" class="isCode"  @click="codeClick">获取验证码</span>
                         <span class="count" v-show="isCode == false && codeStart == false">{{ count }}s后获取</span>
                     </div>
                     <div class="inputBox">
@@ -59,7 +60,7 @@
 </template>
 <script>
 import headNav from '@/components/merchantPC/headNav.vue'
-
+import api from '@/api/apiH5'
 export default {
   name: 'login',
   components: {
@@ -76,7 +77,39 @@ export default {
         disabled: true,
         code: '',
         timer: null,
+        captchaIns: ''
     }
+  },
+  created(){
+    var that = this
+    // initNECaptcha为全局函数，可直接调用
+    initNECaptcha({
+      // config对象，参数配置
+      captchaId: '39626bde5c61453a9bba63b1eb0a7d2c',
+      element: '#captcha',
+      mode: 'bind',
+      width: '320px',
+      enableClose: true, // 由业务方控制验证码弹框关闭
+      onVerify: function(err, data){
+        // 用户验证码验证成功后，进行实际的提交行为
+        if (!err) {
+          // 验证成功后，调用close方法关闭弹框（enableClose为true时调用）
+          that.captchaIns.close()
+          if (data) {
+            that.sendCode(data)
+          }
+        } else {
+            console.log(err)
+          return
+        }
+      }
+    }, function  onload (instance) {
+        // 初始化成功后得到验证实例instance，可以调用实例的方法
+        console.log(instance)
+        that.captchaIns = instance
+    }, function  onerror (err) {
+        // 初始化失败后触发该函数，err对象描述当前错误信息
+    })
   },
   methods: {
     getCode(){
@@ -91,13 +124,12 @@ export default {
                    clearInterval(this.timer);
                    this.timer = null; 
                    this.isCode = true
-                   this.sendIng = false
+                   this.codeStart = false
                }
             },1000)
         }
     },
     phoneInput(e){
-        console.log(this.phone)
         this.codeStart = false
         if(this.phone == ''){
             this.codeStart = true
@@ -112,7 +144,6 @@ export default {
         }
     },
     passwordInput(e){
-        console.log(this.code)
         if(this.code != '' && this.phone != '' && this.password != ''){
             this.disabled = false
         }else{
@@ -120,16 +151,20 @@ export default {
         }
     },
     codeInput(e){
-        console.log(this.code)
         if(this.code != '' && this.phone != '' && this.password != ''){
             this.disabled = false
         }else{
             this.disabled = true
         }
     },
-    sendCode(){
+    codeClick(){
+        console.log(this.captchaIns)
+        this.captchaIns && this.captchaIns.verify()
+    },
+    sendCode(data){
+        this.isCode = false
         let phone = this.phone
-        if(!(/^1[345678]\d{9}$/.test(phone))){
+        if(!(/^1[23456789]\d{9}$/.test(phone))){
             this.$message({
               message: '请输入正确的手机号',
               type: 'error',
@@ -137,12 +172,60 @@ export default {
               duration: 1000
             })
         }else{
-            this.isCode = false
-            this.getCode()
+            let json = {
+                clientType: 'h5',
+                phone: phone,
+                captchaValidate: data.validate 
+            }
+            api.merchantCode(json).then(res => {
+                this.captchaIns && this.captchaIns.refresh()
+                if(res.code == 0){
+                    this.getCode()
+                }
+            })
+            .catch( err => {
+                this.captchaIns && this.captchaIns.refresh()
+                this.isCode = true
+            })
         }
     },
     login(){
-      this.$router.push('/search-pc')
+      if(this.password.length >= 6){
+            let phone = this.phone,
+                password = this.password
+            let data = {
+                clientType: 'pc',
+                phone: phone,
+                password: password,
+                verifycode: this.code
+            }
+            console.log(data)
+            // data = qs.stringify(data)
+            api.merchantRegister(data).then(res => {
+                console.log(res)
+                if(res.code == 0){
+                    this.$message({
+                        message: '保存成功',
+                        type: 'success',
+                        showClose: true,
+                        duration: 1000
+                    })
+                    setTimeout(res => {
+                        this.$router.push('/search-pc')
+                    },1000)
+                }
+            })
+            .catch(err => {
+                this.c
+            })
+        }else{
+            this.$message({
+              message: '密码6~16位',
+              type: 'error',
+              showClose: true,
+              duration: 1000
+            })
+        }
     }
   }
 }

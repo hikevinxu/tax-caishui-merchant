@@ -23,11 +23,12 @@
                     <input type="text" v-model="phone" class="phoneInput" maxlength="11" placeholder="账号使用手机号" @input="phoneInput" >
                 </div>
                 <span style="font-size: 12px;color: rgba(0,0,0,0.60);display: block;margin-bottom: 13px;margin-left: 72px;">该手机号将作为商户登录账号</span>
+                <div id="captcha"></div>
                 <div class="inputBox">
                     <img src="@/assets/global/form_cellpass.png" alt="">
                     <input type="text" v-model="code" class="codeInput" maxlength="4" placeholder="验证码" @input="codeInput">
                     <span v-show="codeStart == true" class="codeStart">获取验证码</span>
-                    <span v-show="isCode == true && codeStart == false" class="isCode"  @click="sendCode">获取验证码</span>
+                    <span v-show="isCode == true && codeStart == false" class="isCode"  @click="codeClick">获取验证码</span>
                     <span class="count" v-show="isCode == false && codeStart == false">{{ count }}s后获取</span>
                 </div>
                 <div class="inputBox">
@@ -36,6 +37,7 @@
                 </div>
             </div>
             <button id="register" :disabled="disabled" @click="login">注 册</button>
+
         </div>
     </div>
 </template>
@@ -43,6 +45,8 @@
 <script>
 import Vue from 'vue';
 import { Toast } from 'vant';
+import api from '@/api/apiH5'
+import qs from 'qs'
 Vue.use(Toast);
 export default {
   name: 'register-h5',
@@ -57,10 +61,39 @@ export default {
         disabled: true,
         code: '',
         timer: null,
+        captchaIns: undefined
     }
   },
   created(){
-    
+      var that = this
+    // initNECaptcha为全局函数，可直接调用
+    initNECaptcha({
+      // config对象，参数配置
+      captchaId: '39626bde5c61453a9bba63b1eb0a7d2c',
+      element: '#captcha',
+      mode: 'bind',
+      width: '320px',
+      enableClose: true, // 由业务方控制验证码弹框关闭
+      onVerify: function(err, data){
+        // 用户验证码验证成功后，进行实际的提交行为
+        if (!err) {
+          // 验证成功后，调用close方法关闭弹框（enableClose为true时调用）
+          that.captchaIns.close()
+          if (data) {
+            that.sendCode(data)
+          }
+        } else {
+            console.log(err)
+          return
+        }
+      }
+    }, function  onload (instance) {
+        // 初始化成功后得到验证实例instance，可以调用实例的方法
+        console.log(instance)
+        that.captchaIns = instance
+    }, function  onerror (err) {
+        // 初始化失败后触发该函数，err对象描述当前错误信息
+    })
   },
   methods: {
     getCode(){
@@ -81,7 +114,6 @@ export default {
         }
     },
     phoneInput(e){
-        console.log(this.phone)
         this.codeStart = false
         if(this.phone == ''){
             this.codeStart = true
@@ -96,7 +128,6 @@ export default {
         }
     },
     passwordInput(e){
-        console.log(this.code)
         if(this.code != '' && this.phone != '' && this.password != ''){
             this.disabled = false
         }else{
@@ -104,24 +135,65 @@ export default {
         }
     },
     codeInput(e){
-        console.log(this.code)
         if(this.code != '' && this.phone != '' && this.password != ''){
             this.disabled = false
         }else{
             this.disabled = true
         }
     },
-    sendCode(){
+    codeClick(){
+        console.log(this.captchaIns)
+        this.captchaIns && this.captchaIns.verify()
+    },
+    sendCode(data){
+        this.isCode = false
         let phone = this.phone
-        if(!(/^1[345678]\d{9}$/.test(phone))){
+        if(!(/^1[23456789]\d{9}$/.test(phone))){
             Toast('请输入正确的手机号')
         }else{
-            this.isCode = false
-            this.getCode()
+            let json = {
+                clientType: 'h5',
+                phone: phone,
+                captchaValidate: data.validate 
+            }
+            api.merchantCode(json).then(res => {
+                this.captchaIns && this.captchaIns.refresh()
+                if(res.code == 0){
+                    this.getCode()
+                }
+            })
+            .catch( err => {
+                this.captchaIns && this.captchaIns.refresh()
+            })
         }
     },
     login(){
-      this.$router.push('/search-h5')
+        if(this.password.length >= 6){
+            let phone = this.phone,
+                password = this.password
+            let data = {
+                clientType: 'h5',
+                phone: phone,
+                password: password,
+                verifycode: this.code
+            }
+            console.log(data)
+            // data = qs.stringify(data)
+            api.merchantRegister(data).then(res => {
+                console.log(res)
+                if(res.code == 0){
+                    Toast('注册成功')
+                    setTimeout(res => {
+                        this.$router.push('/search-h5')
+                    },1000)
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            })
+        }else{
+            Toast('密码是长度在6~16之间')
+        }
     }
   }
 }

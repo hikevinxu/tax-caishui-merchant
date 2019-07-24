@@ -32,27 +32,30 @@
                 </van-popup>
                 <button id="search" :disabled="disabled" @click="search">搜索企业</button>
             </div>
-            <div class="company-content" v-show="result == false">
-                <div class="title">为您找到以下企业({{ length }})</div>
+            <div class="company-content" v-show="result == true">
+                <div class="title">为您找到以下企业({{ total }})</div>
                 <div class="companyList" v-for="(item,index) in companyList" :key="index">
                     <h4 class="cpmpanyName">{{ item.name }}</h4>
                     <div class="companInfo">
                         <div class="info-content">
                             <div class="adress" style="margin-bottom: 4px;">
                                 <img style="display: block;width: 16px;height: 16px;margin-right: 8px;" src="@/assets/global/firm_ic_address.png" alt="">
-                                <span>{{ item.adress }}</span>
+                                <span>{{ item.address }}</span>
                             </div>
                             <div class="phone">
                                 <img style="display: block;width: 16px;height: 16px;margin-right: 8px;" src="@/assets/global/firm_ic_phone.png" alt="">
-                                <span>{{ item.phone }}</span>
+                                <span v-for="(items, index) in item.phones" :key="index">{{ items }}</span>
                             </div>
                         </div>
-                        <div class="conpanyBtn">认领</div>
+                        <div class="conpanyBtn" @click="claim(item)">认领</div>
                     </div>
                 </div>
-                <div class="load_more" @click="loadingMore">
+                <div class="load_more" @click="loadingMore" v-show="showLoad &&!noMore">
                     <span v-show="!loading_more">点击加载更多</span>
                     <van-loading style="width: 10px;" v-show="loading_more == true" type="spinner" />
+                </div>
+                <div class="load_more" v-show="showLoad && noMore">
+                    <span>已经到底了</span>
                 </div>
                 <div class="addNew">
                     <span class="" style="font-size: 12px;color: rgba(0,0,0,0.60);">没有找到想要认领的企业？</span>
@@ -68,45 +71,33 @@
 </template>
 
 <script>
+let pageNum = 1;
 import areaList from '@/utils/areaList'
 import Vue from 'vue';
+import api from '@/api/apiH5'
+import qs from 'qs'
 import { Picker,Popup,Loading } from 'vant';
-import { setTimeout } from 'timers';
-import { Area } from 'vant';
-Vue.use(Area);
-Vue.use(Picker);
-Vue.use(Popup);
-Vue.use(Loading);
+import { Area, Toast } from 'vant';
+Vue.use(Area);Vue.use(Toast);Vue.use(Picker);Vue.use(Popup);Vue.use(Loading);
 export default {
   name: 'search-h5',
   data(){
     return{
         value: '',
         name: '',
+        total: 0,
+        showLoad: false,
+        noMore: false,
         showPicker: false,
         disabled: true,
         result: false,
-        length: 2,
         areaList: areaList,
         loading: false,
         loading_more: false,
-        companyList: [
-            {
-                name: '杭州税牛科技有限公司',
-                adress: '浙江省杭州市西湖区双龙街199号金色西溪B座8楼',
-                phone: '0571-29182721'
-            },
-            {
-                name: '杭州税牛科技有限公司',
-                adress: '浙江省杭州市西湖区双龙街199号金色西溪B座8楼',
-                phone: '0571-29182721'
-            },
-            {
-                name: '杭州税牛科技有限公司',
-                adress: '浙江省杭州市西湖区双龙街199号金色西溪B座8楼',
-                phone: '0571-29182721'
-            }
-        ]
+        companyList: [],
+        areaCode: '',
+        cityCode: '',
+        pageSize: 20
     }
   },
   created(){
@@ -117,6 +108,17 @@ export default {
         console.log(value)
         this.value = value[0].name + value[1].name + value[2].name
         console.log(this.value)
+        if(value[1].name == '北京市'){
+            value[1].code = '110000'
+        }else if(value[1].name == '天津市'){
+            value[1].code = '120000'
+        }else if(value[1].name == '上海市'){
+            value[1].code = '310000'
+        }else if(value[1].name == '重庆市'){
+            value[1].code = '500000'
+        }
+        this.cityCode = value[1].code
+        this.areaCode = value[2].code
         this.showPicker = false;
         if(this.name != ''){
             this.disabled = false
@@ -133,41 +135,81 @@ export default {
         }
     },
     search(){
+        this.result = false
         this.loading = true
         if(this.value != '' && this.name != ''){
-            let that = this
-            setTimeout(function(){
-                that.result = true
-                that.loading = false
-            },1000)
+            let data = {
+                areaCode: this.areaCode,
+                cityCode: this.cityCode,
+                // fullSearch: true,
+                pageNum: pageNum,
+                pageSize: this.pageSize,
+                keyword: this.name
+            }
+            console.log(data)
+            api.merchantSearch(data).then(res => {
+                console.log(res)
+                if(res.code == 0){
+                    this.loading = false
+                    this.result = true
+                    this.companyList = res.data.items
+                    this.total = res.data.total
+                    console.log(res.data.items.length)
+                    if(res.data.total <= 20){
+                        this.showLoad = false
+                    }else{
+                        this.showLoad = true
+                    }
+                }
+            })
+            
         }else{
            this.result = false
+           Toast('请完善数据后搜索')
+        }
+    },
+    searchMore(){
+        pageNum ++
+        this.loading_more = true
+        if(this.value != '' && this.name != ''){
+            let data = {
+                areaCode: this.areaCode,
+                cityCode: this.cityCode,
+                // fullSearch: true,
+                pageNum: pageNum,
+                pageSize: this.pageSize,
+                keyword: this.name
+            }
+            console.log(data)
+            api.merchantSearch(data).then(res => {
+                console.log(res)
+                if(res.code == 0){
+                    this.companyList = this.companyList.concat(res.data.items)
+                    this.total = res.data.total
+                    this.loading_more = false
+                    if(res.data.items.length <= 20){
+                        this.noMore = true
+                    }else{
+                        this.noMore = false
+                    }
+                }
+            })
+        }else{
+           Toast('请完善数据后搜索')
         }
     },
     loadingMore(){
-        let companyList = [
-            {
-                name: '杭州税牛科技有限公司',
-                adress: '浙江省杭州市西湖区双龙街199号金色西溪B座8楼',
-                phone: '0571-29182721'
-            },
-            {
-                name: '杭州税牛科技有限公司',
-                adress: '浙江省杭州市西湖区双龙街199号金色西溪B座8楼',
-                phone: '0571-29182721'
-            },
-            {
-                name: '杭州税牛科技有限公司',
-                adress: '浙江省杭州市西湖区双龙街199号金色西溪B座8楼',
-                phone: '0571-29182721'
+        console.log(pageNum)
+        this.searchMore()
+    },
+    claim(item){
+        console.log(item.id)
+        this.$router.push({
+            path: '/merchant-h5',
+            query: {
+              id: item.id,
             }
-        ]
-        this.loading_more = true
-        setTimeout(res => {
-            this.companyList = this.companyList.concat(companyList)
-            this.loading_more = false
-        },1000)
-
+        })
     },
     goClaim(){
         this.$router.push('/merchant-h5')
@@ -297,7 +339,8 @@ export default {
     .search-h5-content .company-content .companyList .companInfo .info-content .adress span,
     .search-h5-content .company-content .companyList .companInfo .info-content .phone span{
         display: block;
-        width: 208px;
+        // width: 208px;
+        margin-right: 8px;
         font-size: 12px;
         color: rgba(0,0,0,0.38);
         text-align: left;

@@ -42,6 +42,7 @@
               <van-popup v-model="showPicker" position="bottom">
                   <van-picker
                     show-toolbar
+                    value-key="name"
                     :columns="columns"
                     @cancel="showPicker = false"
                     @confirm="onConfirm"
@@ -52,7 +53,8 @@
           <div class="formItem upload">
             <label for="fileList">机构Logo<span class="notNull">*</span></label>
             <div class="input">
-              <van-uploader v-model="fileList" multiple :max-count="1" :before-read="beforeRead" />
+              <van-uploader v-model="fileList" multiple :max-count="1" :before-read="beforeRead" 
+              :after-read='upload'/>
             </div>
             <div class="prompt">
               <p>请上传图片</p>
@@ -62,7 +64,7 @@
           <div class="formItem">
             <label for="position">所在地区<span class="notNull">*</span></label>
             <div class="input">
-                <van-field readonly v-model="position" placeholder="请选择" @click="showAreaPicker = true"/>
+                <van-field readonly v-model="value" placeholder="请选择" @click="showAreaPicker = true"/>
                 <div class="icon">
                   <img src="@/assets/global/ic_arrow_dropdown@3x.png" alt="">
                 </div>
@@ -81,47 +83,17 @@
                   <img src="@/assets/global/ic_form_location.png" alt="">
                 </div>
             </div>
-            <!-- <div class="picker">
-              <van-popup v-model="showMap" :style="{ width: '100%', height: '100%', minHeight: '100%' }">
-                <div class="mapContainer">
-                  <div class="closeIcon" @click="closeMapDialog">
-                    <img src="@/assets/global/ic_white_close.png" alt="">
-                  </div>
-                  <div id="container">
-                    <el-amap vid="amap" ref="map" :center="center" :zoom="zoom" :plugin="plugin" :events="events"></el-amap>
-                    <div class="search-box">
-                      <span class="searchIcon"><img src="@/assets/global/ic_search@3x.png" alt=""></span>
-                      <el-amap-search-box :search-option="searchOption" :on-search-result="onSearchResult"></el-amap-search-box>
-                    </div>
-                    <div class="reGetLocation" @click="getCurrentPositionLaglng">
-                      <div v-if="getLocationLoading" class="geo_over">
-                        <van-loading />
-                      </div>
-                      <div v-else class="geo_over">
-                        <img src="../../assets/global/ic_map_locating.png" alt="">
-                      </div>
-                    </div>
-                    <div class="point"><img src="@/assets/global/map_pin.png" alt=""></div>
-                    <div class="selectAddress">
-                      <div class="inner"> 
-                        <div class="text">
-                          <span><img src="@/assets/global/ic_form_location.png" alt=""></span>
-                          <div class="addressDetail">{{address}}</div>
-                        </div>
-                        <div class="btn" >
-                          <van-button type="primary" size="large" @click="getLagLng">确定使用该地址</van-button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </van-popup>
-            </div> -->
           </div>
           <div class="formItem">
-            <label for="person">联系人</label>
+            <label for="name">详细地址<span class="notNull">*</span></label>
             <div class="input">
-                <van-field v-model="person" placeholder="请填写联系人" />
+              <van-field v-model="address" placeholder="详细地址不能为空" />
+            </div>
+          </div>
+          <div class="formItem">
+            <label for="person">联系人<span class="notNull">*</span></label>
+            <div class="input">
+                <van-field v-model="contact" placeholder="请填写联系人" />
             </div>
           </div>
           <div class="formItem">
@@ -145,14 +117,15 @@
           <div class="formItem textArea">
             <label for="email">详细介绍</label>
             <div class="input">
-              <van-field v-model="intro" type="textarea" placeholder="请输入机构详细介绍" rows="3" />
+              <van-field v-model="introduce" type="textarea" placeholder="请输入机构详细介绍" rows="3" />
             </div>
           </div>
           <div class="formItem introPic">
             <label for="email">介绍图 <span class="warning">添加几张图片，让您的服务更受欢迎</span></label>
             <div class="input">
               <div class="introPicList">
-                <van-uploader v-model="fileList" multiple :max-count="8" :before-read="beforeRead" />
+                <van-uploader v-model="fileIntroList" multiple :max-count="8" :before-read="beforeReadIntro" 
+                :after-read='uploadIntro'/>
               </div>
               <div class="prompt">
                 <p>最多8张 建议尺寸: 400*400px</p>
@@ -170,20 +143,13 @@
 
 <script>
 import Vue from 'vue'
-import VueAMap from 'vue-amap';
+import api from '@/api/apiH5'
+import apiPC from '@/api/api'
 import { setCookie } from '@/utils/cookie.js'
 import { eventManager } from '@/utils/global'
 import areaList from '@/utils/areaList'
 import { Field, Picker, Popup, Uploader, Toast, Button, Icon, Loading, Area } from 'vant'
-Vue.use(VueAMap).use(Field).use(Picker).use(Popup).use(Uploader).use(Toast).use(Button).use(Icon).use(Loading).use(Area)
-
-// 初始化高德地图的 key 和插件
-VueAMap.initAMapApiLoader({
-  key: '54f7b2ff0b18deaefc0fd1925e434ead',
-  plugin: ['AMap.Autocomplete', 'AMap.PlaceSearch', 'AMap.Scale', 'AMap.OverView', 'AMap.ToolBar', 'AMap.MapType', 'AMap.PolyEditor', 'AMap.CircleEditor', 'AMap.Geocoder', 'AMap.Geolocation'],
-  // 默认高德 sdk 版本为 1.4.4
-  v: '1.4.4'
-});
+Vue.use(Field).use(Picker).use(Popup).use(Uploader).use(Toast).use(Button).use(Icon).use(Loading).use(Area)
 
 export default {
   name: 'merchant-h5',
@@ -191,13 +157,17 @@ export default {
     return {
       name: '',
       type: '',
+      typeValue: '',
+      value: '',
       position: '',
+      address: '',
       laglng: '',
-      person: '',
+      center: [],
+      contact: '',
       phone: '',
       QQAccount: '',
       email: '',
-      intro: '',
+      introduce: '',
       columns: [],
       areaList: areaList,
       showPicker: false,
@@ -205,77 +175,10 @@ export default {
       username: '',
       password: '',
       fileList: [],
+      fileIntroList: [],
+      introList: [],
       phone: '',
-      showMap: false,
-      searchOption: {
-        city: '',
-        citylimit: true
-      },
-      getLocationLoading: false,
-      currentPosition: false,
-      center: [116.397477,39.908692],
-      zoom: 16,
-      events: {
-        init: (o) => {
-          // console.log(o)
-        },
-        'dragend': (e) => {
-          // console.log(this)
-          var centerPoint = this.$refs.map.$$getCenter()
-          this.center = centerPoint
-          var geocoder = new AMap.Geocoder({
-            radius: 1000,
-            extensions: 'all'
-          })
-          geocoder.getAddress(centerPoint, (status, result) => {
-            if (status == 'complete') {
-              // console.log(result.regeocode)
-              this.address = result.regeocode.formattedAddress
-            }
-          })
-        }
-      },
-      plugin: [
-        'ToolBar', 
-        {
-          pName: 'Scale',
-          events: {
-            init(o) {
-              // console.log(o);
-            }
-          }
-        },
-        {
-          pName: 'Geolocation',
-          events: {
-            init: (o) => {
-              // o 是高德地图定位插件实例
-              // o.getCurrentPosition((status, result) => {
-              //   if (result && result.position) {
-              //     console.log(self)
-              //     this.center = [result.position.lng, result.position.lat];
-              //     var geocoder = new AMap.Geocoder({
-              //       radius: 1000,
-              //       extensions: 'all'
-              //     })
-              //     geocoder.getAddress(this.center, (status, result) => {
-              //       console.log(status)
-              //       if (status == 'complete') {
-              //         console.log(result.regeocode)
-              //         this.address = result.regeocode.formattedAddress
-              //         this.currentPosition = true
-              //       } else if(status == 'error') {
-              //         alert("定位失败！")
-              //       }
-              //       Toast.clear()
-              //     })
-              //   }
-              // })
-            }
-          }
-        }
-      ],
-      address: ''
+      fileId: ''
     }
   },
   created() {
@@ -285,25 +188,45 @@ export default {
           document.activeElement.scrollIntoViewIfNeeded()
         }, 0)
       }
-   })
+    })
+    this.getCompanyTypes()
   },
   methods: {
-    goChat(){
-      setCookie('uid', '15515268707')
-      setCookie("sdktoken", "b3e8d33f9cfbc94f4ea0e8b41c41fb1c")
-      window.open('./IM/im/main.html')
-    },
-    onConfirm(val){
+    onConfirm(val,index){
       console.log(val)
+      console.log(index)
+      this.type = val.name
+      this.typeValue = this.columns[index].value
       this.showPicker = false
     },
-    selectArea(val){
-      this.position = val[0].name + ' ' + val[1].name + ' ' + val[2].name
-      this.showAreaPicker = false
+    getCompanyTypes(){
+      api.merchantCompanyTypes().then(res => {
+        console.log(res)
+        if(res.code == 0){
+          this.columns = res.data
+        }
+      })
+    },
+    selectArea(value){
+      console.log(value)
+      this.value = value[0].name + value[1].name + value[2].name
+      console.log(this.value)
+      if(value[1].name == '北京市'){
+          value[1].code = '110000'
+      }else if(value[1].name == '天津市'){
+          value[1].code = '120000'
+      }else if(value[1].name == '上海市'){
+          value[1].code = '310000'
+      }else if(value[1].name == '重庆市'){
+          value[1].code = '500000'
+      }
+      this.provinceCode = value[0].code
+      this.cityCode = value[1].code
+      this.areaCode = value[2].code
+      this.showAreaPicker = false;
     },
     // 返回布尔值
     beforeRead(file) {
-      console.log(file)
       var reader = new FileReader()
       reader.onload = function(evt){
         console.log(evt)
@@ -313,8 +236,6 @@ export default {
           var height = image.height;
           var width = image.width;
           var filesize = image.fileSize;
-          console.log(height)
-          console.log(width)
         }
       }
       reader.readAsDataURL(file)
@@ -324,80 +245,88 @@ export default {
       // }
       return true;
     },
+    beforeReadIntro(file) {
+      console.log(file)
+      return true;
+    },
+    upload(file){
+      let formData = new FormData()
+      formData.append('files', file.file)
+      apiPC.fileupload(formData).then(res => {
+        if (res.code == 0) {
+          console.log(res)
+          this.fileId =  res.data[0].fileId
+        }
+      }).catch(err => {
+        this.$message.error('上传失败，请重新上传')
+      })
+    },
+    uploadIntro(file){
+      console.log(file)
+      if(file instanceof Array){
+        for (let i = 0; i < file.length; i++) {
+          let image = file[i].file;
+          let formData = new FormData()
+          formData.append('files', image)
+          apiPC.fileupload(formData).then(res => {
+            if (res.code == 0) {
+              this.fileIdIntro =  res.data[0].fileId
+              this.introList.push(this.fileIdIntro)
+              console.log(this.introList)
+            }
+          }).catch(err => {
+            this.$message.error('上传失败，请重新上传')
+          })
+        }
+      }else{
+        let formData = new FormData()
+        formData.append('files', file.file)
+        apiPC.fileupload(formData).then(res => {
+          if (res.code == 0) {
+            console.log(res)
+            this.fileIdIntro =  res.data[0].fileId
+            this.introList.push(this.fileIdIntro)
+            console.log(this.introList)
+          }
+        }).catch(err => {
+          this.$message.error('上传失败，请重新上传')
+        })
+      }
+    },
     showMapDialog(){
-      // this.showMap = true
-      // this.getCurrentPositionLaglng()
       eventManager.addEvent('mapLagLng', (data) => {
         console.log(data)
         this.laglng = data.address
         eventManager.removeEvent('mapLagLng')
+        this.center = data.center
       })
       this.$router.push('/map-h5')
     },
-    closeMapDialog(){
-      this.showMap = false
-    },
-    onSearchResult(pois) {
-      // console.log(pois)
-      if (pois.length > 0) {
-        let center = {
-          lng: pois[0].lng,
-          lat: pois[0].lat
-        };
-        this.center = [center.lng, center.lat];
-        var geocoder = new AMap.Geocoder({
-          radius: 1000,
-          extensions: 'all'
-        })
-        geocoder.getAddress(this.center, (status, result) => {
-          if (status == 'complete') {
-            // console.log(result.regeocode)
-            this.address = result.regeocode.formattedAddress
-          }
-        })
-      }
-    },
-    getLagLng(){
-      // console.log(this.plugin)
-      this.closeMapDialog()
-      alert('当前地址为：' + this.address + ',当前经纬度为：' + this.center)
-    },
-    getCurrentPositionLaglng(){
-      this.getLocationLoading = true
-      Toast.loading({
-        duration: 0,       // 持续展示 toast
-        forbidClick: true, // 禁用背景点击
-        loadingType: 'spinner',
-        message: '正在获取当前位置'
-      });
-      var geolocation = new AMap.Geolocation({
-        // 是否使用高精度定位，默认：true
-        enableHighAccuracy: true,
-        // 设置定位超时时间，默认：无穷大
-        timeout: 10000,
-        // 定位按钮的停靠位置的偏移量，默认：Pixel(10, 20)
-        buttonOffset: new AMap.Pixel(10, 20),
-        //  定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
-        zoomToAccuracy: true,     
-        //  定位按钮的排放位置,  RB表示右下
-        buttonPosition: 'RB'
-      })
-
-      geolocation.getCurrentPosition()
-      AMap.event.addListener(geolocation, 'complete', (data) => {
-        console.log(data)
-        this.center = [data.position.lng, data.position.lat];
-        this.address = data.formattedAddress
-        this.getLocationLoading = false
-        Toast.clear()
-      })
-      AMap.event.addListener(geolocation, 'error', (data) => {
-        Toast.clear()
-        Toast.fail("获取位置信息超时")
-      })
-    },
     jumpNextStep () {
-      this.$router.push('certification-h5')
+      let data = {
+        name: this.name,
+        type: this.typeValue,
+        logo: this.fileId,
+        bindCompanyId: '1353',
+        cityCode:this.cityCode,
+        areaCode: this.areaCode,
+        provinceCode: this.provinceCode,
+        contact: this.contact,
+        address: this.value + this.address,
+        location: this.center[0].toString() + ',' + this.center[1].toString(),
+        phone: this.phone,
+        qq: this.QQAccount,
+        email: this.email,
+        introduce: this.introduce,
+        publicityImgs: this.introList
+      }
+      console.log(data)
+      api.merchantSaveCompany(data).then(res => {
+        if(res.code == 0){
+          Toast('保存成功')
+        }
+      })
+      // this.$router.push('certification-h5')
     }
   }
 }

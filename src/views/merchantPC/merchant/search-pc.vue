@@ -27,37 +27,37 @@
                     <div class="inputBox">
                         <span class="label">企业所在地区</span>
                         <div class="selectLine">
-                            <el-select style="width: 33%" v-model="value1" placeholder="请选择">
+                            <el-select @change="proviceChange" style="width: 33%" v-model="value" placeholder="请选择">
                                 <el-option
                                 v-for="item in options"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
+                                :key="item.code"
+                                :label="item.name"
+                                :value="item.code">
                                 </el-option>
                             </el-select>
 
-                            <el-select style="width: 33%" v-model="value1" placeholder="请选择">
+                            <el-select @change="areaChange" style="width: 33%" v-model="value1" placeholder="请选择">
                                 <el-option
-                                v-for="item in options"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
+                                v-for="item in options1"
+                                :key="item.code"
+                                :label="item.name"
+                                :value="item.code">
                                 </el-option>
                             </el-select>
 
-                            <el-select style="width: 33%" v-model="value1" placeholder="请选择">
+                            <el-select @change="cityChange" style="width: 33%" v-model="value2" placeholder="请选择">
                                 <el-option
-                                v-for="item in options"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
+                                v-for="item in options2"
+                                :key="item.code"
+                                :label="item.name"
+                                :value="item.code">
                                 </el-option>
                             </el-select>
                         </div>
                     </div>
                     <div class="inputBox">
                         <span class="label">企业全称</span>
-                        <input type="text" v-model="phone" class="phoneInput" maxlength="11" placeholder="请输入企业名称" @input="phoneInput" >
+                        <input type="text" v-model="name" class="phoneInput" maxlength="11" placeholder="请输入企业名称" @input="nameInput" >
                     </div>
                     <button @click="searchFirst" class="search" :disabled="disabled">搜索企业</button>
                 </div>
@@ -66,46 +66,46 @@
                         <div class="inputBox">
                             <span class="label">企业所在地区</span>
                             <div class="selectLine">
-                                <el-select style="width: 33%" v-model="value1" placeholder="请选择">
+                                <el-select @change="proviceChange" style="width: 33%" v-model="value" placeholder="请选择">
                                     <el-option
                                     v-for="item in options"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
+                                    :key="item.code"
+                                    :label="item.name"
+                                    :value="item.code">
                                     </el-option>
                                 </el-select>
 
-                                <el-select style="width: 33%" v-model="value1" placeholder="请选择">
+                                <el-select @change="areaChange" style="width: 33%" v-model="value1" placeholder="请选择">
                                     <el-option
-                                    v-for="item in options"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
+                                    v-for="item in options1"
+                                    :key="item.code"
+                                    :label="item.name"
+                                    :value="item.code">
                                     </el-option>
                                 </el-select>
 
-                                <el-select style="width: 33%" v-model="value1" placeholder="请选择">
+                                <el-select @change="cityChange" style="width: 33%" v-model="value2" placeholder="请选择">
                                     <el-option
-                                    v-for="item in options"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
+                                    v-for="item in options2"
+                                    :key="item.code"
+                                    :label="item.name"
+                                    :value="item.code">
                                     </el-option>
                                 </el-select>
                             </div>
                         </div>
                         <div class="inputBox">
                             <span class="label">企业全称</span>
-                            <input type="text" v-model="phone" class="phoneInput" maxlength="11" placeholder="请输入企业名称" @input="phoneInput" >
+                            <input type="text" v-model="name" class="phoneInput" maxlength="11" placeholder="请输入企业名称" @input="nameInput" >
                         </div>
-                        <button class="search" :disabled="disabled">搜索企业</button>
+                        <button @click="search" class="search" :disabled="disabled">搜索企业</button>
                         <div class="addNew">
                             <span style="font-size: 12PX;color: rgba(0,0,0,0.60);">没有找到想要认领的企业？</span>
-                            <span class="addCompany" style="font-size: 12PX;color: #FFFFFF;">添加企业 ></span>
+                            <span @click="goClaim" class="addCompany" style="font-size: 12PX;color: #FFFFFF;">添加企业 ></span>
                         </div>
                     </div>
                     <div class="resoult_content" v-show="!noData">
-                        <span class="label">为您找到以下企业({{num}})</span>
+                        <span class="label">为您找到以下企业({{ total }})</span>
                         <div class="companyList">
                             <div class="company" v-for="(item,index) in companyList" :key="index">
                                 <h4 class="cpmpanyName">{{ item.name }}</h4>
@@ -113,18 +113,24 @@
                                     <div class="info-content">
                                         <div class="adress" style="margin-bottom: 4PX;">
                                             <img style="display: block;width: 16PX;height: 16PX;margin-right: 8PX;" src="@/assets/globalPc/firm_ic_address@3x.png" alt="">
-                                            <span>{{ item.adress }}</span>
+                                            <span>{{ item.address }}</span>
                                         </div>
                                         <div class="phone">
                                             <img style="display: block;width: 16PX;height: 16PX;margin-right: 8PX;" src="@/assets/globalPc/firm_ic_phone@3x.png" alt="">
-                                            <span>{{ item.phone }}</span>
+                                            <span style="margin-right:8PX;" v-for="(items, index) in item.phones" :key="index">{{ items }}</span>
                                         </div>
                                     </div>
                                     <div class="conpanyBtn">认领</div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
+                            <div class="load_more" @click="loadingMore" v-show="showLoad &&!noMore">
+                                <span v-show="!loading_more">点击加载更多</span>
+                            </div>
+                            <div class="load_more" v-show="showLoad && noMore">
+                                <span>已经到底了</span>
+                            </div>
+                                </div>
+                            </div>
                     <div class="noData" v-show="noData">
                         <img src="@/assets/globalPc/img_nonsearch.png" alt="" srcset="">
                         <span>没有搜索到企业</span>
@@ -146,7 +152,11 @@
   </div>
 </template>
 <script>
+let pageNum = 1;
 import headNav from '@/components/merchantPC/headNav.vue'
+import province_local from '@/utils/province_local'
+import api from '@/api/apiH5'
+import qs from 'qs'
 export default {
   name: 'login',
   components: {
@@ -154,79 +164,55 @@ export default {
   },
   data(){
     return {
-        value: '',
         name: '',
-        showPicker: false,
-        disabled: false,
+        total: 0,
+        showLoad: false,
+        noMore: false,
+        disabled: true,
         result: false,
-        length: 2,
-        // areaList: AreaList,
         loading: false,
+        loading_more: false,
         phone: '',
         companyList: [
-            {
-                name: '杭州税牛科技有限公司',
-                adress: '浙江省杭州市西湖区双龙街199号金色西溪B座8楼',
-                phone: '0571-29182721'
-            },
-            {
-                name: '杭州税牛科技有限公司',
-                adress: '浙江省杭州市西湖区双龙街199号金色西溪B座8楼',
-                phone: '0571-29182721'
-            },
-            {
-                name: '杭州税牛科技有限公司',
-                adress: '浙江省杭州市西湖区双龙街199号金色西溪B座8楼',
-                phone: '0571-29182721'
-            },
-            {
-                name: '杭州税牛科技有限公司',
-                adress: '浙江省杭州市西湖区双龙街199号金色西溪B座8楼',
-                phone: '0571-29182721'
-            },
-            {
-                name: '杭州税牛科技有限公司',
-                adress: '浙江省杭州市西湖区双龙街199号金色西溪B座8楼',
-                phone: '0571-29182721'
-            },
-            {
-                name: '杭州税牛科技有限公司',
-                adress: '浙江省杭州市西湖区双龙街199号金色西溪B座8楼',
-                phone: '0571-29182721'
-            },
-            {
-                name: '杭州税牛科技有限公司',
-                adress: '浙江省杭州市西湖区双龙街199号金色西溪B座8楼',
-                phone: '0571-29182721'
-            }
         ],
-        options: [{
-            value: '选项1',
-            label: '黄金糕'
-            }, {
-            value: '选项2',
-            label: '双皮奶'
-            }, {
-            value: '选项3',
-            label: '蚵仔煎'
-            }, {
-            value: '选项4',
-            label: '龙须面'
-            }, {
-            value: '选项5',
-            label: '北京烤鸭'
-        }],
+        options: province_local,
+        options1: [],
+        options2: [],
         value: '',
         value1: '',
         value2: '',
         isSearch: false,
         noData: false,
         num: 1,
+        areaCode: '',
+        cityCode: '',
+        pageSize: 20
     }
   },
   methods: {
-    phoneInput(e){
+    proviceChange(val){
+        console.log(val)
+        var obj = {};
+        obj = this.options.find(function(item){
+            return item.code == val
+        })
+        // console.log(obj)
+        this.options1 = obj.childs
+    },
+    areaChange(val){
+        console.log(val)
+        this.cityCode = val.toString()
+        var obj = {};
+        obj = this.options1.find(function(item){
+            return item.code == val
+        })
+        // console.log(obj)
+        this.options2 = obj.childs
 
+    },
+    cityChange(val){
+        console.log(val)
+        this.areaCode = val.toString()
     },
     nameInput(e){
         console.log(this.value)
@@ -238,26 +224,92 @@ export default {
     },
     searchFirst(){
         this.isSearch = true;
-        if(this.companyList.length == 0){
-            this.noData = true
-        }else{
-            this.noData = false
-        }
+        this.search()
     },
     search(){
+        this.result = false
         this.loading = true
         if(this.value != '' && this.name != ''){
-            let that = this
-            setTimeout(function(){
-                that.result = true
-                that.loading = false
-            },1000)
+            let data = {
+                areaCode: this.areaCode,
+                cityCode: this.cityCode,
+                // fullSearch: true,
+                pageNum: pageNum,
+                pageSize: this.pageSize,
+                keyword: this.name
+            }
+            console.log(data)
+            api.merchantSearch(data).then(res => {
+                console.log(res)
+                if(res.code == 0){
+                    this.loading = false
+                    this.result = true
+                    this.companyList = res.data.items
+                    if(this.companyList.length == 0){
+                        this.noData = true
+                    }else{
+                        this.noData = false
+                    }
+                    this.total = res.data.total
+                    if(res.data.total <= 20){
+                        this.showLoad = false
+                    }else{
+                        this.showLoad = true
+                    }
+                }
+            })
+            
         }else{
-           this.result = false
+            this.result = false
+            this.$message({
+              message: '请完善数据后提交',
+              type: 'error',
+              showClose: true,
+              duration: 1000
+            })
         }
     },
+    searchMore(){
+        pageNum ++
+        this.loading_more = true
+        if(this.value != '' && this.name != ''){
+            let data = {
+                areaCode: this.areaCode,
+                cityCode: this.cityCode,
+                // fullSearch: true,
+                pageNum: pageNum,
+                pageSize: this.pageSize,
+                keyword: this.name
+            }
+            console.log(data)
+            api.merchantSearch(data).then(res => {
+                console.log(res)
+                if(res.code == 0){
+                    this.companyList = this.companyList.concat(res.data.items)
+                    this.total = res.data.total
+                    this.loading_more = false
+                    if(res.data.items.length <= 20){
+                        this.noMore = true
+                    }else{
+                        this.noMore = false
+                    }
+                }
+            })
+        }else{
+            this.$message({
+              message: '请完善数据后提交',
+              type: 'error',
+              showClose: true,
+              duration: 1000
+            })
+        }
+    },
+    loadingMore(){
+        console.log(pageNum)
+        this.searchMore()
+    },
     goClaim(){
-        this.$router.push('/merchant-h5')
+        this.$router.push('/merchant-pc')
     }
   }
 }
@@ -635,8 +687,21 @@ export default {
                                             font-size: 13PX;
                                             color: #FF7F4A;
                                             text-align: center;
+                                            cursor: pointer;
                                         }
                                     }
+                                }
+                                .load_more{
+                                    width: 360PX;
+                                    display: flex;
+                                    align-items: center; 
+                                    justify-content: center;
+                                    font-size: 14PX;
+                                    color: rgba(0,0,0,0.60);
+                                    height: 40PX;
+                                    background: #FAFAFA;
+                                    border: 1PX solid rgba(0,0,0,0.04);
+                                    margin-bottom: 8PX;
                                 }
                             }
                         }
