@@ -10,7 +10,7 @@
         <div @mouseenter="showBtnList = true" @mouseleave="showBtnList = false" class="btnList" v-show="showBtnList == true">
           <div class="btnLine account">{{ account }}</div>
           <div class="btnLine">修改密码</div>
-          <div class="btnLine">修改手机号</div>
+          <!-- <div class="btnLine">修改手机号</div> -->
           <div class="btnLine">退出</div>
         </div>
       </div>
@@ -78,7 +78,7 @@ export default {
       position: relative;
       .btnList{
         position: absolute;
-        bottom: -180PX;
+        bottom: -130PX;
         right: 0;
         width: 200PX;
         padding-top: 8PX;
