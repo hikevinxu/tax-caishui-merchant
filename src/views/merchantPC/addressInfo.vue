@@ -28,6 +28,14 @@
                 :value="item.value">
               </el-option>
             </el-select>
+            <el-select class="selectArea" v-model="value" placeholder="请选择">
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
             <el-select class="selectAddress" v-model="input" :loading="loading" :remote-method="selectAddressInput" @change="selectAddressChange" reserve-keyword filterable remote placeholder="请选择">
               <el-option
                 v-for="item in searchResult"
@@ -58,8 +66,7 @@
 </template>
 <script>
 import Vue from 'vue'
-import VueAMap from 'vue-amap';
-import { setCookie } from '@/utils/cookie.js'
+import VueAMap from 'vue-amap'
 Vue.use(VueAMap)
 
 // 初始化高德地图的 key 和插件
@@ -241,7 +248,7 @@ export default {
     save () {
       // alert(this.center)
       // alert(this.address)
-      this.$store.dispatch('initNimSDK')
+      this.$store.dispatch('connect')
     },
     canael() {
       console.log(this.$store.state)
@@ -321,12 +328,13 @@ export default {
         .editAddress {
           .el-select {
             .el-input {
-              width: 224Px;
-              min-width: 200Px;
+              width: 145Px;
+              min-width: 140Px;
             }
           }
+          .selectArea,
           .selectCity {
-            margin-left: 8Px;
+            margin-left: 10Px;
           }
           .selectAddress {
             .el-input {

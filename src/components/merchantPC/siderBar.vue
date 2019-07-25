@@ -29,9 +29,9 @@
         <i class="el-icon-setting"></i>
         <span slot="title">数据中心</span>
       </el-menu-item>
-      <el-menu-item index="/messageCenter" route="/messageCenter">
+      <el-menu-item class="msgUnreadItem" index="/messageCenter" route="/messageCenter">
         <i class="el-icon-document"></i>
-        <span slot="title">消息中心</span>
+        <span slot="title">消息中心 <span v-if="unread > 0" class="msgUnread">{{unread}}</span></span>
       </el-menu-item>
     </el-menu>
   </div>
@@ -42,7 +42,48 @@ export default {
   name: 'siderBar',
   data(){
     return {
-      activeMenu: ''
+      activeMenu: '',
+      unread: 0,
+      sessionlist: []
+    }
+  },
+  // 所有页面更新都会触发此函数
+  updated () {
+    let that = this
+    // 提交sdk连接请求
+    var nim = SDK.NIM.getInstance({
+        // debug: true,
+        appKey: "7cb7efab05029f8c18576aa98a9cce96",
+        account: "15515268707",
+        token: "b3e8d33f9cfbc94f4ea0e8b41c41fb1c",
+        syncSessionUnread: true,
+        syncRobots: true,
+        autoMarkRead: true, // 默认为true
+        transports: ['websocket'],
+        onsessions: onSessions,
+        onupdatesession: onUpdateSession
+    });
+    function onSessions(sessions) {
+      console.log(sessions)
+      that.sessionlist = sessions
+      for(let i=0;i<that.sessionlist.length;i++){
+        that.unread += Number(that.sessionlist[i].unread)
+      }
+    }
+    function onUpdateSession(session) {
+      console.log(session)
+      that.sessionlist = nim.mergeSessions(that.sessionlist, session)
+      that.sessionlist.sort((a, b) => {
+        return b.updateTime - a.updateTime
+      })
+      console.log(that.sessionlist)
+      that.unread = 0
+      for(let i=0;i<that.sessionlist.length;i++){
+        that.unread += Number(that.sessionlist[i].unread)
+      }
+    }
+    function updateSessionsUI() {
+      // 刷新界面
     }
   },
   created () {
@@ -120,6 +161,24 @@ export default {
   .el-submenu .el-menu-item {
     min-width: 184Px;
     color: rgba(0,0,0,0.60);
+  }
+  .msgUnreadItem {
+    position: relative;
+  }
+  .msgUnread {
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: 30Px;
+    transform: translate(0, -50%);
+    width: 20Px;
+    height: 20Px;
+    background-color: red;
+    color: #fff;
+    border-radius: 50%;
+    font-size: 12Px;
+    text-align: center;
+    line-height: 20Px;
   }
 }
 </style>

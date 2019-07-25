@@ -151,7 +151,6 @@ import Vue from 'vue'
 import { List, Cell } from 'vant'
 Vue.use(List).use(Cell)
 import Calendar from 'vue-calendar-component'
-import { setCookie } from '@/utils/cookie.js'
 export default {
   components: {
     Calendar
@@ -242,11 +241,6 @@ export default {
         this.currentYear++
         this.monthList2 = this.initMonth(this.currentYear)
       }
-    },
-    toChat: function(){
-      setCookie('uid', '15515268707')
-      setCookie("sdktoken", "b3e8d33f9cfbc94f4ea0e8b41c41fb1c")
-      window.open('./IM/im/main.html')
     },
     onLoad () {
       // 异步更新数据
