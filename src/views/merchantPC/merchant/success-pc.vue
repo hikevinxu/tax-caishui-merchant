@@ -1,7 +1,7 @@
 <template>
   <div class="successPc">
     <div class="successPc_container">
-        <head-nav id="mainHeader"></head-nav>
+        <head-nav :title="title" id="mainHeader"></head-nav>
         <div class="registerContent">
             <div class="header">
                 <div class="headerContent">
@@ -52,6 +52,7 @@ export default {
   },
   data(){
     return {
+        title: '返回登录',
         phone: '',
         password: '',
         codeStart: true,

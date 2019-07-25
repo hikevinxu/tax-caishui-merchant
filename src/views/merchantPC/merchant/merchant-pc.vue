@@ -1,7 +1,7 @@
 <template>
   <div class="merchantPc">
     <div class="merchantPc_container">
-        <head-nav id="mainHeader"></head-nav>
+        <head-nav :title="title" id="mainHeader"></head-nav>
         <div class="merchantContent">
             <div class="header">
                 <div class="headerContent">
@@ -33,8 +33,8 @@
                     <div class="input">
                       <el-select v-model="type" placeholder="请选择">
                         <el-option
-                          v-for="item in options"
-                          :key="item.name"
+                          v-for="item in companyTypes"
+                          :key="item.value"
                           :label="item.name"
                           :value="item.value">
                         </el-option>
@@ -46,7 +46,16 @@
                     <div class="input">
                       <div class="input">
                         <div class="imgList fl">
-
+                          <el-upload
+                            class="upload-demo"
+                            action=""
+                            :http-request="upload"
+                            :multiple="false"
+                            :show-file-list="false">
+                            <div class="imgDesrcibe" style="display: block;width: 100%;height: 100%">
+                              <img class="introduceImg" style="display: block;width: 100%;height: 100%" :src="introduceImg" alt="" srcset="">
+                            </div>  
+                          </el-upload>
                         </div>
                         <div class="logoWarning fl">
                           <p>请上传图片</p>
@@ -58,28 +67,28 @@
                   <div class="formItem">
                     <label for="name">所在地区<span>*</span></label>
                     <div class="input address">
-                      <el-select v-model="type" placeholder="请选择">
+                      <el-select v-model="value" @change="proviceChange" placeholder="请选择">
                         <el-option
                           v-for="item in options"
-                          :key="item.name"
+                          :key="item.code"
                           :label="item.name"
-                          :value="item.value">
+                          :value="item.code">
                         </el-option>
                       </el-select>
-                      <el-select v-model="type" placeholder="请选择">
+                      <el-select v-model="value1" @change="areaChange" placeholder="请选择">
                         <el-option
-                          v-for="item in options"
-                          :key="item.name"
+                          v-for="item in options1"
+                          :key="item.code"
                           :label="item.name"
-                          :value="item.value">
+                          :value="item.code">
                         </el-option>
                       </el-select>
-                      <el-select v-model="type" placeholder="请选择">
+                      <el-select v-model="value2" @change="cityChange" placeholder="请选择">
                         <el-option
-                          v-for="item in options"
-                          :key="item.name"
+                          v-for="item in options2"
+                          :key="item.code"
                           :label="item.name"
-                          :value="item.value">
+                          :value="item.code">
                         </el-option>
                       </el-select>
                     </div>
@@ -102,6 +111,12 @@
                     </div>
                   </div>
                   <div class="formItem">
+                    <label for="name">详细地址<span>*</span></label>
+                    <div class="input">
+                      <input type="text" v-model="address" placeholder="请填写详细地址" />
+                    </div>
+                  </div>
+                  <div class="formItem">
                     <label for="name">联系人<span>*</span></label>
                     <div class="input">
                       <input type="text" v-model="phone" placeholder="请填写联系人" />
@@ -114,28 +129,41 @@
                     </div>
                   </div>
                   <div class="formItem">
-                    <label for="name">QQ号<span>*</span></label>
+                    <label for="name">QQ号</label>
                     <div class="input">
                       <input type="text" v-model="phone" placeholder="请填写QQ号" />
                     </div>
                   </div>
                   <div class="formItem">
-                    <label for="name">电子邮箱<span>*</span></label>
+                    <label for="name">电子邮箱</label>
                     <div class="input">
                       <input type="text" v-model="phone" placeholder="请填写电子邮箱" />
                     </div>
                   </div>
                   <div class="formItem textArea">
-                    <label for="name">详细介绍<span>*</span></label>
+                    <label for="name">详细介绍</label>
                     <div class="input">
                       <textarea type="text" row="4" v-model="phone" placeholder="请输入机构详细介绍"></textarea>
                     </div>
                   </div>
                   <div class="formItem uploadImg">
-                    <label for="name">介绍图<span>*</span></label>
+                    <label for="name">介绍图</label>
                     <div class="input">
-                      <div class="imgList">
-
+                      <div class="imgList introImgList">
+                        <!-- <div class="uploadImgList"> -->
+                          <el-upload
+                            action=""
+                            :class="this.fileIntroList.length >= 8 ? 'disabled' : ''"
+                            list-type="picture-card"
+                            :multiple="false"
+                            :http-request="uploadIntro"
+                            :show-file-list="true"
+                            :limit="8"
+                            :file-list="fileList"
+                            :on-remove="handleRemove">
+                            <i class="el-icon-plus"></i>
+                          </el-upload>
+                        <!-- </div> -->
                       </div>
                       <div class="warning">
                         <p>添加几张图片，让您的服务更受欢迎</p>
@@ -166,7 +194,10 @@
 import headNav from '@/components/merchantPC/headNav.vue'
 import Vue from 'vue'
 import VueAMap from 'vue-amap';
-import { setCookie } from '@/utils/cookie.js'
+import province_local from '@/utils/province_local'
+import api from '@/api/apiH5'
+import apiPC from '@/api/api'
+import qs from 'qs' 
 Vue.use(VueAMap)
 
 // 初始化高德地图的 key 和插件
@@ -184,12 +215,27 @@ export default {
   },
   data(){
     return {
+      title: '返回登录',
       phone: '',
       input: '',
       loading: '',
-      options: [],
+      fileId: '',
+      introduceImg: '',
+      options: province_local,
+      options1: [],
+      options2: [],
+      cityCode: '',
+      areaCode: '',
+      value: '',
+      value1: '',
+      value2: '',
       type: '',
+      typeValue: '',
+      companyTypes: [],
       searchResult: [],
+      fileList: [],
+      fileIntroList: [],
+      disable: false,
       center: [116.397477,39.908692],
       zoom: 16,
       events: {
@@ -207,7 +253,7 @@ export default {
           geocoder.getAddress(centerPoint, (status, result) => {
             if (status == 'complete') {
               console.log(result.regeocode)
-              this.address = result.regeocode.formattedAddress
+              this.location = result.regeocode.formattedAddress
             }
           })
         }
@@ -223,14 +269,98 @@ export default {
           }
         }
       ],
+      location: '',
       address: ''
     }
   },
+  created() {
+    window.addEventListener('resize', function () {
+     if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') {
+        window.setTimeout(function () {
+          document.activeElement.scrollIntoViewIfNeeded()
+        }, 0)
+      }
+    })
+    this.getCompanyTypes()
+  },
   methods: {
+    //上传图片
+    upload (files) {
+      let formData = new FormData()
+      formData.append('files', files.file)
+      apiPC.fileupload(formData).then(res => {
+        if (res.code == 0) {
+          console.log(res)
+          this.fileId =  res.data[0].fileId
+          let reader = new FileReader();
+          let file = files.file
+          let imgUrlBase64
+          if(file){
+            imgUrlBase64 = reader.readAsDataURL(file);
+            reader.onload = (e) => {
+              this.introduceImg = reader.result
+            }
+          }
+        }
+      }).catch(err => {
+        this.$message.error('上传失败，请重新上传')
+      })
+    },
+    uploadIntro(files){
+      let formData = new FormData()
+      formData.append('files', files.file)
+      apiPC.fileupload(formData).then(res => {
+        if (res.code == 0) {
+          console.log(res)
+          let img =  res.data[0].fileId
+          this.fileIntroList.push(img)
+          console.log(this.fileIntroList.length)
+        }
+      }).catch(err => {
+        this.$message.error('上传失败，请重新上传')
+      })
+    },
+    handleRemove(file,fileList){
+      console.log(file)
+      console.log(fileList)
+      console.log(this.fileIntroList)
+    },
+    proviceChange(val){
+        console.log(val)
+        var obj = {};
+        obj = this.options.find(function(item){
+            return item.code == val
+        })
+        // console.log(obj)
+        this.options1 = obj.childs
+    },
+    areaChange(val){
+        console.log(val)
+        this.cityCode = val.toString()
+        var obj = {};
+        obj = this.options1.find(function(item){
+            return item.code == val
+        })
+        // console.log(obj)
+        this.options2 = obj.childs
+
+    },
+    cityChange(val){
+        console.log(val)
+        this.areaCode = val.toString()
+    },
+    getCompanyTypes(){
+      api.merchantCompanyTypes().then(res => {
+        console.log(res)
+        if(res.code == 0){
+          this.companyTypes = res.data
+        }
+      })
+    },
     getLagLng(){
       this.closeMapDialog()
       let data = {
-        address: this.address,
+        address: this.location,
         center: this.center
       }
       eventManager.returnEvent('mapLagLng', data)
@@ -260,7 +390,7 @@ export default {
       geolocation.getCurrentPosition()
       AMap.event.addListener(geolocation, 'complete', (data) => {
         this.center = [data.position.lng, data.position.lat];
-        this.address = data.formattedAddress
+        this.location = data.formattedAddress
         this.getLocationLoading = false
         // Toast.clear()
       })
@@ -309,6 +439,11 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.upload-demo{
+  width: 100%;
+  height: 100%;
+}
+
 .merchantPc{
   width: 100%;
   height: 100vh;
@@ -552,6 +687,17 @@ export default {
               height: 72Px;
               background-color: #fafafa;
             }
+            .introImgList{
+              width: 312Px;
+              height: auto;
+              background-color: transparent;
+              > div{
+                display: flex;
+                align-items: center;
+                width: 312Px;
+                flex-wrap: wrap;
+              }
+            }
             .logoWarning {
               display: block;
               font-family: PingFangSC-Regular;
@@ -670,6 +816,37 @@ export default {
           }
         }
       }
+    }
+  }
+  .el-upload{
+    width: 100%;
+    height: 100%;
+  }
+  .disabled .el-upload--picture-card {
+    display: none;
+  }
+  .el-upload--picture-card{
+    width: 72PX;
+    height: 72PX;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .imgContent{
+    height: 100%;
+  }
+  .el-upload-list{
+    height: auto;
+    display: flex;
+    align-items: center;
+    max-width: 312Px;
+    flex-wrap: wrap;
+    .el-upload-list__item{
+      height: 72PX;
+      width: 72PX;
+      margin: 0;
+      margin-right: 4PX;
+      border: none;
     }
   }
 }

@@ -1,7 +1,7 @@
 <template>
   <div class="searchPc">
     <div class="searchPc_container">
-        <head-nav id="mainHeader"></head-nav>
+        <head-nav :title="title" id="mainHeader"></head-nav>
         <div class="registerContent">
             <div class="header">
                 <div class="headerContent">
@@ -164,6 +164,7 @@ export default {
   },
   data(){
     return {
+        title:'返回登录',
         name: '',
         total: 0,
         showLoad: false,

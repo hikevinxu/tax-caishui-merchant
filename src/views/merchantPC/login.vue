@@ -1,7 +1,7 @@
 <template>
   <div class="loginPc">
     <div class="loginPc_container">
-        <head-nav id="mainHeader"></head-nav>
+        <head-nav :title="title" id="mainHeader"></head-nav>
         <img class="title" src="@/assets/globalPc/title.png" alt="" srcset="">
         <div class="login_form">
             <div class="form">
@@ -43,6 +43,7 @@ export default {
   },
   data(){
     return {
+        title: '商户入驻',
         phone: '',
         password: '',
         disabled: false,

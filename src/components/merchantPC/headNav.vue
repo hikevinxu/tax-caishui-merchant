@@ -4,16 +4,31 @@
       <img src="@/assets/globalPc/logo.png" alt="">
     </div>
     <div class="merchantBtn">
-      <button>商户入驻</button>
+      <button @click="goRegister" v-show="title == '商户入驻'">{{ title }}</button>
+      <button @click="goLogin" v-show="title == '返回登录'">{{ title }}</button>
     </div>
   </div>
 </template>
 <script>
 export default {
   name: 'headNav',
+  props: {
+    title: String
+  },
   data(){
     return {
 
+    }
+  },
+  created(){
+    
+  },
+  methods: {
+    goLogin(){
+      this.$router.push('/login')
+    },
+    goRegister(){
+      this.$router.push('/register-pc')
     }
   }
 }

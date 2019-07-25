@@ -1,7 +1,7 @@
 <template>
   <div class="resetPc">
     <div class="resetPc_container">
-        <head-nav id="mainHeader"></head-nav>
+        <head-nav :title="title" id="mainHeader"></head-nav>
         <div class="resetContent">
           <div class="resetForm">
             <h4>重置登录密码</h4>
@@ -49,6 +49,7 @@ export default {
   },
   data(){
     return {
+      title: '返回登录',
       phone: '',
       disabled: false
     }

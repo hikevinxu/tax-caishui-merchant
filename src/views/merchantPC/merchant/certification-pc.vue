@@ -1,7 +1,7 @@
 <template>
   <div class="certificationPc">
     <div class="certificationPc_container">
-        <head-nav id="mainHeader"></head-nav>
+        <head-nav :title="title" id="mainHeader"></head-nav>
         <div class="certificationContent">
             <div class="header">
                 <div class="headerContent">
@@ -103,6 +103,7 @@ export default {
   },
   data(){
     return {
+      title: '返回登录',
       phone: '',
       input: '',
       loading: '',

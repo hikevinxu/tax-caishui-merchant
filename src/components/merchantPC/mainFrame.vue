@@ -1,7 +1,7 @@
 <template>
   <div class="mainFrame">
     <sider-bar id="mainSider"></sider-bar>
-    <head-nav id="mainHeader"></head-nav>
+    <head-nav :title="title" id="mainHeader"></head-nav>
     <router-view id="mainContent"></router-view>
   </div>
 </template>
@@ -16,7 +16,7 @@ export default {
   },
   data(){
     return {
-
+      title: '商户入驻'
     }
   }
 }
