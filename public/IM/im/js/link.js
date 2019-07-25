@@ -7,7 +7,8 @@ var SDKBridge = function(ctr, data) {
     userUID = readCookie('uid'),
     that = this;
   if (!sdktoken) {
-    window.location.href = '../../login.html';
+    window.parent.location.href = window.location.protocol+"//"+window.location.host + '/home'
+    // window.location.href = '../../login.html';
     return;
   }
   //缓存需要获取的用户信息账号
@@ -119,7 +120,8 @@ var SDKBridge = function(ctr, data) {
           delCookie('uid');
           delCookie('sdktoken');
           delCookie('nickName');
-          window.location.href = '../../login.html';
+          window.parent.location.href = window.location.protocol+"//"+window.location.host + '/home'
+          // window.location.href = '../../login.html';
           break;
         // 被踢, 请提示错误后跳转到登录页面
         case 'kicked':
@@ -142,7 +144,8 @@ var SDKBridge = function(ctr, data) {
           delCookie('uid');
           delCookie('sdktoken');
           delCookie('nickName');
-          window.location.href = '../../login.html';
+          window.parent.location.href = window.location.protocol+"//"+window.location.host + '/home'
+          // window.location.href = '../../login.html';
           break;
         default:
           break;
