@@ -54,8 +54,11 @@
                             :http-request="upload"
                             :multiple="false"
                             :show-file-list="false">
-                            <div class="imgDesrcibe" style="display: block;width: 100%;height: 100%">
+                            <div class="imgDesrcibe" style="display: block;width: 100%;height: 100%;position: relative;">
                               <img class="introduceImg" style="display: block;width: 100%;height: 100%" :src="introduceImg" alt="" srcset="">
+                              <div class="deleteIcon" @click.stop="deleteFileId" v-if="fileId !== ''">
+                                <i class="el-icon-delete"></i>
+                              </div>
                             </div>
                             <div class="addPhotoIcon" v-if="fileId == ''">
                               <img src="@/assets/globalPc/ic_form_addphoto@3x.png" alt="">
@@ -307,10 +310,39 @@ export default {
         }, 0)
       }
     })
+    // this.getCertificationStatus()
     this.getProvinceList()
     this.getCompanyTypes()
   },
   methods: {
+    getCertificationStatus(){
+      api.getCertificationStatus().then(res => {
+        console.log(res)
+        if(res.code == 0){
+          if(res.data.status == 100){
+            this.$router.push({path: '/search-pc'})
+          }else if(res.data.status == 101){
+            this.$router.push({path: '/certification-pc'})
+          }else if(res.data.status == 102){
+            this.$router.push({
+                path: '/success-pc',
+                query: {
+                  status: res.data.status,
+                }
+            })
+          }else if(res.data.status == 103){
+            this.$router.push({path: '/home'})
+          }else if(res.data.status == 999){
+            this.$router.push({
+                path: '/success-pc',
+                query: {
+                  status: res.data.status,
+                }
+            })
+          }
+        }
+      })
+    },
     getCompanyInfo(){
       console.log(this.$store.getters.getCompanyInfo)
       this.companyInfo = this.$store.getters.getCompanyInfo
@@ -370,6 +402,10 @@ export default {
       }).catch(err => {
         this.$message.error('上传失败，请重新上传')
       })
+    },
+    deleteFileId(){
+      this.introduceImg = '',
+      this.fileId = ''
     },
     uploadList(files){
       let formData = new FormData()
@@ -596,7 +632,7 @@ export default {
         name: this.name,
         type: this.type,
         logo: this.fileId,
-        bindCompanyId: '1353',
+        bindCompanyId: this.companyId,
         cityCode:this.cityCode,
         areaCode: this.areaCode,
         provinceCode: this.provinceCode,
@@ -893,6 +929,22 @@ export default {
                   display: block;
                   width: 100%;
                   height: 100%;
+                }
+              }
+              .deleteIcon {
+                width: 27Px;
+                height: 27Px;
+                position: absolute;
+                right: 0;
+                bottom: 0;
+                .el-icon-delete {
+                  background-color: rgba(0,0,0,.45);
+                  position: absolute;
+                  top: 50%;
+                  left: 50%;
+                  transform: translate(-50%,-50%);
+                  font-size: 20Px;
+                  color: #fff;
                 }
               }
               .el-upload {

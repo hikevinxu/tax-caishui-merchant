@@ -71,7 +71,7 @@
             </div>
             <div class="picker rightIcon">
               <van-popup v-model="showAreaPicker" position="bottom">
-                <van-area :area-list="areaList" :columns-num="3" title="请选择" @cancel="showAreaPicker = false" @confirm="selectArea" />
+                <van-area :area-list="areaList" :value="areaCode" :columns-num="3" title="请选择" @cancel="showAreaPicker = false" @confirm="selectArea" />
               </van-popup>
             </div>
           </div>
@@ -145,6 +145,7 @@
 import Vue from 'vue'
 import api from '@/api/apiH5'
 import apiPC from '@/api/api'
+import globalApi from '@/api/globalApi'
 import { setCookie } from '@/utils/cookie.js'
 import { eventManager } from '@/utils/global'
 import areaList from '@/utils/areaList'
@@ -155,6 +156,8 @@ export default {
   name: 'merchant-h5',
   data (){
     return {
+      companyInfo: {},
+      companyId: '',
       name: '',
       type: '',
       typeValue: '',
@@ -172,6 +175,9 @@ export default {
       areaList: areaList,
       showPicker: false,
       showAreaPicker: false,
+      areaCode: '',
+      provinceCode: '',
+      cityCode: '',
       username: '',
       password: '',
       fileList: [],
@@ -190,9 +196,91 @@ export default {
         }, 0)
       }
     })
+    this.getCertificationStatus()
     this.getCompanyTypes()
+    this.getCompanyInfo()
   },
   methods: {
+    getCertificationStatus(){
+      api.getCertificationStatus().then(res => {
+        console.log(res)
+        if(res.code == 0){
+          if(res.data.status == 100){
+            this.$router.push({path: '/search-h5'})
+          }else if(res.data.status == 101){
+            this.$router.push({path: '/certification-h5'})
+          }else if(res.data.status == 102){
+            this.$router.push({
+                path: '/success-h5',
+                query: {
+                  status: res.data.status,
+                }
+            })
+          }else if(res.data.status == 103){
+            this.$router.push({path: '/home'})
+          }else if(res.data.status == 999){
+            this.$router.push({
+                path: '/success-h5',
+                query: {
+                  status: res.data.status,
+                }
+            })
+          }
+        }
+      })
+    },
+    getCompanyInfo(){
+      console.log(this.$store.getters.getCompanyInfo)
+      this.companyInfo = this.$store.getters.getCompanyInfo
+      this.name = this.companyInfo.name
+      this.companyId = this.companyInfo.id
+      this.provinceCode = this.companyInfo.provinceCode
+      this.cityCode = this.companyInfo.cityCode
+      this.areaCode = this.companyInfo.areaCode
+      this.value = this.companyInfo.areaCode
+      if(this.companyInfo.location){
+        this.center[0] = this.companyInfo.location.split(',')[1]
+        this.center[1] = this.companyInfo.location.split(',')[0]
+      }
+      if(this.companyInfo.phones.length > 0){
+        this.phone = this.companyInfo.phones[0]
+      }
+      this.address = this.companyInfo.address
+      globalApi.getAddressProvinces().then(res => {
+        if(res.code == 0){
+          for(let i=0;i<res.data.length;i++){
+            if (res.data[i].code == this.provinceCode){
+              this.value = res.data[i].name
+              let params = {
+                provinceCode: this.provinceCode
+              }
+              globalApi.getAddressCitys(params).then(res => {
+                if(res.code == 0){
+                  for(let i=0;i<res.data.length;i++){
+                    if (res.data[i].code == this.cityCode){
+                      this.value += res.data[i].name
+                      let data = {
+                        provinceCode: this.provinceCode,
+                        cityCode: this.cityCode
+                      }
+                      globalApi.getAddressAreas(data).then(res => {
+                        if(res.code == 0){
+                          for(let i=0;i<res.data.length;i++){
+                            if (res.data[i].code == this.areaCode){
+                              this.value += res.data[i].name
+                            }
+                          }
+                        }
+                      })
+                    }
+                  }
+                }
+              })
+            }
+          }
+        }
+      })
+    },
     onConfirm(val,index){
       console.log(val)
       console.log(index)
@@ -313,7 +401,12 @@ export default {
         eventManager.removeEvent('mapLagLng')
         this.center = data.center
       })
-      this.$router.push('/map-h5')
+      if (this.center.length > 0) {
+        this.$router.push('/map-h5?location=' + this.center[0]+','+ this.center[1])
+      } else {
+        this.$router.push('/map-h5')
+      }
+      
     },
     jumpNextStep () {
 
@@ -389,9 +482,9 @@ export default {
       api.merchantSaveCompany(data).then(res => {
         if(res.code == 0){
           Toast('保存成功')
+          this.$router.push('certification-h5')
         }
       })
-      // this.$router.push('certification-h5')
     }
   }
 }

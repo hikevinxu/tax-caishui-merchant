@@ -204,6 +204,7 @@ export default {
     },
     claim(item){
         console.log(item.id)
+        this.$store.dispatch('save_companyInfo', item)
         this.$router.push({
             path: '/merchant-h5',
             query: {
@@ -212,7 +213,7 @@ export default {
         })
     },
     goClaim(){
-        this.$router.push('/merchant-h5')
+      this.$router.push('/merchant-h5')
     },
     getCertificationStatus(){
       api.getCertificationStatus().then(res => {

@@ -93,35 +93,13 @@ export default {
           events: {
             init: (o) => {
               // o 是高德地图定位插件实例
-              this.getCurrentPositionLaglng()
-              // o.getCurrentPosition((status, result) => {
-              //   this.getLocationLoading = true
-              //   Toast.loading({
-              //     duration: 0,       // 持续展示 toast
-              //     forbidClick: true, // 禁用背景点击
-              //     loadingType: 'spinner',
-              //     message: '正在获取当前位置'
-              //   })
-              //   if (result && result.position) {
-              //     console.log(self)
-              //     this.center = [result.position.lng, result.position.lat];
-              //     var geocoder = new AMap.Geocoder({
-              //       radius: 1000,
-              //       extensions: 'all'
-              //     })
-              //     geocoder.getAddress(this.center, (status, result) => {
-              //       console.log(status)
-              //       if (status == 'complete') {
-              //         console.log(result.regeocode)
-              //         this.address = result.regeocode.formattedAddress
-              //         this.getLocationLoading = true
-              //       } else if(status == 'error') {
-              //         alert("定位失败！")
-              //       }
-              //       Toast.clear()
-              //     })
-              //   }
-              // })
+              if (this.$route.query.location) {
+                console.log(this.$route.query.location.split(','))
+                this.center = this.$route.query.location.split(',')
+                this.selectAddressChange(this.$route.query.location.split(','))
+              } else {
+                this.getCurrentPositionLaglng()
+              }
             }
           }
         }
@@ -201,7 +179,18 @@ export default {
         Toast.clear()
         Toast.fail("获取位置信息超时")
       })
-    }
+    },
+    selectAddressChange (val) {
+      var geocoder = new AMap.Geocoder({
+        radius: 1000,
+        extensions: 'all'
+      })
+      geocoder.getAddress(val, (status, result) => {
+        if (status == 'complete') {
+          this.address = result.regeocode.formattedAddress
+        }
+      })
+    },
   }
 }
 </script>

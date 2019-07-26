@@ -42,8 +42,11 @@
                           :http-request="uploadYYZZ"
                           :multiple="false"
                           :show-file-list="false">
-                          <div class="imgDesrcibe" style="display: block;width: 100%;height: 100%">
+                          <div class="imgDesrcibe" style="display: block;width: 100%;height: 100%;position: relative;">
                             <img class="introduceImg" style="display: block;width: 100%;height: 100%" :src="introduceImg" alt="" srcset="">
+                            <div class="deleteIcon" @click.stop="deleteFileId" v-if="fileId !== ''">
+                              <i class="el-icon-delete"></i>
+                            </div>
                           </div>
                           <div class="addPhotoIcon" v-if="fileId == ''">
                             <img src="@/assets/globalPc/ic_form_addphoto@3x.png" alt="">
@@ -66,8 +69,11 @@
                             :http-request="uploadSFZ"
                             :multiple="false"
                             :show-file-list="false">
-                            <div class="imgDesrcibe" style="display: block;width: 100%;height: 100%">
+                            <div class="imgDesrcibe" style="display: block;width: 100%;height: 100%;position: relative;">
                               <img class="introduceImg" style="display: block;width: 100%;height: 100%" :src="introduceImg1" alt="" srcset="">
+                              <div class="deleteIcon" @click.stop="deleteFileId1" v-if="fileId1 !== ''">
+                                <i class="el-icon-delete"></i>
+                              </div>
                             </div>
                             <div class="addPhotoIcon" v-if="fileId1 == ''">
                               <img src="@/assets/globalPc/ic_form_addphoto@3x.png" alt="">
@@ -90,8 +96,11 @@
                           :http-request="uploadZZZS"
                           :multiple="false"
                           :show-file-list="false">
-                          <div class="imgDesrcibe" style="display: block;width: 100%;height: 100%">
+                          <div class="imgDesrcibe" style="display: block;width: 100%;height: 100%;position: relative;">
                             <img class="introduceImg" style="display: block;width: 100%;height: 100%" :src="introduceImg2" alt="" srcset="">
+                            <div class="deleteIcon" @click.stop="deleteFileId2" v-if="fileId2 !== ''">
+                              <i class="el-icon-delete"></i>
+                            </div>
                           </div>
                           <div class="addPhotoIcon" v-if="fileId2 == ''">
                             <img src="@/assets/globalPc/ic_form_addphoto@3x.png" alt="">
@@ -152,21 +161,33 @@ export default {
     }
   },
   created(){
-    this.getCertificationStatus()
+    // this.getCertificationStatus()
   },
   methods: {
     getCertificationStatus(){
       api.getCertificationStatus().then(res => {
         console.log(res)
         if(res.code == 0){
-          if(res.data.status == 102){
-            // this.$router.push({
-            //     path: '/success-h5',
-            //     query: {
-            //       status: res.data.status,
-            //     }
-            // })
-            alert('审核中')
+          if(res.data.status == 100){
+            this.$router.push({path: '/search-pc'})
+          }else if(res.data.status == 101){
+            this.$router.push({path: '/certification-pc'})
+          }else if(res.data.status == 102){
+            this.$router.push({
+                path: '/success-pc',
+                query: {
+                  status: res.data.status,
+                }
+            })
+          }else if(res.data.status == 103){
+            this.$router.push({path: '/home'})
+          }else if(res.data.status == 999){
+            this.$router.push({
+                path: '/success-pc',
+                query: {
+                  status: res.data.status,
+                }
+            })
           }
         }
       })
@@ -221,7 +242,12 @@ export default {
       console.log(data)
       api.merchantSaveCertification(data).then(res => {
         if(res.code == 0){
-          Toast('保存成功')
+          this.$message({
+            message: '提交成功',
+            type: 'success',
+            showClose: true,
+            duration: 1000
+          })
           setTimeout(res => {
             this.$router.push('success-pc')
           },1000)
@@ -295,6 +321,18 @@ export default {
         this.$message.error('上传失败，请重新上传')
       })
     },
+    deleteFileId () {
+      this.fileId = ''
+      this.introduceImg = ''
+    },
+    deleteFileId1(){
+      this.fileId1 = ''
+      this.introduceImg1 = ''
+    },
+    deleteFileId2(){
+      this.fileId2 = ''
+      this.introduceImg2 = ''
+    }
   }
 }
 </script>
@@ -547,6 +585,22 @@ export default {
                     display: block;
                     width: 100%;
                     height: 100%;
+                  }
+                }
+                .deleteIcon {
+                  width: 27Px;
+                  height: 27Px;
+                  position: absolute;
+                  right: 0;
+                  bottom: 0;
+                  .el-icon-delete {
+                    background-color: rgba(0,0,0,.45);
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%,-50%);
+                    font-size: 20Px;
+                    color: #fff;
                   }
                 }
                 .upload-demo{
