@@ -199,7 +199,7 @@ export default {
         }
     },
     getCertificationStatus(){
-      apiH5.getCertificationStatus().then(res => {
+      api.getCertificationStatus().then(res => {
         console.log(res)
         if(res.code == 0){
           if(res.data.status == 100){

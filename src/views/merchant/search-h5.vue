@@ -101,7 +101,7 @@ export default {
     }
   },
   created(){
-    
+    this.getCertificationStatus()
   },
   methods: {
     onConfirm(value) {
@@ -213,6 +213,34 @@ export default {
     },
     goClaim(){
         this.$router.push('/merchant-h5')
+    },
+    getCertificationStatus(){
+      api.getCertificationStatus().then(res => {
+        console.log(res)
+        if(res.code == 0){
+          if(res.data.status == 100){
+            this.$router.push({path: '/search-h5'})
+          }else if(res.data.status == 101){
+            this.$router.push({path: '/certification-h5'})
+          }else if(res.data.status == 102){
+            this.$router.push({
+                path: '/success-h5',
+                query: {
+                  status: res.data.status,
+                }
+            })
+          }else if(res.data.status == 103){
+            this.$router.push({path: '/home'})
+          }else if(res.data.status == 999){
+            this.$router.push({
+                path: '/success-h5',
+                query: {
+                  status: res.data.status,
+                }
+            })
+          }
+        }
+      })
     }
   }
 }
