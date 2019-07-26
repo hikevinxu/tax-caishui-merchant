@@ -46,11 +46,19 @@ export default {
   },
   
   /**
-   * 提问-获取问题分类
+   * 登录
    * @function authLogin
    * @type 'POST'
    */
   authLogin (params) {
     return fetchPost('/auth/login', params)
+  },
+  /**
+   * 登录
+   * @function authLogin
+   * @type 'GET'
+   */
+  loginOut () {
+    return fetchGet('/auth/logout')
   },
 }

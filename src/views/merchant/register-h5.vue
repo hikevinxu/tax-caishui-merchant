@@ -47,6 +47,7 @@ import Vue from 'vue';
 import { Toast } from 'vant';
 import api from '@/api/apiH5'
 import qs from 'qs'
+import cookie from '@/utils/cookie'
 Vue.use(Toast);
 export default {
   name: 'register-h5',
@@ -184,9 +185,10 @@ export default {
                 console.log(res)
                 if(res.code == 0){
                     Toast('注册成功')
-                    setTimeout(res => {
-                        this.$router.push('/search-h5')
-                    },1000)
+                    cookie.setCookie("accessToken", res.data.accessToken)
+                    cookie.setCookie('uid', res.data.authInfo.uid)
+                    cookie.setCookie("sdktoken", res.data.accessToken)
+                    this.getCertificationStatus()
                 }
             })
             .catch(err => {
@@ -195,7 +197,35 @@ export default {
         }else{
             Toast('密码是长度在6~16之间')
         }
-    }
+    },
+    getCertificationStatus(){
+      apiH5.getCertificationStatus().then(res => {
+        console.log(res)
+        if(res.code == 0){
+          if(res.data.status == 100){
+            this.$router.push({path: '/search-h5'})
+          }else if(res.data.status == 101){
+            this.$router.push({path: '/certification-h5'})
+          }else if(res.data.status == 102){
+            this.$router.push({
+                path: '/success-h5',
+                query: {
+                  status: res.data.status,
+                }
+            })
+          }else if(res.data.status == 103){
+            this.$router.push({path: '/home'})
+          }else if(res.data.status == 999){
+            this.$router.push({
+                path: '/success-h5',
+                query: {
+                  status: res.data.status,
+                }
+            })
+          }
+        }
+      })
+    },
   }
 }
 </script>

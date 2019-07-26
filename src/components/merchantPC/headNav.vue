@@ -4,14 +4,14 @@
       <img src="@/assets/globalPc/logo.png" alt="">
     </div>
     <div class="merchantBtn">
-      <div class="accountContent" @mouseenter="showBtnList = true" @mouseleave="showBtnList = false">
+      <div class="accountContent" v-show="isLogin" @mouseenter="showBtnList = true" @mouseleave="showBtnList = false">
         <span style="font-size: 14PX;color: rgba(0,0,0,0.87);" class="userName">你好, (财税鱼账号{{ account }})</span>
         <img src="@/assets/globalPc/ic_arrow_dropdown@3x.png" alt="" srcset="">
-        <div @mouseenter="showBtnList = true" @mouseleave="showBtnList = false" class="btnList" v-show="showBtnList == true">
+        <div @mouseenter="showBtnList = true" class="btnList" v-show="showBtnList == true">
           <div class="btnLine account">{{ account }}</div>
           <div class="btnLine">修改密码</div>
           <!-- <div class="btnLine">修改手机号</div> -->
-          <div class="btnLine">退出</div>
+          <div class="btnLine" @click="logoOut">退出</div>
         </div>
       </div>
       <button @click="goRegister" v-show="title == '商户入驻'">{{ title }}</button>
@@ -20,6 +20,8 @@
   </div>
 </template>
 <script>
+import globalApi from '@/api/globalApi'
+import cookie from '@/utils/cookie'
 export default {
   name: 'headNav',
   props: {
@@ -28,7 +30,8 @@ export default {
   data(){
     return {
       account: '187****7263',
-      showBtnList: false
+      showBtnList: false,
+      isLogin: true
     }
   },
   created(){
@@ -40,6 +43,33 @@ export default {
     },
     goRegister(){
       this.$router.push('/register-pc')
+    },
+    logoOut(){
+      this.$confirm('确认退出该账号?', '提示', {}).then(() => {
+        globalApi.loginOut().then(res => {
+          console.log(res)
+          if(res.code == 0){
+            this.$message({
+              message: '退出成功',
+              type: 'success',
+              showClose: true,
+              duration: 1000
+            })
+            cookie.delCookie("accessToken")
+            cookie.delCookie('uid')
+            cookie.delCookie("sdktoken")
+            this.$router.push('/login')
+            this.isLogin = false
+          }else{
+            this.$message({
+              message: '退出失败',
+              type: 'success',
+              showClose: true,
+              duration: 1000
+            })
+          }
+        })
+      })
     }
   }
 }

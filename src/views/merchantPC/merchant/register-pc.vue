@@ -61,6 +61,7 @@
 <script>
 import headNav from '@/components/merchantPC/headNav.vue'
 import api from '@/api/apiH5'
+import cookie from '@/utils/cookie'
 export default {
   name: 'login',
   components: {
@@ -211,9 +212,10 @@ export default {
                         showClose: true,
                         duration: 1000
                     })
-                    setTimeout(res => {
-                        this.$router.push('/search-pc')
-                    },1000)
+                    cookie.setCookie("accessToken", res.data.accessToken)
+                    cookie.setCookie('uid', res.data.authInfo.uid)
+                    cookie.setCookie("sdktoken", res.data.accessToken)
+                    this.getCertificationStatus()
                 }
             })
             .catch(err => {
@@ -227,7 +229,35 @@ export default {
               duration: 1000
             })
         }
-    }
+    },
+    getCertificationStatus(){
+      api.getCertificationStatus().then(res => {
+        console.log(res)
+        if(res.code == 0){
+          if(res.data.status == 100){
+            this.$router.push({path: '/search-pc'})
+          }else if(res.data.status == 101){
+            this.$router.push({path: '/certification-pc'})
+          }else if(res.data.status == 102){
+            this.$router.push({
+                path: '/success-pc',
+                query: {
+                  status: res.data.status,
+                }
+            })
+          }else if(res.data.status == 103){
+            this.$router.push({path: '/home'})
+          }else if(res.data.status == 999){
+            this.$router.push({
+                path: '/success-pc',
+                query: {
+                  status: res.data.status,
+                }
+            })
+          }
+        }
+      })
+    },
   }
 }
 </script>
