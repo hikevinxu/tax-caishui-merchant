@@ -182,15 +182,15 @@ export default {
         }
       })
     },
-    getLagLng(){
-      this.closeMapDialog()
-      let data = {
-        address: this.address,
-        center: this.center
-      }
-      eventManager.returnEvent('mapLagLng', data)
-      this.$router.back(-1)
-    },
+    // getLagLng(){
+    //   this.closeMapDialog()
+    //   let data = {
+    //     address: this.address,
+    //     center: this.center
+    //   }
+    //   eventManager.returnEvent('mapLagLng', data)
+    //   this.$router.back(-1)
+    // },
     getCurrentPositionLaglng(){
       this.getLocationLoading = true
       var geolocation = new AMap.Geolocation({
@@ -213,7 +213,7 @@ export default {
       })
       AMap.event.addListener(geolocation, 'error', (data) => {
         this.$message({
-          message: '修改成功',
+          message: '获取位置信息超时',
           type: 'error',
           showClose: true,
           duration: 1000

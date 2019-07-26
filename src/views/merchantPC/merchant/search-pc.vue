@@ -120,7 +120,7 @@
                                             <span style="margin-right:8PX;" v-for="(items, index) in item.phones" :key="index">{{ items }}</span>
                                         </div>
                                     </div>
-                                    <div class="conpanyBtn">认领</div>
+                                    <div class="conpanyBtn" @click="claim(item)">认领</div>
                                 </div>
                             </div>
                             <div class="load_more" @click="loadingMore" v-show="showLoad &&!noMore">
@@ -311,7 +311,13 @@ export default {
     },
     goClaim(){
         this.$router.push('/merchant-pc')
-    }
+    },
+    claim(item){
+      this.$store.dispatch('save_companyInfo', item)
+      this.$router.push({
+          path: '/merchant-pc'
+      })
+    },
   }
 }
 </script>

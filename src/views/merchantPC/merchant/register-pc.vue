@@ -174,7 +174,7 @@ export default {
             })
         }else{
             let json = {
-                clientType: 'h5',
+                clientType: 'pc',
                 phone: phone,
                 captchaValidate: data.validate 
             }

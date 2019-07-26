@@ -5,6 +5,7 @@ import router from '@/router/index'
 // import qs from 'qs'
 import { Toast } from 'vant'
 import { Message, MessageBox } from 'element-ui'
+import cookie from '@/utils/cookie'
 
 Vue.use(Toast)
 
@@ -27,11 +28,11 @@ axios.interceptors.request.use((config) => {
   if (config.method === 'post') {
     // config.data = qs.stringify(config.data)
   }
-  // let token = localStorage.getItem('token')
-  // if (token) {
-  //   // 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
-  //   config.headers['Authorization'] = token
-  // }
+  let accessToken = cookie.readCookie('accessToken')
+  if (accessToken) {
+    // 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
+    config.headers['Authorization'] = accessToken
+  }
   // config.headers['Authorization'] = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjEwMDAsImx0IjoidmVyaWZ5Y29kZSIsImxkIjoiYXBwIiwiY3QiOiJhcHAiLCJydCI6IjAwMDAwIiwiaWF0IjoxNTU3ODg2NjgxLCJleHAiOjE4NTU0NDE0NDk4NzQ4MSwidHRsIjoiMTg1NTQyNTg3MTAwODAwMDAwIn0.1JPP2kN-S7O-9eYa4Y2Coso1JsUhUK47x7F_pShILCk'
   return config
 }, (error) => {
@@ -91,9 +92,6 @@ export function fetchPost (url, params) {
   return new Promise((resolve, reject) => {
     axios.post(url, params)
       .then(response => {
-        // if (response.headers.authorization) {
-        //   store.dispatch('save_token', response.headers.authorization)
-        // }
         resolve(response.data)
       }, err => {
         reject(err)
@@ -109,9 +107,6 @@ export function fetchGet (url, param) {
   return new Promise((resolve, reject) => {
     axios.get(url, { params: param })
       .then(response => {
-        // if (response.headers.authorization) {
-        //   store.dispatch('save_token', response.headers.authorization)
-        // }
         resolve(response.data)
       }, err => {
         reject(err)
