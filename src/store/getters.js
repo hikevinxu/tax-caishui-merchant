@@ -3,7 +3,7 @@ let getters = {
     return state.activeLi
   },
   getCompanyInfo: state => {
-    return state.companyInfo
+    return JSON.parse(localStorage.getItem("companyInfo"))
   }
 }
 

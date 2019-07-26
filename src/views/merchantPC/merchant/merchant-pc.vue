@@ -72,7 +72,7 @@
                   <div class="formItem">
                     <label for="name">所在地区<span>*</span></label>
                     <div class="input address">
-                      <el-select v-model="provinceCode" @change="proviceChange" placeholder="请选择">
+                      <el-select v-model="provinceCode" @change="provinceCodeChange" placeholder="请选择">
                         <el-option
                           v-for="item in provinceList"
                           :key="item.code"
@@ -80,7 +80,7 @@
                           :value="item.code">
                         </el-option>
                       </el-select>
-                      <el-select v-model="cityCode" @change="areaChange" placeholder="请选择">
+                      <el-select v-model="cityCode" @change="cityCodeChange" placeholder="请选择">
                         <el-option
                           v-for="item in cityList"
                           :key="item.code"
@@ -88,7 +88,7 @@
                           :value="item.code">
                         </el-option>
                       </el-select>
-                      <el-select v-model="areaCode" @change="cityChange" placeholder="请选择">
+                      <el-select v-model="areaCode" placeholder="请选择">
                         <el-option
                           v-for="item in areaList"
                           :key="item.code"
@@ -204,9 +204,10 @@
 import headNav from '@/components/merchantPC/headNav.vue'
 import Vue from 'vue'
 import VueAMap from 'vue-amap';
-import province_local from '@/utils/province_local'
+// import province_local from '@/utils/province_local'
 import api from '@/api/apiH5'
 import apiPC from '@/api/api'
+import globalApi from '@/api/globalApi'
 import qs from 'qs' 
 Vue.use(VueAMap)
 
@@ -226,12 +227,14 @@ export default {
   data(){
     return {
       title: '返回登录',
+      companyInfo: {},
+      companyId: '',
       name: '',
       phone: '',
       loading: '',
       fileId: '',
       introduceImg: '',
-      provinceList: province_local,
+      provinceList: [],
       cityList: [],
       areaList: [],
       cityCode: '',
@@ -287,11 +290,7 @@ export default {
           events: {
             init: (o) => {
               // o 是高德地图定位插件实例
-              if (this.$route.query.id) {
-
-              } else {
-                this.getCurrentPositionLaglng()
-              }
+              this.getCompanyInfo()
             }
           }
         }
@@ -308,12 +307,46 @@ export default {
         }, 0)
       }
     })
+    this.getProvinceList()
     this.getCompanyTypes()
-    console.log(this.$store.getters.getCompanyInfo)
   },
   methods: {
     getCompanyInfo(){
-      
+      console.log(this.$store.getters.getCompanyInfo)
+      this.companyInfo = this.$store.getters.getCompanyInfo
+      this.name = this.companyInfo.name
+      this.companyId = this.companyInfo.id
+      this.provinceCode = this.companyInfo.provinceCode
+      this.cityCode = this.companyInfo.cityCode
+      this.areaCode = this.companyInfo.areaCode
+      if(this.companyInfo.location){
+        this.center[0] = this.companyInfo.location.split(',')[1]
+        this.center[1] = this.companyInfo.location.split(',')[0]
+        this.selectAddressChange(this.center)
+      } else {
+        this.getCurrentPositionLaglng()
+      }
+      if(this.companyInfo.phones.length > 0){
+        this.phone = this.companyInfo.phones[0]
+      }
+      this.address = this.companyInfo.address
+      let params = {
+        provinceCode: this.provinceCode
+      }
+      globalApi.getAddressCitys(params).then(res => {
+        if(res.code == 0){
+          this.cityList = res.data
+        }
+      })
+      let data = {
+        provinceCode: this.provinceCode,
+        cityCode: this.cityCode
+      }
+      globalApi.getAddressAreas(data).then(res => {
+        if(res.code == 0){
+          this.areaList = res.data
+        }
+      })
     },
     //上传图片
     upload (files) {
@@ -361,6 +394,7 @@ export default {
         }
       }
       console.log(this.fileIntroList)
+      this.imgTotal = this.fileIntroList.length
     },
     handleRemove(file,fileList){
       // console.log(file)
@@ -368,25 +402,39 @@ export default {
       // console.log(fileList)
       // console.log(this.fileIntroList)
     },
-    proviceChange(val){
-        console.log(val)
-        var obj = {}
-        obj = this.provinceList.find(function(item){
-            return item.code == val
-        })
-        this.cityList = obj.childs
+    provinceCodeChange(val){
+      this.cityCode = ''
+      this.areaCode = ''
+      this.cityList = []
+      this.areaList = []
+      let params = {
+        provinceCode: val
+      }
+      globalApi.getAddressCitys(params).then(res => {
+        if(res.code == 0){
+          this.cityList = res.data
+        }
+      })
     },
-    areaChange(val){
-        console.log(val)
-        var obj = {}
-        obj = this.cityList.find(function(item){
-            return item.code == val
-        })
-        this.areaList = obj.childs
-
+    cityCodeChange(val){
+      this.areaCode = ''
+      this.areaList = []
+      let data = {
+        provinceCode: this.provinceCode,
+        cityCode: val
+      }
+      globalApi.getAddressAreas(data).then(res => {
+        if(res.code == 0){
+          this.areaList = res.data
+        }
+      })
     },
-    cityChange(val){
-      console.log(val)
+    getProvinceList() {
+      globalApi.getAddressProvinces().then(res => {
+        if(res.code == 0){
+          this.provinceList = res.data
+        }
+      })
     },
     getCompanyTypes(){
       api.merchantCompanyTypes().then(res => {
@@ -570,6 +618,7 @@ export default {
             showClose: true,
             duration: 1000
           })
+          this.$router.push('/certification-pc')
         }
       })
     }

@@ -4,6 +4,7 @@ let mutations = {
   },
   update_companyInfo(state, companyInfo) {
     state.companyInfo = companyInfo
+    localStorage.setItem('companyInfo', JSON.stringify(companyInfo))
   }
 }
 
