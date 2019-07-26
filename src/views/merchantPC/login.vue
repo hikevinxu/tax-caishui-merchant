@@ -38,6 +38,7 @@
 import headNav from '@/components/merchantPC/headNav.vue'
 import globalApi from '@/api/globalApi'
 import cookie from '@/utils/cookie'
+import apiH5 from '@/api/apiH5'
 export default {
   name: 'login',
   components: {
@@ -64,10 +65,41 @@ export default {
           cookie.setCookie("accessToken", res.data.accessToken)
           cookie.setCookie('uid', res.data.authInfo.uid)
           cookie.setCookie("sdktoken", res.data.accessToken)
+          this.getCertificationStatus()
         }
       })
     },
-    join(){}
+    getCertificationStatus(){
+      apiH5.getCertificationStatus().then(res => {
+        console.log(res)
+        if(res.code == 0){
+          if(res.data.status == 100){
+            this.$router.push({path: '/search-pc'})
+          }else if(res.data.status == 101){
+            this.$router.push({path: '/certification-pc'})
+          }else if(res.data.status == 102){
+            this.$router.push({
+                path: '/success-pc',
+                query: {
+                  status: res.data.status,
+                }
+            })
+          }else if(res.data.status == 103){
+            this.$router.push({path: '/home'})
+          }else if(res.data.status == 999){
+            this.$router.push({
+                path: '/success-pc',
+                query: {
+                  status: res.data.status,
+                }
+            })
+          }
+        }
+      })
+    },
+    join(){
+      this.$router.push({path: '/register-pc'})
+    }
   }
 }
 </script>

@@ -188,9 +188,7 @@ export default {
                     cookie.setCookie("accessToken", res.data.accessToken)
                     cookie.setCookie('uid', res.data.authInfo.uid)
                     cookie.setCookie("sdktoken", res.data.accessToken)
-                    setTimeout(res => {
-                        this.$router.push('/search-h5')
-                    },1000)
+                    this.getCertificationStatus()
                 }
             })
             .catch(err => {
@@ -199,7 +197,35 @@ export default {
         }else{
             Toast('密码是长度在6~16之间')
         }
-    }
+    },
+    getCertificationStatus(){
+      apiH5.getCertificationStatus().then(res => {
+        console.log(res)
+        if(res.code == 0){
+          if(res.data.status == 100){
+            this.$router.push({path: '/search-h5'})
+          }else if(res.data.status == 101){
+            this.$router.push({path: '/certification-h5'})
+          }else if(res.data.status == 102){
+            this.$router.push({
+                path: '/success-h5',
+                query: {
+                  status: res.data.status,
+                }
+            })
+          }else if(res.data.status == 103){
+            this.$router.push({path: '/home'})
+          }else if(res.data.status == 999){
+            this.$router.push({
+                path: '/success-h5',
+                query: {
+                  status: res.data.status,
+                }
+            })
+          }
+        }
+      })
+    },
   }
 }
 </script>
