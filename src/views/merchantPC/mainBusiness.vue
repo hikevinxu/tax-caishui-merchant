@@ -85,7 +85,7 @@
               <div class="describe">
                 <div class="choseType">
                   <div class="chose_radio">
-                    <el-radio v-model="radio" label="1">文字描述</el-radio>
+                    <el-radio v-model="radio" label="1">空</el-radio>
                     <el-radio v-model="radio" label="2">自定义图片</el-radio>
                   </div>
                   <span style="display: block;color:rgba(0,0,0,0.12);margin-left: 8PX;margin-right: 8PX;">|</span>
@@ -94,8 +94,8 @@
                   </div>
                 </div>
                 <div class="textDescribe" v-show="radio == '1'">
-                  <textarea class="introduceInput" v-model="introduceContent" name="" id="" cols="30" rows="10" maxlength="500"></textarea>
-                  <span class="default">使用默认描述</span>
+                  <textarea v-show="!hideIntroduceContent" class="introduceInput" v-model="introduceContent" name="" id="" cols="30" rows="10" maxlength="500"></textarea>
+                  <span v-show="!hideIntroduceContent" class="default">使用默认描述</span>
                 </div>
                 <el-upload
                   class="upload-demo"
@@ -112,7 +112,7 @@
                 </el-upload>
               </div>
               <div class="details_img" v-show="radio == '2' && checked == true">
-                <el-input style="margin-left: 30PX;display: block; width: 90%;height: 40PX" maxlength="15" v-model="detailTitle" placeholder="请输入详情页标题"></el-input>
+                <el-input style="margin-left: 40PX;display: block; width: 90%;height: 40PX" maxlength="15" v-model="detailTitle" placeholder="请输入详情页标题"></el-input>
                 <el-upload
                   class="upload-demo"
                   action=""
@@ -173,7 +173,7 @@
               <div class="describe">
                 <div class="choseType">
                   <div class="chose_radio">
-                    <el-radio v-model="radio" label="1">文字描述</el-radio>
+                    <el-radio v-model="radio" label="1">空</el-radio>
                     <el-radio v-model="radio" label="2">自定义图片</el-radio>
                   </div>
                   <span style="display: block;color:rgba(0,0,0,0.12);margin-left: 8PX;margin-right: 8PX;">|</span>
@@ -182,8 +182,8 @@
                   </div>
                 </div>
                 <div class="textDescribe" v-show="radio == '1'">
-                  <textarea class="introduceInput" v-model="introduceContent" name="" id="" cols="30" rows="10" maxlength="500"></textarea>
-                  <span class="default">使用默认描述</span>
+                  <textarea v-show="!hideIntroduceContent"  class="introduceInput" v-model="introduceContent" name="" id="" cols="30" rows="10" maxlength="500"></textarea>
+                  <span v-show="!hideIntroduceContent" class="default">使用默认描述</span>
                 </div>
                 <el-upload
                   class="upload-demo"
@@ -200,7 +200,7 @@
                 </el-upload>
               </div>
               <div class="details_img" v-show="radio == '2' && checked == true">
-                <el-input style="margin-left: 30PX;display: block; width: 90%;height: 40PX" maxlength="15" v-model="detailTitle" placeholder="请输入详情页标题"></el-input>
+                <el-input style="margin-left: 40PX;display: block; width: 90%;height: 40PX" maxlength="15" v-model="detailTitle" placeholder="请输入详情页标题"></el-input>
                 <el-upload
                   class="upload-demo"
                   action=""
@@ -237,7 +237,7 @@ export default {
   filters: {
     typeChange(val){
       if(val == 'text'){
-        return val = '文字描述'
+        return val = '无'
       }else if(val == 'image'){
         return val = '自定义图片'
       }
@@ -297,6 +297,7 @@ export default {
       radio: '1',
       checked: false,
       introduceContent: '',
+      hideIntroduceContent: true,
       detailTitle: '',
       createData: {
         code: '',
@@ -452,7 +453,7 @@ export default {
     create(){
       if(this.radio == '1'){
         this.createData.introduceType = 'text'
-        if(this.value != '' &&  this.introduceContent != '' && this.value1 != ''){
+        if(this.value != '' &&  this.value1 != ''){
           if(this.showOptions3 == true){
             if(this.value2 != ''){
               this.createData.code = this.value2
@@ -562,7 +563,7 @@ export default {
     upDate(){
       if(this.radio == '1'){
         this.createData.introduceType = 'text'
-        if(this.value3 != '' &&  this.introduceContent != '' && this.value4 != ''){
+        if(this.value3 != '' &&  this.value4 != ''){
           if(this.showOptions4 == true){
             if(this.value5 != ''){
               this.createData.code = this.value5
@@ -803,6 +804,7 @@ export default {
       if(row.introduceType == 'text'){
         this.radio = '1'
         this.introduceContent = row.introduceContent
+        this.checked = false
       }else{
         this.radio = '2'
         row.introduceContent = JSON.parse(row.introduceContent)
@@ -815,6 +817,9 @@ export default {
           this.detailImg = row.introduceContent.detailImg
           this.detailImgUpload = true
         }else{
+          this.detailTitle = ''
+          this.detailImg = ''
+          this.detailImgUpload = false
           this.checked = false
         }
       }
@@ -1035,6 +1040,7 @@ export default {
             }
             .imgDesrcibe{
               width: 90%;
+              margin-right: auto;
               background: #FAFAFA;
               border-radius: 4PX;
               display: flex;
