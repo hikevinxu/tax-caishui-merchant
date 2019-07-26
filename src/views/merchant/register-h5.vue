@@ -47,6 +47,7 @@ import Vue from 'vue';
 import { Toast } from 'vant';
 import api from '@/api/apiH5'
 import qs from 'qs'
+import cookie from '@/utils/cookie'
 Vue.use(Toast);
 export default {
   name: 'register-h5',

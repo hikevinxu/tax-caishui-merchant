@@ -61,6 +61,7 @@
 <script>
 import headNav from '@/components/merchantPC/headNav.vue'
 import api from '@/api/apiH5'
+import cookie from '@/utils/cookie'
 export default {
   name: 'login',
   components: {
