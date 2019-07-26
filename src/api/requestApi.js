@@ -23,4 +23,23 @@ export default {
   datacenterStatistic (params) {
     return fetchPost('/datacenter/statistic', params)
   },
+  /**
+   * 修改地址信息 - 修改公司地址信息
+   * @function companyAddressUpdate
+   * @type 'POST'
+   * @param type String
+   * @param time String
+   */
+  companyAddressUpdate(params) {
+    return fetchPost('/company/address/update', params)
+  },
+  
+  /**
+   * 修改地址信息 - 获取公司地址信息
+   * @function companyAddressGet
+   * @type 'get'
+   */
+  companyAddressGet(params) {
+    return fetchGet('/company/address/get', params)
+  },
 }

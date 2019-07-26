@@ -7,9 +7,9 @@
           <img src="@/assets/globalPc/ic_b_scroll_left.png" alt="">
         </div>
         <ul>
-          <li v-for="(item, index) in monthList2" :key="'month' + index" >
-            <span>{{item.month == '1月' || index == 0 ? item.year : ''}}</span>
-            <div class="item" :style="item.active ? 'background-color: #FF7F4A;color: #fff;' : ''" @click="clickMonth(index)">{{item.month}}</div>
+          <li v-for="(item, index) in monthList" :key="'month' + index" >
+            <span>{{item.month == '01月' || index == 0 ? item.year : ''}}</span>
+            <div class="item" :style="item.active ? 'background-color: #FF7F4A;color: #fff;' : ''" @click="clickMonth(item.date, index)">{{item.month}}</div>
           </li>
         </ul>
         <div class="rightBtn" @click="clickRightBtn">
@@ -18,7 +18,7 @@
       </div>
       <div class="dataShow">
         <div class="dataShowItem">
-          <span>3816</span>
+          <span>{{monthPhoneCount}}</span>
           <div class="phoneData">
             <div class="phoneDataInner">
               <span><img src="@/assets/globalPc/ic_b_data_phone.png" alt=""></span><p>电话咨询量</p>
@@ -26,7 +26,7 @@
           </div>
         </div>
         <div class="dataShowItem">
-          <span>625</span>
+          <span>{{monthImCount}}</span>
           <div class="phoneData">
             <div class="phoneDataInner">
               <span><img src="@/assets/globalPc/ic_b_data_im.png" alt=""></span><p>IM咨询量</p>
@@ -34,7 +34,7 @@
           </div>
         </div>
         <div class="dataShowItem">
-          <span style="color: #5AB3A4;">11862</span>
+          <span style="color: #5AB3A4;">{{monthViewCount}}</span>
           <div class="phoneData">
             <div class="phoneDataInner">
               <span><img src="@/assets/globalPc/ic_b_data_view.png" alt=""></span><p>浏览量</p>
@@ -56,91 +56,42 @@
             ></Calendar>
           </div>
           <div class="itemCalendarData">
-            <div class="CalendarDataTitle">2019-07-13 数据</div>
+            <div class="CalendarDataTitle">{{currentDate}} 数据</div>
             <ul>
               <li>
                 <div class="itemCalendarItem">
                   <span><img src="@/assets/globalPc/ic_b_data_phone.png" alt=""></span><i>电话咨询量</i>
                 </div>
-                <div class="itemCalendarItemNum orangeColor">4次</div>
+                <div class="itemCalendarItemNum orangeColor">{{dayPhoneCount}}次</div>
               </li>
               <li>
                 <div class="itemCalendarItem">
                   <span><img src="@/assets/globalPc/ic_b_data_im.png" alt=""></span><i>IM咨询量</i>
                 </div>
-                <div class="itemCalendarItemNum orangeColor">4次</div>
+                <div class="itemCalendarItemNum orangeColor">{{dayImCount}}次</div>
               </li>
               <li>
                 <div class="itemCalendarItem">
                   <span><img src="@/assets/globalPc/ic_b_data_view.png" alt=""></span><i>浏览量</i>
                 </div>
-                <div class="itemCalendarItemNum greenColor">28次</div>
+                <div class="itemCalendarItemNum greenColor">{{dayViewCount}}次</div>
               </li>
             </ul>
           </div>
         </div>
         <div class="itemRow">
-          <div class="phoneRecordsTitle">电话记录（6）</div>
+          <div class="phoneRecordsTitle">电话记录（{{phoneTotal}}）</div>
           <ul>
-            <li><span>187****7261</span><span>发起时间 12:32:92</span></li>
-            <li><span>187****7261</span><span>发起时间 12:32:92</span></li>
-            <li><span>187****7261</span><span>发起时间 12:32:92</span></li>
-            <li><span>187****7261</span><span>发起时间 12:32:92</span></li>
-            <li><span>187****7261</span><span>发起时间 12:32:92</span></li>
-            <li><span>187****7261</span><span>发起时间 12:32:92</span></li>
-            <li><span>187****7261</span><span>发起时间 12:32:92</span></li>
-            <li><span>187****7261</span><span>发起时间 12:32:92</span></li>
-            <li><span>187****7261</span><span>发起时间 12:32:92</span></li>
-            <li><span>187****7261</span><span>发起时间 12:32:92</span></li>
-            <li><span>187****7261</span><span>发起时间 12:32:92</span></li>
-            <li><span>187****7261</span><span>发起时间 12:32:92</span></li>
-            <li><span>187****7261</span><span>发起时间 12:32:92</span></li>
-            <li><span>187****7261</span><span>发起时间 12:32:92</span></li>
-            <li><span>187****7261</span><span>发起时间 12:32:92</span></li>
-            <li><span>187****7261</span><span>发起时间 12:32:92</span></li>
-            <li><span>187****7261</span><span>发起时间 12:32:92</span></li>
-            <li><span>187****7261</span><span>发起时间 12:32:92</span></li>
-            <li class="loadMore"><i v-if="!phoneFinish">点击加载更多</i><i v-else>没有更多数据了</i></li>
+            <li v-for="(item, index) in phoneDataList" :key="'phoneData' + index"><span>{{item.consultUser | phoneFilter}}</span><span>发起时间 {{item.consultTime}}</span></li>
+            <li class="loadMore" @click="getPhoneNextPageList"><i v-if="phoneDataList.length < phoneTotal">点击加载更多</i><i v-else>没有更多数据了</i></li>
           </ul>
         </div>
         <div class="itemRow">
-          <div class="phoneRecordsTitle">IM咨询记录（6）</div>
-          <!-- <ul>
-            <li><span>187****7261</span><span>发起时间 12:32:92</span></li>
-            <li><span>187****7261</span><span>发起时间 12:32:92</span></li>
-            <li><span>187****7261</span><span>发起时间 12:32:92</span></li>
-            <li><span>187****7261</span><span>发起时间 12:32:92</span></li>
-            <li><span>187****7261</span><span>发起时间 12:32:92</span></li>
-            <li><span>187****7261</span><span>发起时间 12:32:92</span></li>
-            <li><span>187****7261</span><span>发起时间 12:32:92</span></li>
-            <li><span>187****7261</span><span>发起时间 12:32:92</span></li>
-            <li><span>187****7261</span><span>发起时间 12:32:92</span></li>
-            <li><span>187****7261</span><span>发起时间 12:32:92</span></li>
-            <li><span>187****7261</span><span>发起时间 12:32:92</span></li>
-            <li><span>187****7261</span><span>发起时间 12:32:92</span></li>
-            <li><span>187****7261</span><span>发起时间 12:32:92</span></li>
-            <li><span>187****7261</span><span>发起时间 12:32:92</span></li>
-            <li><span>187****7261</span><span>发起时间 12:32:92</span></li>
-            <li><span>187****7261</span><span>发起时间 12:32:92</span></li>
-            <li><span>187****7261</span><span>发起时间 12:32:92</span></li>
-            <li><span>187****7261</span><span>发起时间 12:32:92</span></li>
-            <li><span>187****7261</span><span>发起时间 12:32:92</span></li>
-            <li><span>187****7261</span><span>发起时间 12:32:92</span></li>
-            <li class="loadMore"><i v-if="!IMFinish">点击加载更多</i><i v-else>没有更多数据了</i></li>
-          </ul> -->
-          <van-list
-            v-model="loading"
-            :finished="finished"
-            finished-text="没有更多了"
-            @load="onLoad"
-          >
-            <van-cell
-              v-for="(item, index) in list"
-              :key="index"
-            >
-              <div class="listItem"><span>{{item.name}}</span><span>{{item.date}}</span></div>
-            </van-cell>
-          </van-list>
+          <div class="phoneRecordsTitle">IM咨询记录（{{imTotal}}）</div>
+          <ul>
+            <li v-for="(item, index) in imDataList" :key="'imData' + index"><span>{{item.consultUser | phoneFilter}}</span><span>发起时间 {{item.consultTime}}</span></li>
+            <li class="loadMore" @click="getImNextPageList"><i v-if="imDataList.length < imTotal">点击加载更多</i><i v-else>没有更多数据了</i></li>
+          </ul>
         </div>
       </div>
     </div>
@@ -149,125 +100,296 @@
 <script>
 import Vue from 'vue'
 import { List, Cell } from 'vant'
+import requestApi from '@/api/requestApi'
+import globalApi from '@/api/globalApi'
 Vue.use(List).use(Cell)
 import Calendar from 'vue-calendar-component'
+import timeFormatter from '@/utils/timeFormatter'
 export default {
   components: {
     Calendar
   },
+  filters: {
+    phoneFilter: (str) => {
+      return str.substr(0,3)+'****'+str.substr(parseInt(str.split('').length/2+2),str.split('').length)
+    }
+  },
   data(){
     return {
+      listPhoneQuery: {
+        pageNum: 1,
+        pageSize: 10,
+        type: "phone",
+        time: ''
+      },
+      listIMQuery: {
+        pageNum: 1,
+        pageSize: 10,
+        type: "im",
+        time: ''
+      },
       phoneFinish: false,
       IMFinish: false,
       loading: false,
       finished: false,
       list: [],
-      monthList: [
-        {month: '1月', year: '2018'},
-        {month: '2月', year: '2018'},
-        {month: '3月', year: '2018'},
-        {month: '4月', year: '2018'},
-        {month: '5月', year: '2018'},
-        {month: '6月', year: '2018'},
-        {month: '7月', year: '2018'},
-        {month: '8月', year: '2018'},
-        {month: '9月', year: '2018'},
-        {month: '10月', year: '2018'},
-        {month: '11月', year: '2018'},
-        {month: '12月', year: '2018'},
-        {month: '1月', year: '2019'},
-        {month: '2月', year: '2019'},
-        {month: '3月', year: '2019'},
-        {month: '4月', year: '2019'},
-        {month: '5月', year: '2019'},
-        {month: '6月', year: '2019'},
-        {month: '7月', year: '2019'},
-        {month: '8月', year: '2019'},
-        {month: '9月', year: '2019'},
-        {month: '10月', year: '2019'},
-        {month: '11月', year: '2019'},
-        {month: '12月', year: '2019'}
-      ],
-      monthList2: [],
+      monthList: [],
       currentYear: '',
+      phoneDataList: [],
+      imDataList: [],
+      monthImCount: 0,
+      monthPhoneCount: 0,
+      monthViewCount: 0,
+      dayImCount: 0,
+      dayPhoneCount: 0,
+      dayViewCount: 0,
+      imTotal: 0,
+      phoneTotal: 0,
+      currentDate: '',
+      activeMonth: '',
       arr: []
     }
   },
   created() {
     let date = new Date()
     this.currentYear = date.getFullYear()
-    this.monthList2 = this.initMonth(this.currentYear)
-    this.arr = ["2019/7/2","2019/7/6"]
+    this.monthList = this.initMonth(this.currentYear)
+    // this.arr = ["2019/7/2","2019/7/6"]
+    this.listPhoneQuery.time = this.getToday()
+    this.listIMQuery.time = this.getToday()
+    this.currentDate = this.getToday()
+    this.activeMonth = this.getToday()
+    this.getPhoneDatacenterConsultRecords()
+    this.getIMDatacenterConsultRecords()
+    this.getDatacenterStatistic(this.getToday(), 'month')
+    this.getDatacenterStatistic(this.getToday(), 'day')
   },
   methods: {
-    initMonth (year) {
-      let arr = []
-      let date = new Date()
-      let month = Number(date.getMonth()) + 1
-      for(let j=month;j<12;j++){
-        arr.push({
-          month: j + 1 + '月',
-          year: year-1,
-          active: false
-        })
-      }
-      for(let i=0;i<month;i++){
-        arr.push({
-          month: i + 1 + '月',
-          year: year,
-          active: false
-        })
-      }
-      console.log(arr)
-      return arr
+    getToday(){
+      let monthList = []
+      var date = new Date()
+      var year = date.getFullYear()
+      var month = date.getMonth()+1
+      var day = date.getDate()
+      let today = year + '-' + (month > 10 ? month : '0' + month) + '-' + day
+      return today
     },
-    clickMonth(index){
-      for(let i=0;i<this.monthList2.length;i++){
-        this.monthList2[i].active = false
+    initMonth () {
+      let monthList = []
+      var date = new Date()
+      var year = date.getFullYear()
+      var month = date.getMonth()+1
+      var day = date.getDate()
+      let today = year + '/' + (month > 10 ? month : '0' + month) + '/' + day
+      function getDate(s){
+        return new Date(s)
       }
-      this.monthList2[index].active = true
+      var arr = [], startD = getDate('2018/10/01'),endD = getDate(today)
+      while(endD > startD){
+        let d = startD.getDate()
+        if(d === 1)arr.push(timeFormatter.formatter(startD))
+        startD.setDate(startD.getDate() + 1)
+      }
+
+      for (let i=0;i<arr.length;i++) {
+        if (arr[i].split('-')[0] == today.split('/')[0] && arr[i].split('-')[1] == today.split('/')[1]) {
+          monthList.push({
+            date: arr[i],
+            year: arr[i].split('-')[0],
+            month: arr[i].split('-')[1] + '月',
+            active: true
+          })
+        } else {
+          monthList.push({
+            date: arr[i],
+            year: arr[i].split('-')[0],
+            month: arr[i].split('-')[1] + '月',
+            active: false
+          })
+        }
+      }
+      return monthList
+    },
+    clickMonth(date, index){
+      for(let i=0;i<this.monthList.length;i++){
+        this.monthList[i].active = false
+      }
+      this.monthList[index].active = true
+      this.activeMonth = this.monthList[index].date
+      alert(this.activeMonth)
+      this.getDatacenterStatistic(date.replace(/\//g,'-'), 'month')
     },
     clickLeftBtn () {
-      this.currentYear--
-      this.monthList2 = this.initMonth(this.currentYear)
+      // this.currentYear--
+      // this.monthList2 = this.initMonth(this.currentYear)
+      console.log(this.monthList[0].date)
+      this.monthList.splice(this.monthList.length - 1, 1)
+      this.monthList = this.getlastMonth().concat(this.monthList)
+
     },
     clickRightBtn () {
       // this.$refs.Calendar.ChoseMonth('2018-12-12');
       let date = new Date()
       let year = date.getFullYear()
-      if (this.currentYear == year) {
+      let month = date.getMonth()+1
+      if (this.currentYear == year && this.getToday().split('-')[1] == this.monthList[this.monthList.length - 1].date.split('-')[1]) {
         alert('后面没有了！')
+        return
       } else {
-        this.currentYear++
-        this.monthList2 = this.initMonth(this.currentYear)
+        console.log(this.monthList[0].date)
+        this.monthList.splice(0, 1)
+        this.monthList = this.monthList.concat(this.getnextmonth())
       }
     },
-    onLoad () {
-      // 异步更新数据
-      setTimeout(() => {
-        for (let i = 0; i < 10; i++) {
-          this.list.push({
-            name: '187****7261',
-            date: '发起时间 12:32:92'
-          });
-        }
-        // 加载状态结束
-        this.loading = false;
-
-        // 数据全部加载完成
-        if (this.list.length >= 40) {
-          this.finished = true;
-        }
-      }, 500);
-    },
     clickDay(data) {
-      console.log(data); //选中某天
+      // console.log(data) //选中某天
+      this.currentDate = data.replace(/\//g,'-')
+      this.listPhoneQuery.pageNum = 1
+      this.listIMQuery.pageNum = 1
+      this.listPhoneQuery.time = data.replace(/\//g,'-')
+      this.listIMQuery.time = data.replace(/\//g,'-')
+      this.getPhoneDatacenterConsultRecords()
+      this.getIMDatacenterConsultRecords()
+      this.getDatacenterStatistic(data.replace(/\//g,'-'), 'day')
     },
     changeDate(data) {
       console.log(data); //左右点击切换月份
     },
     clickToday(data) {
       console.log(data); //跳到了本月
+    },
+    getPhoneDatacenterConsultRecords(){
+      requestApi.datacenterConsult_records(this.listPhoneQuery).then(res => {
+        if(res.code == 0){
+          // console.log(res)
+          this.phoneDataList = res.data.items
+          this.phoneTotal = res.data.total
+        }
+      })
+    },
+    getIMDatacenterConsultRecords(){
+      requestApi.datacenterConsult_records(this.listIMQuery).then(res => {
+        if(res.code == 0){
+          // console.log(res)
+          this.imDataList = res.data.items
+          this.imTotal = res.data.total
+        }
+      })
+    },
+    getImNextPageList(){
+      this.listIMQuery.pageNum++
+      requestApi.datacenterConsult_records(this.listIMQuery).then(res => {
+        if(res.code == 0){
+          this.imDataList = this.imDataList.concat(res.data.items)
+          this.imTotal = res.data.total
+        }
+      })
+    },
+    getPhoneNextPageList(){
+      this.listPhoneQuery.pageNum++
+      requestApi.datacenterConsult_records(this.listPhoneQuery).then(res => {
+        if(res.code == 0){
+          this.phoneDataList = this.phoneDataList.concat(res.data.items)
+          this.phoneTotal = res.data.total
+        }
+      })
+    },
+    getDatacenterStatistic(date, type){
+      let params = {
+        time: date,
+        type: type
+      }
+      // console.log(params)
+      requestApi.datacenterStatistic(params).then(res => {
+        if(res.code == 0){
+          if(type == 'month'){
+            this.monthImCount = res.data.imCount
+            this.monthPhoneCount = res.data.phoneCount
+            this.monthViewCount = res.data.viewCount
+          }else if(type == 'day'){
+            this.dayImCount = res.data.imCount
+            this.dayPhoneCount = res.data.phoneCount
+            this.dayViewCount = res.data.viewCount
+          }
+        }
+      })
+    },
+    getnextmonth(){
+      let nextArr = []
+      // 现在的时间
+      var date = new Date()
+      var year = date.getFullYear()
+      var month = date.getMonth()+1
+
+      let time = this.monthList[this.monthList.length - 1].date
+      let timeYear = time.split('-')[0]
+      let timeMonth = time.split('-')[1]
+
+      if(Number(timeMonth) == 12) {
+        if ((Number(timeYear) + 1) == this.activeMonth.split('-')[0] && this.activeMonth.split('-')[1] == '01') {
+          nextArr.push({
+            date: (Number(timeYear) + 1) + '-' + '01' + '-' + '01',
+            year: (Number(timeYear) + 1),
+            month: '01' + '月',
+            active: true
+          })
+        } else {
+          nextArr.push({
+            date: (Number(timeYear) + 1) + '-' + '01' + '-' + '01',
+            year: (Number(timeYear) + 1),
+            month: '01' + '月',
+            active: false
+          })
+        }
+      } else {
+        let nextMonth = (Number(timeMonth) + 1) >= 10 ? (Number(timeMonth) + 1) :  "0" + (Number(timeMonth) + 1)
+        if (timeYear == this.activeMonth.split('-')[0] && this.activeMonth.split('-')[1] == nextMonth) {
+          nextArr.push({
+            date: timeYear + '-' + nextMonth + '-' + '01',
+            year: timeYear,
+            month: nextMonth + '月',
+            active: true
+          })
+        } else {
+          nextArr.push({
+            date: timeYear + '-' + nextMonth + '-' + '01',
+            year: timeYear,
+            month: nextMonth + '月',
+            active: false
+          })
+        }
+      }
+      return nextArr
+    },
+    getlastMonth(){
+      let lastArr = []
+      // 现在的时间
+      var date = new Date()
+      var year = date.getFullYear()
+      var month = date.getMonth()+1
+
+      let time = this.monthList[0].date
+      let timeYear = time.split('-')[0]
+      let timeMonth = time.split('-')[1]
+
+      if(Number(timeMonth) == 1) {
+        lastArr.push({
+          date: (Number(timeYear) - 1) + '-' + '12' + '-' + '01',
+          year: (Number(timeYear) - 1),
+          month: '12' + '月',
+          active: false
+        })
+      } else {
+        let nextMonth = (Number(timeMonth) - 1) >= 10 ? (Number(timeMonth) - 1) :  "0" + (Number(timeMonth) - 1)
+        lastArr.push({
+          date: timeYear + '-' + nextMonth + '-' + '01',
+          year: timeYear,
+          month: nextMonth + '月',
+          active: false
+        })
+      }
+      console.log(lastArr)
+      return lastArr
     }
   }
 }
@@ -292,7 +414,6 @@ export default {
   }
   .monthData {
     width: 100%;
-    // height: 306Px;
     background: #FFFFFF;
     box-shadow: 0 4Px 8Px 0 rgba(0,0,0,0.04);
     .selectMonth {
@@ -508,6 +629,18 @@ export default {
               background: #f5f5f5;
               color: rgba(0,0,0,0.60);
               border-radius: 50%;
+            }
+            .wh_jiantou2,
+            .wh_jiantou1 {
+              display: none;
+            }
+            .wh_top_changge {
+              li:first-child {
+                display: none;
+              }
+              li:last-child {
+                display: none;
+              }
             }
           }
           .itemCalendarData {

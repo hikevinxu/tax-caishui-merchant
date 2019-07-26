@@ -6,56 +6,53 @@
       </div>
       <div class="content">
         <div class="item info">
-          <div class="itemTitle">公司地址</div>
-          <div class="text" v-if="!editMark">
-            <p>浙江省杭州市</p>
-            <p>双龙街199号金色西溪B座</p>
-          </div>
-          <div class="editAddress" v-else>
-            <el-select v-model="value" placeholder="请选择">
+          <div class="editAddress">
+            <el-select :disabled="editMark" v-model="provinceCode" @change="provinceCodeChange" placeholder="请选择">
               <el-option
-                v-for="item in options"
-                :key="item.name"
+                v-for="item in provinceList"
+                :key="item.code"
                 :label="item.name"
-                :value="item.value">
+                :value="item.code">
               </el-option>
             </el-select>
-            <el-select class="selectCity" v-model="value" placeholder="请选择">
+            <el-select :disabled="editMark" class="selectCity" v-model="cityCode"  @change="cityCodeChange" placeholder="请选择">
               <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
-              </el-option>
-            </el-select>
-            <el-select class="selectArea" v-model="value" placeholder="请选择">
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
-              </el-option>
-            </el-select>
-            <el-select class="selectAddress" v-model="input" :loading="loading" :remote-method="selectAddressInput" @change="selectAddressChange" reserve-keyword filterable remote placeholder="请选择">
-              <el-option
-                v-for="item in searchResult"
-                :key="item.id"
+                v-for="item in cityList"
+                :key="item.code"
                 :label="item.name"
-                :value="item.lnglat">
+                :value="item.code">
               </el-option>
             </el-select>
+            <el-select :disabled="editMark" class="selectArea" v-model="areaCode" placeholder="请选择">
+              <el-option
+                v-for="item in areaList"
+                :key="item.code"
+                :label="item.name"
+                :value="item.code">
+              </el-option>
+            </el-select>
+            <el-input :disabled="editMark" class="addressInput" v-model="address" placeholder="请输入内容"></el-input>
           </div>
         </div>
         <div class="item map">
           <div class="itemTitle">地图信息</div>
+          <el-select class="selectAddress" v-model="searchInput" :loading="loading" :remote-method="selectAddressInput" @change="selectAddressChange" reserve-keyword filterable remote placeholder="请选择">
+            <el-option
+              v-for="item in searchResult"
+              :key="item.id"
+              :label="item.name"
+              :value="item.lnglat">
+            </el-option>
+          </el-select>
           <div class="map">
             <el-amap vid="amap" ref="map" :center="center" :zoom="zoom" :plugin="plugin" :events="events"></el-amap>
             <div class="point"><img src="@/assets/global/map_pin.png" alt=""></div>
+            <div class="location" @click="getCurrentPositionLaglng"><img src="../../assets/global/ic_map_locating.png" alt=""></div>
           </div>
         </div>
       </div>
-      <div class="editBtn" v-if="!editMark">
-        <button @click="editMark = true">编辑地址</button>
+      <div class="editBtn" v-if="editMark">
+        <button @click="editAddress">编辑地址</button>
       </div>
       <div class="saveBtn" v-else>
         <button class="cancel" @click="canael">取消</button>
@@ -67,6 +64,8 @@
 <script>
 import Vue from 'vue'
 import VueAMap from 'vue-amap'
+import requestApi from '@/api/requestApi'
+import globalApi from '@/api/globalApi'
 Vue.use(VueAMap)
 
 // 初始化高德地图的 key 和插件
@@ -81,19 +80,25 @@ export default {
   data(){
     return {
       loading: false,
+      temp: {},
       searchResult: [],
-      options: [],
-      value: '',
-      input: '',
-      editMark: false,
+      provinceCode: '',
+      provinceList: [],
+      cityCode: '',
+      cityList: [],
+      areaCode: '',
+      areaList: [],
+      searchInput: '',
+      editMark: true,
+      address: '',
       center: [116.397477,39.908692],
+      // center: [],
       zoom: 16,
       events: {
         init: (o) => {
-          // console.log(o)
+          console.log(o)
         },
         'dragend': (e) => {
-          // console.log(this)
           var centerPoint = this.$refs.map.$$getCenter()
           this.center = centerPoint
           var geocoder = new AMap.Geocoder({
@@ -103,7 +108,7 @@ export default {
           geocoder.getAddress(centerPoint, (status, result) => {
             if (status == 'complete') {
               console.log(result.regeocode)
-              this.address = result.regeocode.formattedAddress
+              // this.address = result.regeocode.formattedAddress
             }
           })
         }
@@ -123,49 +128,59 @@ export default {
           events: {
             init: (o) => {
               // o 是高德地图定位插件实例
-              this.getCurrentPositionLaglng()
-              // o.getCurrentPosition((status, result) => {
-              //   this.getLocationLoading = true
-              //   Toast.loading({
-              //     duration: 0,       // 持续展示 toast
-              //     forbidClick: true, // 禁用背景点击
-              //     loadingType: 'spinner',
-              //     message: '正在获取当前位置'
-              //   })
-              //   if (result && result.position) {
-              //     console.log(self)
-              //     this.center = [result.position.lng, result.position.lat];
-              //     var geocoder = new AMap.Geocoder({
-              //       radius: 1000,
-              //       extensions: 'all'
-              //     })
-              //     geocoder.getAddress(this.center, (status, result) => {
-              //       console.log(status)
-              //       if (status == 'complete') {
-              //         console.log(result.regeocode)
-              //         this.address = result.regeocode.formattedAddress
-              //         this.getLocationLoading = true
-              //       } else if(status == 'error') {
-              //         alert("定位失败！")
-              //       }
-              //       Toast.clear()
-              //     })
-              //   }
-              // })
+              
             }
           }
         }
       ],
-      address: ''
     }
   },
   created() {
+    this.companyAddressGet()
+    this.getProvinceList()
   },
   methods: {
-    toChat: function(){
-      setCookie('uid', '15515268707')
-      setCookie("sdktoken", "b3e8d33f9cfbc94f4ea0e8b41c41fb1c")
-      window.open('./IM/im/main.html')
+    companyAddressGet() {
+      requestApi.companyAddressGet().then(res => {
+        if(res.code == 0){
+          console.log(res)
+          this.address = res.data.address
+          if (res.data.location != '') {
+            this.center[1] = res.data.location.split(',')[0]
+            this.center[0] = res.data.location.split(',')[1]
+            this.selectAddressChange(this.center)
+          } else {
+            this.getCurrentPositionLaglng()
+          }
+          this.provinceCode = res.data.provinceCode
+          this.cityCode = res.data.cityCode
+          this.areaCode = res.data.areaCode
+          let params = {
+            provinceCode: this.provinceCode
+          }
+          globalApi.getAddressCitys(params).then(res => {
+            if(res.code == 0){
+              this.cityList = res.data
+            }
+          })
+          let data = {
+            provinceCode: this.provinceCode,
+            cityCode: this.cityCode
+          }
+          globalApi.getAddressAreas(data).then(res => {
+            if(res.code == 0){
+              this.areaList = res.data
+            }
+          })
+        }
+      })
+    },
+    getProvinceList() {
+      globalApi.getAddressProvinces().then(res => {
+        if(res.code == 0){
+          this.provinceList = res.data
+        }
+      })
     },
     getLagLng(){
       this.closeMapDialog()
@@ -178,12 +193,6 @@ export default {
     },
     getCurrentPositionLaglng(){
       this.getLocationLoading = true
-      // Toast.loading({
-      //   duration: 0,       // 持续展示 toast
-      //   forbidClick: true, // 禁用背景点击
-      //   loadingType: 'spinner',
-      //   message: '正在获取当前位置'
-      // });
       var geolocation = new AMap.Geolocation({
         // 是否使用高精度定位，默认：true
         enableHighAccuracy: true,
@@ -199,17 +208,20 @@ export default {
 
       geolocation.getCurrentPosition()
       AMap.event.addListener(geolocation, 'complete', (data) => {
-        this.center = [data.position.lng, data.position.lat];
-        this.address = data.formattedAddress
+        this.center = [data.position.lng, data.position.lat]
         this.getLocationLoading = false
-        // Toast.clear()
       })
       AMap.event.addListener(geolocation, 'error', (data) => {
-        // Toast.clear()
-        // Toast.fail("获取位置信息超时")
+        this.$message({
+          message: '修改成功',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
       })
     },
     selectAddressChange (val) {
+      console.log(val)
       this.center = [val[0], val[1]]
       var geocoder = new AMap.Geocoder({
         radius: 1000,
@@ -245,13 +257,64 @@ export default {
         this.searchResult = []
       }
     },
+    provinceCodeChange(val){
+      this.cityCode = ''
+      this.areaCode = ''
+      this.cityList = []
+      this.areaList = []
+      let params = {
+        provinceCode: val
+      }
+      globalApi.getAddressCitys(params).then(res => {
+        if(res.code == 0){
+          this.cityList = res.data
+        }
+      })
+    },
+    cityCodeChange(val){
+      this.areaCode = ''
+      this.areaList = []
+      let data = {
+        provinceCode: this.provinceCode,
+        cityCode: val
+      }
+      globalApi.getAddressAreas(data).then(res => {
+        if(res.code == 0){
+          this.areaList = res.data
+        }
+      })
+    },
+    editAddress(){
+      this.companyAddressGet()
+      this.getProvinceList()
+      this.editMark = false
+    },
     save () {
-      // alert(this.center)
-      // alert(this.address)
-      this.$store.dispatch('connect')
+      let params = {
+        address: this.address,
+        provinceCode: this.provinceCode,
+        cityCode: this.cityCode,
+        areaCode: this.areaCode,
+        location: this.center[1] + ',' + this.center[0]
+      }
+      requestApi.companyAddressUpdate(params).then(res => {
+        if(res.code == 0){
+          this.$message({
+            message: '修改成功',
+            type: 'success',
+            showClose: true,
+            duration: 1000
+          })
+          this.companyAddressGet()
+          this.getProvinceList()
+          this.editMark = true
+        }
+      })
     },
     canael() {
-      console.log(this.$store.state)
+      this.companyAddressGet()
+      this.getProvinceList()
+      this.editMark = true
     }
   }
 }
@@ -262,7 +325,7 @@ export default {
   height: 100vh;
   font-size: 48PX;
   .address {
-    height: 570Px;
+    height: 620Px;
     width: 100%;
     min-width: 1100Px;
     background: #FFFFFF;
@@ -278,7 +341,7 @@ export default {
     }
     .content {
       box-sizing: border-box;
-      height: 400Px;
+      height: 450Px;
       margin-top: 24Px;
       .item {
         float: left;
@@ -321,6 +384,33 @@ export default {
               height: 100%;
             }
           }
+          .location {
+            width: 38Px;
+            height: 38Px;
+            background-color: #fff;
+            position: absolute;
+            bottom: 50Px;
+            left: 10Px;
+            border-radius: 5Px;
+            border: 1Px solid #ccc;
+            cursor: pointer;
+            img {
+              display: block;
+              width: 24Px;
+              height: 24Px;
+              position: absolute;
+              top: 7Px;
+              left: 7Px;
+            }
+          }
+          .amap-geolocation-con {
+            display: none;
+          }
+        }
+        .selectAddress {
+          .el-input {
+            width: 456Px;
+          }
         }
       }
       .info {
@@ -336,11 +426,9 @@ export default {
           .selectCity {
             margin-left: 10Px;
           }
-          .selectAddress {
-            .el-input {
-              width: 456Px;
-            }
-          }
+          .addressInput {
+            width: 456Px;
+          } 
         }
       }
     }
