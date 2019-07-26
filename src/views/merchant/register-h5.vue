@@ -163,6 +163,7 @@ export default {
                 }
             })
             .catch( err => {
+                this.isCode = true
                 this.captchaIns && this.captchaIns.refresh()
             })
         }

@@ -63,7 +63,8 @@
         </div>
         <div class="xieyi">
           <div class="xieyiInner">
-             <van-checkbox v-model="checked">我已阅读并同意<span @click="jumpAgreement">《用户服务协议》</span></van-checkbox>
+             <van-checkbox v-model="checked">我已阅读并同意</van-checkbox>
+             <span class="agreement" @click="jumpAgreement">《用户服务协议》</span>
           </div>
         </div>
         <div class="submitbtn">
@@ -156,7 +157,8 @@ export default {
       })
     },
     jumpAgreement () {
-      this.$router.push('agreement-h5')
+      // this.$router.push('agreement-h5')
+      window.location.href = 'https://res.caishuiyu.com/common/h5/platform_agreement.html'
     },
     jumpNextStep () {
       // this.$router.push('success-h5')
@@ -310,10 +312,20 @@ export default {
 }
 .xieyi {
   .xieyiInner {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translate(-50%, 0)
+    // position: absolute;
+    // top: 0;
+    // left: 50%;
+    // transform: translate(-50%, 0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 312px;
+    margin-left: auto;
+    margin-right: auto;
+    .agreement{
+      display: block;
+      width: 100px;
+    }
   }
   .van-checkbox {
     display: inline-flex;
@@ -325,7 +337,7 @@ export default {
   }
   .van-checkbox__label {
     color: rgba(0,0,0,0.60);
-    width: 200px;
+    width: 90px;
   }
   .van-checkbox__icon {
     height: auto;
