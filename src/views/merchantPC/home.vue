@@ -3,7 +3,7 @@
       <div class="basics">
         <div class="basics_title">
           <h4>基本资料</h4>
-          <div class="compile">
+          <div class="compile" @click="goBasic">
             <span>基本资料维护</span>
             <img src="@/assets/globalPc/ic_chevron_right_small@3x.png" alt="">
           </div>
@@ -48,7 +48,7 @@
       <div class="data">
         <div class="data_title">
           <h4>当月数据</h4>
-          <div class="compile">
+          <div class="compile" @click="goMessage">
             <span>查看更多数据</span>
             <img src="@/assets/globalPc/ic_chevron_right_small@3x.png" alt="">
           </div>
@@ -184,7 +184,6 @@ export default {
         return result;
     },
     save(){
-      
       let data = {
         content: this.notice.content
       }
@@ -212,6 +211,12 @@ export default {
         }
       })
     },
+    goBasic(){
+      this.$router.push('/basicInfo')
+    },
+    goMessage(){
+      this.$router.push('/recordsCenter')
+    }
   }
 }
 </script>
