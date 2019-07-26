@@ -184,6 +184,9 @@ export default {
                 console.log(res)
                 if(res.code == 0){
                     Toast('注册成功')
+                    cookie.setCookie("accessToken", res.data.accessToken)
+                    cookie.setCookie('uid', res.data.authInfo.uid)
+                    cookie.setCookie("sdktoken", res.data.accessToken)
                     setTimeout(res => {
                         this.$router.push('/search-h5')
                     },1000)

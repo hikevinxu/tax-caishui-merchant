@@ -211,6 +211,9 @@ export default {
                         showClose: true,
                         duration: 1000
                     })
+                    cookie.setCookie("accessToken", res.data.accessToken)
+                    cookie.setCookie('uid', res.data.authInfo.uid)
+                    cookie.setCookie("sdktoken", res.data.accessToken)
                     setTimeout(res => {
                         this.$router.push('/search-pc')
                     },1000)
