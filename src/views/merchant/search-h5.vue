@@ -204,15 +204,17 @@ export default {
     },
     claim(item){
         console.log(item.id)
-        this.$store.dispatch('save_companyInfo', item)
+        // this.$store.dispatch('save_companyInfo', item)
         this.$router.push({
             path: '/merchant-h5',
             query: {
               id: item.id,
+              item: JSON.stringify(item)
             }
         })
     },
     goClaim(){
+      this.$store.dispatch('save_companyInfo', {})
       this.$router.push('/merchant-h5')
     },
     getCertificationStatus(){

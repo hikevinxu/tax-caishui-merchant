@@ -188,7 +188,20 @@ export default {
       fileLength: 0
     }
   },
-  created() {
+  // created() {
+  //   window.addEventListener('resize', function () {
+  //    if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') {
+  //       window.setTimeout(function () {
+  //         document.activeElement.scrollIntoViewIfNeeded()
+  //       }, 0)
+  //     }
+  //   })
+  //   this.getCompanyTypes()
+  //   if(this.$route.query.item){
+  //     this.getCompanyInfo()
+  //   }
+  // },
+  activated(){
     window.addEventListener('resize', function () {
      if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') {
         window.setTimeout(function () {
@@ -196,9 +209,20 @@ export default {
         }, 0)
       }
     })
-    this.getCertificationStatus()
     this.getCompanyTypes()
-    this.getCompanyInfo()
+    if(this.$route.query.item){
+      this.getCompanyInfo()
+    } else {
+      this.name = ''
+      this.companyId = ''
+      this.provinceCode = ''
+      this.cityCode = ''
+      this.areaCode = ''
+      this.value = ''
+      this.center = ''
+      this.phone = ''
+      this.address = ''
+    }
   },
   methods: {
     getCertificationStatus(){
@@ -230,8 +254,7 @@ export default {
       })
     },
     getCompanyInfo(){
-      console.log(this.$store.getters.getCompanyInfo)
-      this.companyInfo = this.$store.getters.getCompanyInfo
+      this.companyInfo = JSON.parse(this.$route.query.item)
       this.name = this.companyInfo.name
       this.companyId = this.companyInfo.id
       this.provinceCode = this.companyInfo.provinceCode
