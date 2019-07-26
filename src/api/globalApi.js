@@ -43,5 +43,14 @@ export default {
    */
   getFileuploadUpload (params) {
     return fetchPost('/fileupload/upload', params)
-  }
+  },
+  
+  /**
+   * 提问-获取问题分类
+   * @function authLogin
+   * @type 'POST'
+   */
+  authLogin (params) {
+    return fetchPost('/auth/login', params)
+  },
 }

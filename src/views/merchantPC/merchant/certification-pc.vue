@@ -6,16 +6,20 @@
             <div class="header">
                 <div class="headerContent">
                     <div class="steps">
-                        <div class="numberPC one">1</div>
+                        <div class="numberPC one">
+                          <img src="@/assets/global/ic_stepdone.png" alt="" srcset="">
+                        </div>
                         <span class="active">注册账号</span>
                     </div>
                     <div class="steps">
-                        <div class="numberPC two">2</div>
-                        <span>认领企业</span>
+                        <div class="numberPC one two_success">
+                          <img src="@/assets/global/ic_stepdone.png" alt="" srcset="">
+                        </div>
+                        <span class="active">认领企业</span>
                     </div>
                     <div class="steps">
-                        <div class="numberPC">3</div>
-                        <span>提交资质</span>
+                        <div class="numberPC one">3</div>
+                        <span class="active">提交资质</span>
                     </div>
                 </div>
             </div>
@@ -25,14 +29,26 @@
                   <div class="formItem">
                     <label for="name">工商注册号<span>*</span></label>
                     <div class="input">
-                      <input type="text" v-model="phone" placeholder="请输入工商注册号" />
+                      <input type="text" v-model="businessLicenseNo" placeholder="请输入工商注册号" />
                     </div>
                   </div>
                   <div class="formItem uploadImg">
                     <label for="name">营业执照<span>*</span></label>
                     <div class="input">
                       <div class="imgList fl">
-
+                        <el-upload
+                          class="upload-demo"
+                          action=""
+                          :http-request="uploadYYZZ"
+                          :multiple="false"
+                          :show-file-list="false">
+                          <div class="imgDesrcibe" style="display: block;width: 100%;height: 100%">
+                            <img class="introduceImg" style="display: block;width: 100%;height: 100%" :src="introduceImg" alt="" srcset="">
+                          </div>
+                          <div class="addPhotoIcon" v-if="fileId == ''">
+                            <img src="@/assets/globalPc/ic_form_addphoto@3x.png" alt="">
+                          </div>
+                        </el-upload>
                       </div>
                       <div class="logoWarning fl">
                         <p>请上传营业执照原件照片</p>
@@ -44,27 +60,43 @@
                     <div class="input">
                       <div class="imgItem">
                         <div class="imgList fl">
-
+                           <el-upload
+                            class="upload-demo"
+                            action=""
+                            :http-request="uploadSFZ"
+                            :multiple="false"
+                            :show-file-list="false">
+                            <div class="imgDesrcibe" style="display: block;width: 100%;height: 100%">
+                              <img class="introduceImg" style="display: block;width: 100%;height: 100%" :src="introduceImg1" alt="" srcset="">
+                            </div>
+                            <div class="addPhotoIcon" v-if="fileId1 == ''">
+                              <img src="@/assets/globalPc/ic_form_addphoto@3x.png" alt="">
+                            </div>
+                          </el-upload>
                         </div>
                         <div class="logoWarning fl">
                           <p>正面照片</p>
                         </div>
                       </div>
-                      <div class="imgItem">
-                        <div class="imgList fl">
-
-                        </div>
-                        <div class="logoWarning fl">
-                          <p>反面照片</p>
-                        </div>
-                      </div>
                     </div>
                   </div>
                   <div class="formItem uploadImg">
-                    <label for="name">资质证书<span>*</span></label>
+                    <label for="name">资质证书</label>
                     <div class="input">
                       <div class="imgList fl">
-
+                         <el-upload
+                          class="upload-demo"
+                          action=""
+                          :http-request="uploadZZZS"
+                          :multiple="false"
+                          :show-file-list="false">
+                          <div class="imgDesrcibe" style="display: block;width: 100%;height: 100%">
+                            <img class="introduceImg" style="display: block;width: 100%;height: 100%" :src="introduceImg2" alt="" srcset="">
+                          </div>
+                          <div class="addPhotoIcon" v-if="fileId2 == ''">
+                            <img src="@/assets/globalPc/ic_form_addphoto@3x.png" alt="">
+                          </div>
+                        </el-upload>
                       </div>
                       <div class="logoWarning fl">
                         <p>可上传其他资质证书照片</p>
@@ -74,7 +106,7 @@
                 </div>
                 <div class="xieyi"><el-checkbox v-model="checked"></el-checkbox>我已阅读并同意<span>《用户服务协议》</span></div>
                 <div class="submitBtn">
-                  <button>提交申请</button>
+                  <button @click="jumpAgreement">提交申请</button>
                 </div>
             </div>
         </div>
@@ -94,7 +126,8 @@
 <script>
 
 import headNav from '@/components/merchantPC/headNav.vue'
-import { setCookie } from '@/utils/cookie.js'
+import apiPC from '@/api/api'
+import api from '@/api/apiH5'
 
 export default {
   name: 'login',
@@ -104,18 +137,164 @@ export default {
   data(){
     return {
       title: '返回登录',
-      phone: '',
+      businessLicenseNo: '',
       input: '',
       loading: '',
       options: [],
       type: '',
-      checked: false
+      checked: false,
+      introduceImg: '',
+      introduceImg1: '',
+      introduceImg2: '',
+      fileId: '',
+      fileId1: '',
+      fileId2: ''
     }
   },
+  created(){
+    this.getCertificationStatus()
+  },
   methods: {
+    getCertificationStatus(){
+      api.getCertificationStatus().then(res => {
+        console.log(res)
+        if(res.code == 0){
+          if(res.data.status == 102){
+            // this.$router.push({
+            //     path: '/success-h5',
+            //     query: {
+            //       status: res.data.status,
+            //     }
+            // })
+            alert('审核中')
+          }
+        }
+      })
+    },
     jumpAgreement(){
+      if(this.businessLicenseNo == ''){
+        this.$message({
+          message: '工商注册号不能为空',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        return 
+      }
 
-    }
+      if(this.fileId == ''){
+        this.$message({
+          message: '请先上传营业执照',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        return 
+      }
+
+      if(this.fileId1 == ''){
+        this.$message({
+          message: '请先上传法人手持身份证照片',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        return 
+      }
+
+      if(!this.checked){
+        this.$message({
+          message: '请先勾选服务协议',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        return 
+      }
+
+      let data = {
+        businessLicenseNo: this.businessLicenseNo,
+        businessLicenseImg: this.fileId,
+        handheldIdCardImg: this.fileId1,
+        otherCertificateImg: this.fileId2
+      }
+      console.log(data)
+      api.merchantSaveCertification(data).then(res => {
+        if(res.code == 0){
+          Toast('保存成功')
+          setTimeout(res => {
+            this.$router.push('success-pc')
+          },1000)
+        }
+      })
+    },
+    //上传图片
+    uploadYYZZ (files) {
+      console.log(files)
+      let formData = new FormData()
+      formData.append('files', files.file)
+      apiPC.fileupload(formData).then(res => {
+        if (res.code == 0) {
+          console.log(res)
+          this.fileId =  res.data[0].fileId
+          let reader = new FileReader();
+          let file = files.file
+          let imgUrlBase64
+          if(file){
+            imgUrlBase64 = reader.readAsDataURL(file);
+            reader.onload = (e) => {
+              this.introduceImg = reader.result
+            }
+          }
+        }
+      }).catch(err => {
+        this.$message.error('上传失败，请重新上传')
+      })
+    },
+    uploadSFZ (files) {
+      console.log(files)
+      let formData = new FormData()
+      formData.append('files', files.file)
+      apiPC.fileupload(formData).then(res => {
+        if (res.code == 0) {
+          console.log(res)
+          this.fileId1 =  res.data[0].fileId
+          let reader = new FileReader();
+          let file = files.file
+          let imgUrlBase64
+          if(file){
+            imgUrlBase64 = reader.readAsDataURL(file);
+            reader.onload = (e) => {
+              this.introduceImg1 = reader.result
+            }
+          }
+        }
+      }).catch(err => {
+        this.$message.error('上传失败，请重新上传')
+      })
+    },
+    uploadZZZS (files) {
+      console.log(files)
+      let formData = new FormData()
+      formData.append('files', files.file)
+      apiPC.fileupload(formData).then(res => {
+        if (res.code == 0) {
+          console.log(res)
+          this.fileId2 =  res.data[0].fileId
+          let reader = new FileReader();
+          let file = files.file
+          let imgUrlBase64
+          if(file){
+            imgUrlBase64 = reader.readAsDataURL(file);
+            reader.onload = (e) => {
+              this.introduceImg2 = reader.result
+            }
+          }
+        }
+      }).catch(err => {
+        this.$message.error('上传失败，请重新上传')
+      })
+    },
   }
 }
 </script>
@@ -352,11 +531,33 @@ export default {
                   margin-bottom: 0;
                 }
               }
-            }
-            .imgList {
-              width: 72Px;
-              height: 72Px;
-              background-color: #fafafa;
+              .imgList {
+                width: 72Px;
+                height: 72Px;
+                background-color: #fafafa;
+                position: relative;
+                .addPhotoIcon {
+                  width: 36Px;
+                  height: 36Px;
+                  position: absolute;
+                  top: 50%;
+                  left: 50%;
+                  transform: translate(-50%, -50%);
+                  img {
+                    display: block;
+                    width: 100%;
+                    height: 100%;
+                  }
+                }
+                .upload-demo{
+                  width: 100%;
+                  height: 100%;
+                }
+                .el-upload {
+                  width: 100%;
+                  height: 100%;
+                }
+              }
             }
             .logoWarning {
               display: block;
@@ -482,6 +683,10 @@ export default {
       }
       .el-checkbox__inner::after {
         border-color: #FF7F4A;
+      }
+      .el-upload {
+        width: 100%;
+        height: 100%;
       }
     }
   }

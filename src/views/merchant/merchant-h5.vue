@@ -53,7 +53,7 @@
           <div class="formItem upload">
             <label for="fileList">机构Logo<span class="notNull">*</span></label>
             <div class="input">
-              <van-uploader v-model="fileList" multiple :max-count="1" :before-read="beforeRead" 
+              <van-uploader v-model="fileList" multiple :max-count="1" @delete="deleteUpload" :before-read="beforeRead" 
               :after-read='upload'/>
             </div>
             <div class="prompt">
@@ -124,7 +124,7 @@
             <label for="email">介绍图 <span class="warning">添加几张图片，让您的服务更受欢迎</span></label>
             <div class="input">
               <div class="introPicList">
-                <van-uploader v-model="fileIntroList" multiple :max-count="8" :before-read="beforeReadIntro" 
+                <van-uploader v-model="fileIntroList" multiple :max-count="8" @delete="fileIntroDelete" :before-read="beforeReadIntro" 
                 :after-read='uploadIntro'/>
               </div>
               <div class="prompt">
@@ -178,7 +178,8 @@ export default {
       fileIntroList: [],
       introList: [],
       phone: '',
-      fileId: ''
+      fileId: '',
+      fileLength: 0
     }
   },
   created() {
@@ -245,9 +246,11 @@ export default {
       // }
       return true;
     },
-    beforeReadIntro(file) {
-      console.log(file)
-      return true;
+    beforeReadIntro(file, detail) {
+      console.log(detail)
+      this.fileLength = this.fileIntroList.length
+      console.log(this.fileLength)
+      return true
     },
     upload(file){
       let formData = new FormData()
@@ -256,10 +259,16 @@ export default {
         if (res.code == 0) {
           console.log(res)
           this.fileId =  res.data[0].fileId
+          this.fileList[0].fileId = res.data[0].fileId
+          console.log(this.fileList)
         }
       }).catch(err => {
         this.$message.error('上传失败，请重新上传')
       })
+    },
+    deleteUpload(file) {
+      console.log(file)
+      console.log(this.fileList)
     },
     uploadIntro(file){
       console.log(file)
@@ -271,8 +280,10 @@ export default {
           apiPC.fileupload(formData).then(res => {
             if (res.code == 0) {
               this.fileIdIntro =  res.data[0].fileId
-              this.introList.push(this.fileIdIntro)
-              console.log(this.introList)
+              let num =  Number(Number(this.fileLength) + i)
+              this.fileIntroList[num].fileId = res.data[0].fileId
+              // this.introList.push(this.fileIdIntro)
+              console.log(this.fileIntroList)
             }
           }).catch(err => {
             this.$message.error('上传失败，请重新上传')
@@ -283,15 +294,17 @@ export default {
         formData.append('files', file.file)
         apiPC.fileupload(formData).then(res => {
           if (res.code == 0) {
-            console.log(res)
             this.fileIdIntro =  res.data[0].fileId
-            this.introList.push(this.fileIdIntro)
-            console.log(this.introList)
+            this.fileIntroList[this.fileIntroList.length-1].fileId = res.data[0].fileId
+            // this.introList.push(this.fileIdIntro)
           }
         }).catch(err => {
           this.$message.error('上传失败，请重新上传')
         })
       }
+    },
+    fileIntroDelete(file){
+      console.log(this.fileIntroList)
     },
     showMapDialog(){
       eventManager.addEvent('mapLagLng', (data) => {
@@ -303,22 +316,74 @@ export default {
       this.$router.push('/map-h5')
     },
     jumpNextStep () {
+
+      if(this.name == ''){
+        Toast.fail('机构名称不能为空')
+        return
+      }
+
+      if(this.typeValue == ''){
+        Toast.fail('机构类型不能为空')
+        return
+      }
+
+      if(this.fileList.length == 0 || this.fileList[0].fileId == ''){
+        Toast.fail('机构LOGO不能为空')
+        return
+      }
+
+      console.log(this.provinceCode)
+
+      if (!this.provinceCode || this.provinceCode == '' || !this.cityCode || this.cityCode == '' || !this.areaCode || this.areaCode == '') {
+        Toast.fail('所选地区不能为空')
+        return 
+      }
+
+      
+      if(this.center.length < 2){
+        Toast.fail('请先选择地图定位')
+        return 
+      }
+
+      if(this.address == ''){
+        Toast.fail('详细地址不能为空')
+        return 
+      }
+
+      if(this.contact == ''){
+        Toast.fail('联系人不能为空')
+        return 
+      }
+
+      if(this.phone == ''){
+        Toast.fail('联系电话不能为空')
+        return 
+      }
+
+      if(!this.phone.match(/0\d{2,3}(-)?\d{7,8}/) && !this.phone.match(/^(0|86|17951)?1[0-9]{10}$/)){
+        Toast.fail('联系电话格式不正确')
+        return 
+      }
+
       let data = {
         name: this.name,
         type: this.typeValue,
-        logo: this.fileId,
+        logo: this.fileList[0].fileId,
         bindCompanyId: '1353',
         cityCode:this.cityCode,
         areaCode: this.areaCode,
         provinceCode: this.provinceCode,
         contact: this.contact,
         address: this.value + this.address,
-        location: this.center[0].toString() + ',' + this.center[1].toString(),
+        location: this.center[1].toString() + ',' + this.center[0].toString(),
         phone: this.phone,
         qq: this.QQAccount,
         email: this.email,
         introduce: this.introduce,
-        publicityImgs: this.introList
+        publicityImgs: []
+      }
+      for (let i=0;i<this.fileIntroList.length;i++) {
+        data.publicityImgs.push(this.fileIntroList[i].fileId)
       }
       console.log(data)
       api.merchantSaveCompany(data).then(res => {

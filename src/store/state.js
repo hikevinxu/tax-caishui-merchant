@@ -1,5 +1,8 @@
 let state = {
-  activeLi: ''
+  activeLi: '',
+  companyInfo: {
+
+  }
 }
 
 export default state

@@ -6,12 +6,14 @@
             <div class="header">
                 <div class="headerContent">
                     <div class="steps">
-                        <div class="numberPC one">1</div>
+                        <div class="numberPC one">
+                          <img src="@/assets/global/ic_stepdone.png" alt="" srcset="">
+                        </div>
                         <span class="active">注册账号</span>
                     </div>
                     <div class="steps">
-                        <div class="numberPC two">2</div>
-                        <span>认领企业</span>
+                        <div class="numberPC one two_search">2</div>
+                        <span class="active">认领企业</span>
                     </div>
                     <div class="steps">
                         <div class="numberPC">3</div>
@@ -25,7 +27,7 @@
                   <div class="formItem">
                     <label for="name">机构名称<span>*</span></label>
                     <div class="input">
-                      <input type="text" v-model="phone" placeholder="账号使用手机号" />
+                      <input type="text" v-model="name" placeholder="请输入机构名称" />
                     </div>
                   </div>
                   <div class="formItem">
@@ -54,7 +56,10 @@
                             :show-file-list="false">
                             <div class="imgDesrcibe" style="display: block;width: 100%;height: 100%">
                               <img class="introduceImg" style="display: block;width: 100%;height: 100%" :src="introduceImg" alt="" srcset="">
-                            </div>  
+                            </div>
+                            <div class="addPhotoIcon" v-if="fileId == ''">
+                              <img src="@/assets/globalPc/ic_form_addphoto@3x.png" alt="">
+                            </div>
                           </el-upload>
                         </div>
                         <div class="logoWarning fl">
@@ -67,25 +72,25 @@
                   <div class="formItem">
                     <label for="name">所在地区<span>*</span></label>
                     <div class="input address">
-                      <el-select v-model="value" @change="proviceChange" placeholder="请选择">
+                      <el-select v-model="provinceCode" @change="proviceChange" placeholder="请选择">
                         <el-option
-                          v-for="item in options"
+                          v-for="item in provinceList"
                           :key="item.code"
                           :label="item.name"
                           :value="item.code">
                         </el-option>
                       </el-select>
-                      <el-select v-model="value1" @change="areaChange" placeholder="请选择">
+                      <el-select v-model="cityCode" @change="areaChange" placeholder="请选择">
                         <el-option
-                          v-for="item in options1"
+                          v-for="item in cityList"
                           :key="item.code"
                           :label="item.name"
                           :value="item.code">
                         </el-option>
                       </el-select>
-                      <el-select v-model="value2" @change="cityChange" placeholder="请选择">
+                      <el-select v-model="areaCode" @change="cityChange" placeholder="请选择">
                         <el-option
-                          v-for="item in options2"
+                          v-for="item in areaList"
                           :key="item.code"
                           :label="item.name"
                           :value="item.code">
@@ -94,9 +99,9 @@
                     </div>
                   </div>
                   <div class="formItem map">
-                    <label for="name">地址定位<span>*</span></label>
+                    <label for="name">地址定位</label>
                     <div class="input">
-                      <el-select class="selectAddress" v-model="input" :loading="loading" :remote-method="selectAddressInput" @change="selectAddressChange" reserve-keyword filterable remote placeholder="请选择">
+                      <el-select class="selectAddress" v-model="searchInput" :loading="loading" :remote-method="selectAddressInput" @change="selectAddressChange" reserve-keyword filterable remote placeholder="请选择">
                         <el-option
                           v-for="item in searchResult"
                           :key="item.id"
@@ -104,11 +109,16 @@
                           :value="item.lnglat">
                         </el-option>
                       </el-select>
-                      <div class="mapContainer">
+                      <!-- <div class="mapContainer">
                         <el-amap vid="amap" ref="map" :center="center" :zoom="zoom" :plugin="plugin" :events="events"></el-amap>
                         <div class="point"><img src="@/assets/global/map_pin.png" alt=""></div>
-                      </div>
+                      </div> -->
                     </div>
+                  </div>
+                  <div class="mapContainer">
+                    <el-amap vid="amap" ref="map" :center="center" :zoom="zoom" :plugin="plugin" :events="events"></el-amap>
+                    <div class="point"><img src="@/assets/global/map_pin.png" alt=""></div>
+                    <div class="location" @click="getCurrentPositionLaglng"><img src="@/assets/global/ic_map_locating.png" alt=""></div>
                   </div>
                   <div class="formItem">
                     <label for="name">详细地址<span>*</span></label>
@@ -119,51 +129,51 @@
                   <div class="formItem">
                     <label for="name">联系人<span>*</span></label>
                     <div class="input">
-                      <input type="text" v-model="phone" placeholder="请填写联系人" />
+                      <input type="text" v-model="contact" placeholder="请填写联系人" />
                     </div>
                   </div>
                   <div class="formItem">
                     <label for="name">联系电话<span>*</span></label>
                     <div class="input">
-                      <input type="text" v-model="phone" placeholder="请填写联系人" />
+                      <input type="phone" v-model="phone" placeholder="请填写联系电话" />
                     </div>
                   </div>
                   <div class="formItem">
                     <label for="name">QQ号</label>
                     <div class="input">
-                      <input type="text" v-model="phone" placeholder="请填写QQ号" />
+                      <input type="phone" v-model="qq" placeholder="请填写QQ号" />
                     </div>
                   </div>
                   <div class="formItem">
                     <label for="name">电子邮箱</label>
                     <div class="input">
-                      <input type="text" v-model="phone" placeholder="请填写电子邮箱" />
+                      <input type="text" v-model="email" placeholder="请填写电子邮箱" />
                     </div>
                   </div>
                   <div class="formItem textArea">
                     <label for="name">详细介绍</label>
                     <div class="input">
-                      <textarea type="text" row="4" v-model="phone" placeholder="请输入机构详细介绍"></textarea>
+                      <textarea type="text" row="4" v-model="introduce" placeholder="请输入机构详细介绍"></textarea>
                     </div>
                   </div>
                   <div class="formItem uploadImg">
                     <label for="name">介绍图</label>
                     <div class="input">
-                      <div class="imgList introImgList">
-                        <!-- <div class="uploadImgList"> -->
+                      <div class="introImgList">
+                        <div class="uploadImgList">
                           <el-upload
+                            :class="imgTotal >= 8 ? 'disabled' : ''"
                             action=""
-                            :class="this.fileIntroList.length >= 8 ? 'disabled' : ''"
                             list-type="picture-card"
-                            :multiple="false"
-                            :http-request="uploadIntro"
-                            :show-file-list="true"
+                            :multiple="true"
                             :limit="8"
                             :file-list="fileList"
-                            :on-remove="handleRemove">
+                            :before-remove="handleRemoveBefore"
+                            :on-remove="handleRemove"
+                            :http-request="uploadList">
                             <i class="el-icon-plus"></i>
                           </el-upload>
-                        <!-- </div> -->
+                        </div>
                       </div>
                       <div class="warning">
                         <p>添加几张图片，让您的服务更受欢迎</p>
@@ -172,7 +182,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="submitBtn">
+                <div class="submitBtn" @click="submit">
                   <button>下一步</button>
                 </div>
             </div>
@@ -209,32 +219,36 @@ VueAMap.initAMapApiLoader({
 })
 
 export default {
-  name: 'login',
+  name: 'merchant-pc',
   components: {
     headNav
   },
   data(){
     return {
       title: '返回登录',
+      name: '',
       phone: '',
-      input: '',
       loading: '',
       fileId: '',
       introduceImg: '',
-      options: province_local,
-      options1: [],
-      options2: [],
+      provinceList: province_local,
+      cityList: [],
+      areaList: [],
       cityCode: '',
       areaCode: '',
-      value: '',
-      value1: '',
-      value2: '',
+      introduce: '',
+      provinceCode: '',
+      searchInput: '',
       type: '',
       typeValue: '',
       companyTypes: [],
+      qq: '',
+      email: '',
+      contact: '',
       searchResult: [],
       fileList: [],
       fileIntroList: [],
+      imgTotal: 0,
       disable: false,
       center: [116.397477,39.908692],
       zoom: 16,
@@ -259,12 +273,25 @@ export default {
         }
       },
       plugin: [
+        'ToolBar',
+        {
+          pName: 'Scale',
+          events: {
+            init(o) {
+              // console.log(o);
+            }
+          }
+        },
         {
           pName: 'Geolocation',
           events: {
             init: (o) => {
               // o 是高德地图定位插件实例
-              this.getCurrentPositionLaglng()
+              if (this.$route.query.id) {
+
+              } else {
+                this.getCurrentPositionLaglng()
+              }
             }
           }
         }
@@ -282,10 +309,15 @@ export default {
       }
     })
     this.getCompanyTypes()
+    console.log(this.$store.getters.getCompanyInfo)
   },
   methods: {
+    getCompanyInfo(){
+      
+    },
     //上传图片
     upload (files) {
+      console.log(files)
       let formData = new FormData()
       formData.append('files', files.file)
       apiPC.fileupload(formData).then(res => {
@@ -306,7 +338,7 @@ export default {
         this.$message.error('上传失败，请重新上传')
       })
     },
-    uploadIntro(files){
+    uploadList(files){
       let formData = new FormData()
       formData.append('files', files.file)
       apiPC.fileupload(formData).then(res => {
@@ -314,40 +346,47 @@ export default {
           console.log(res)
           let img =  res.data[0].fileId
           this.fileIntroList.push(img)
-          console.log(this.fileIntroList.length)
+          this.imgTotal = this.fileIntroList.length
         }
       }).catch(err => {
         this.$message.error('上传失败，请重新上传')
       })
     },
-    handleRemove(file,fileList){
+    handleRemoveBefore(file,fileList) {
       console.log(file)
-      console.log(fileList)
+      for(let i=0;i<fileList.length;i++){
+        console.log(fileList[i])
+        if(file.uid == fileList[i].uid){
+          this.fileIntroList.splice(i, 1)
+        }
+      }
       console.log(this.fileIntroList)
+    },
+    handleRemove(file,fileList){
+      // console.log(file)
+      // console.log(this.fileList)
+      // console.log(fileList)
+      // console.log(this.fileIntroList)
     },
     proviceChange(val){
         console.log(val)
-        var obj = {};
-        obj = this.options.find(function(item){
+        var obj = {}
+        obj = this.provinceList.find(function(item){
             return item.code == val
         })
-        // console.log(obj)
-        this.options1 = obj.childs
+        this.cityList = obj.childs
     },
     areaChange(val){
         console.log(val)
-        this.cityCode = val.toString()
-        var obj = {};
-        obj = this.options1.find(function(item){
+        var obj = {}
+        obj = this.cityList.find(function(item){
             return item.code == val
         })
-        // console.log(obj)
-        this.options2 = obj.childs
+        this.areaList = obj.childs
 
     },
     cityChange(val){
-        console.log(val)
-        this.areaCode = val.toString()
+      console.log(val)
     },
     getCompanyTypes(){
       api.merchantCompanyTypes().then(res => {
@@ -357,23 +396,17 @@ export default {
         }
       })
     },
-    getLagLng(){
-      this.closeMapDialog()
-      let data = {
-        address: this.location,
-        center: this.center
-      }
-      eventManager.returnEvent('mapLagLng', data)
-      this.$router.back(-1)
-    },
+    // getLagLng(){
+    //   this.closeMapDialog()
+    //   let data = {
+    //     address: this.location,
+    //     center: this.center
+    //   }
+    //   eventManager.returnEvent('mapLagLng', data)
+    //   this.$router.back(-1)
+    // },
     getCurrentPositionLaglng(){
       this.getLocationLoading = true
-      // Toast.loading({
-      //   duration: 0,       // 持续展示 toast
-      //   forbidClick: true, // 禁用背景点击
-      //   loadingType: 'spinner',
-      //   message: '正在获取当前位置'
-      // });
       var geolocation = new AMap.Geolocation({
         // 是否使用高精度定位，默认：true
         enableHighAccuracy: true,
@@ -392,11 +425,14 @@ export default {
         this.center = [data.position.lng, data.position.lat];
         this.location = data.formattedAddress
         this.getLocationLoading = false
-        // Toast.clear()
       })
       AMap.event.addListener(geolocation, 'error', (data) => {
-        // Toast.clear()
-        // Toast.fail("获取位置信息超时")
+        this.$message({
+          message: '获取位置信息超时',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
       })
     },
     selectAddressChange (val) {
@@ -435,6 +471,108 @@ export default {
         this.searchResult = []
       }
     },
+    submit() {
+      if(this.name == '') {
+        this.$message({
+          message: '机构名称不能为空',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        return
+      }
+      if(this.type == ''){
+        this.$message({
+          message: '机构类型不能为空',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        return
+      }
+      if (this.fileId == '') {
+        this.$message({
+          message: '机构LOGO不能为空',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        return 
+      }
+      if (!this.provinceCode || this.provinceCode == '' || !this.cityCode || this.cityCode == '' || !this.areaCode || this.areaCode == '') {
+        this.$message({
+          message: '所选地区不能为空',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        return 
+      }
+      if(this.address == ''){
+        this.$message({
+          message: '详细地址不能为空',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        return 
+      }
+      if(this.contact == ''){
+        this.$message({
+          message: '联系人不能为空',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        return 
+      }
+      if(this.phone == ''){
+        this.$message({
+          message: '联系电话不能为空',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        return 
+      }
+      if(!this.phone.match(/0\d{2,3}(-)?\d{7,8}/) && !this.phone.match(/^(0|86|17951)?1[0-9]{10}$/)){
+        this.$message({
+          message: '联系电话格式不正确',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        return 
+      }
+      let data = {
+        name: this.name,
+        type: this.type,
+        logo: this.fileId,
+        bindCompanyId: '1353',
+        cityCode:this.cityCode,
+        areaCode: this.areaCode,
+        provinceCode: this.provinceCode,
+        contact: this.contact,
+        address: this.address,
+        location: this.center[1].toString() + ',' + this.center[0].toString(),
+        phone: this.phone,
+        qq: this.qq,
+        email: this.email,
+        introduce: this.introduce,
+        publicityImgs: this.fileIntroList
+      }
+      console.log(data)
+      api.merchantSaveCompany(data).then(res => {
+        if(res.code == 0){
+          this.$message({
+            message: '保存成功',
+            type: 'success',
+            showClose: true,
+            duration: 1000
+          })
+        }
+      })
+    }
   }
 }
 </script>
@@ -649,25 +787,33 @@ export default {
           }
           .formItem.map {
             height: auto;
-            .input {
-              .mapContainer {
-                height: 150Px;
-                margin-top: 16Px;
-                position: relative;
-                .point {
-                  width: 20Px;
-                  height: 40Px;
-                  position: absolute;
-                  top: 50%;
-                  left: 50%;
-                  transform: translate(-50%, -100%);
-                  img {
-                    width: 100%;
-                    height: 100%;
-                  }
-                }
-              }
-            }
+            // .input {
+              // .mapContainer {
+              //   height: 150Px;
+              //   margin-top: 16Px;
+              //   position: relative;
+              //   .point {
+              //     width: 20Px;
+              //     height: 40Px;
+              //     position: absolute;
+              //     top: 50%;
+              //     left: 50%;
+              //     transform: translate(-50%, -100%);
+              //     img {
+              //       width: 100%;
+              //       height: 100%;
+              //     }
+              //   }
+              //   .amap-controls {
+              //     .amap-scalecontrol {
+              //       display: none;
+              //     }
+              //     .amap-geolocation-con {
+              //       display: none;
+              //     }
+              //   }
+              // }
+            // }
           }
           .formItem.textArea {
             height: auto;
@@ -686,16 +832,23 @@ export default {
               width: 72Px;
               height: 72Px;
               background-color: #fafafa;
-            }
-            .introImgList{
-              width: 312Px;
-              height: auto;
-              background-color: transparent;
-              > div{
-                display: flex;
-                align-items: center;
-                width: 312Px;
-                flex-wrap: wrap;
+              position: relative;
+              .addPhotoIcon {
+                width: 36Px;
+                height: 36Px;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                img {
+                  display: block;
+                  width: 100%;
+                  height: 100%;
+                }
+              }
+              .el-upload {
+                width: 100%;
+                height: 100%;
               }
             }
             .logoWarning {
@@ -815,38 +968,110 @@ export default {
             border: 0;
           }
         }
+        .formItem.uploadImg {
+          .imgList {
+            .el-upload {
+              width: 100%;
+              height: 100%;
+            }
+          }
+          .introImgList{
+            width: 312Px;
+            height: auto;
+            box-sizing: border-box;
+            background: #FFFFFF;
+            overflow: hidden;
+            .uploadImgList {
+              .el-upload-list__item,
+              .el-upload-list__item-actions,
+              .el-upload {
+                width: 72Px;
+                height: 72Px;
+              }
+              .el-upload-list--picture-card .el-upload-list__item {
+                margin: 0 4Px 4Px 0;
+              }
+              .el-upload {
+                position: relative;
+                .el-icon-plus {
+                  position: absolute;
+                  top: 50%;
+                  left: 50%;
+                  transform: translate(-50%, -50%);
+                }
+              }
+              .disabled .el-upload--picture-card {
+                display: none;
+              }
+              .imgTotal {
+                font-family: PingFangSC-Regular;
+                font-size: 12Px;
+                color: rgba(0,0,0,0.60);
+                text-align: left;
+                line-height: 18Px;
+              }
+            }
+          }
+        }
       }
     }
   }
-  .el-upload{
-    width: 100%;
-    height: 100%;
-  }
-  .disabled .el-upload--picture-card {
-    display: none;
-  }
-  .el-upload--picture-card{
-    width: 72PX;
-    height: 72PX;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .imgContent{
-    height: 100%;
-  }
-  .el-upload-list{
+  .merchantPc .merchantPc_container .merchantContent .register_form .form .formItem.uploadImg .uploadImgList {
+    width: auto;
     height: auto;
-    display: flex;
-    align-items: center;
-    max-width: 312Px;
-    flex-wrap: wrap;
-    .el-upload-list__item{
-      height: 72PX;
-      width: 72PX;
-      margin: 0;
-      margin-right: 4PX;
-      border: none;
+  }
+  .map {
+    .amap-geolocation-con {
+      display: none;
+    }
+  }
+}
+</style>
+<style lang="scss">
+.mapContainer {
+  height: 250Px;
+  margin-top: 16Px;
+  position: relative;
+  .point {
+    width: 20Px;
+    height: 40Px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -100%);
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+  .location {
+    width: 38Px;
+    height: 38Px;
+    background-color: #fff;
+    position: absolute;
+    bottom: 50Px;
+    left: 10Px;
+    border-radius: 5Px;
+    border: 1Px solid #ccc;
+    cursor: pointer;
+    img {
+      display: block;
+      width: 24Px;
+      height: 24Px;
+      position: absolute;
+      top: 7Px;
+      left: 7Px;
+    }
+  }
+  .amap-controls {
+    .amap-toolbar {
+      display: none;
+    }
+    .amap-scalecontrol {
+      display: none;
+    }
+    .amap-geolocation-con {
+      display: none;
     }
   }
 }

@@ -5,6 +5,12 @@ let actions = {
       resolve()
     })
   },
+  save_companyInfo (context, companyInfo) {
+    return new Promise((resolve) => {
+      context.commit('update_companyInfo', companyInfo)
+      resolve()
+    })
+  }
 }
 
 export default actions

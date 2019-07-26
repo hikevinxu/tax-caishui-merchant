@@ -36,6 +36,8 @@
 </template>
 <script>
 import headNav from '@/components/merchantPC/headNav.vue'
+import globalApi from '@/api/globalApi'
+import cookie from '@/utils/cookie'
 export default {
   name: 'login',
   components: {
@@ -43,16 +45,28 @@ export default {
   },
   data(){
     return {
-        title: '商户入驻',
-        phone: '',
-        password: '',
-        disabled: false,
+      title: '商户入驻',
+      phone: '',
+      password: '',
+      disabled: false,
     }
   },
   methods: {
     phoneInput(e){},
     passwordInput(e){},
-    login(){},
+    login(){
+      let params = {
+        phone: '18146625635',
+        password: '123456'
+      }
+      globalApi.authLogin(params).then(res => {
+        if(res.code == 0){
+          cookie.setCookie("accessToken", res.data.accessToken)
+          cookie.setCookie('uid', res.data.authInfo.uid)
+          cookie.setCookie("sdktoken", res.data.accessToken)
+        }
+      })
+    },
     join(){}
   }
 }

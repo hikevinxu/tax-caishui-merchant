@@ -34,7 +34,7 @@
         <div class="formItem upload">
           <label for="fileList">营业执照<span class="notNull">*</span></label>
           <div class="input">
-            <van-uploader v-model="fileList" multiple :max-count="1" :after-read="upload"/>
+            <van-uploader v-model="fileList" multiple @delete="uploadDelete" :max-count="1" :after-read="upload"/>
           </div>
           <div class="prompt">
             <p>请上传营业执照</p>
@@ -44,7 +44,7 @@
         <div class="formItem upload">
           <label for="fileList">法人手持身份证照片<span class="notNull">*</span></label>
           <div class="input">
-            <van-uploader v-model="fileList1" multiple :max-count="1" :after-read="upload1"/>
+            <van-uploader v-model="fileList1" multiple @delete="uploadDelete1" :max-count="1" :after-read="upload1"/>
           </div>
           <div class="prompt">
             <p>请上传营业执照</p>
@@ -54,7 +54,7 @@
         <div class="formItem upload">
           <label for="fileList">资质证书</label>
           <div class="input">
-            <van-uploader v-model="fileList2" multiple :max-count="1" :after-read="upload2"/>
+            <van-uploader v-model="fileList2" multiple @delete="uploadDelete2" :max-count="1" :after-read="upload2"/>
           </div>
           <div class="prompt">
             <p>可上传其他资质</p>
@@ -132,6 +132,9 @@ export default {
         this.$message.error('上传失败，请重新上传')
       })
     },
+    uploadDelete(file){
+      this.fileId = ''
+    },
     upload1(file){
       let formData = new FormData()
       formData.append('files', file.file)
@@ -143,6 +146,9 @@ export default {
       }).catch(err => {
         this.$message.error('上传失败，请重新上传')
       })
+    },
+    uploadDelete1(file){
+      this.fileId1 = ''
     },
     upload2(file){
       let formData = new FormData()
@@ -156,12 +162,34 @@ export default {
         this.$message.error('上传失败，请重新上传')
       })
     },
+    uploadDelete2(file){
+      this.fileId2 = ''
+    },
     jumpAgreement () {
       // this.$router.push('agreement-h5')
       window.location.href = 'https://res.caishuiyu.com/common/h5/platform_agreement.html'
     },
     jumpNextStep () {
-      // this.$router.push('success-h5')
+      if (!this.businessLicenseNothis || this.businessLicenseNo == '') {
+        Toast.fail('工商注册号不能为空')
+        return
+      }
+
+      if (!this.fileId || this.fileId == '') {
+        Toast.fail('请先上传营业执照')
+        return
+      }
+
+      if (!this.fileId1 || this.fileId1 == '') {
+        Toast.fail('请先上传法人手持身份证照片')
+        return
+      }
+
+      if(!this.checked){
+        Toast.fail('请先勾选服务协议')
+        return 
+      }
+
       let data = {
         businessLicenseNo: this.businessLicenseNo,
         businessLicenseImg: this.fileId,
