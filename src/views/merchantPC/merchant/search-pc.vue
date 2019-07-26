@@ -190,6 +190,9 @@ export default {
         pageSize: 20
     }
   },
+  created(){
+      this.getCertificationStatus()
+  },
   methods: {
     proviceChange(val){
         console.log(val)
@@ -318,6 +321,34 @@ export default {
           path: '/merchant-pc'
       })
     },
+    getCertificationStatus(){
+      api.getCertificationStatus().then(res => {
+        console.log(res)
+        if(res.code == 0){
+          if(res.data.status == 100){
+            this.$router.push({path: '/search-pc'})
+          }else if(res.data.status == 101){
+            this.$router.push({path: '/certification-pc'})
+          }else if(res.data.status == 102){
+            this.$router.push({
+                path: '/success-pc',
+                query: {
+                  status: res.data.status,
+                }
+            })
+          }else if(res.data.status == 103){
+            this.$router.push({path: '/home'})
+          }else if(res.data.status == 999){
+            this.$router.push({
+                path: '/success-pc',
+                query: {
+                  status: res.data.status,
+                }
+            })
+          }
+        }
+      })
+    }
   }
 }
 </script>

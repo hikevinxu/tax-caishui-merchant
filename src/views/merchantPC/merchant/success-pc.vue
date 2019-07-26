@@ -23,10 +23,22 @@
                     </div>
                 </div>
             </div>
-            <div class="success_content">
+            <div class="success_content" v-show="status == '102'">
                 <img src="@/assets/global/img_page_complete.png" alt="">
                 <span style="font-size: 16PX;color: rgba(0,0,0,0.87);">商家入驻申请提交成功</span>
                 <span style="font-size: 12PX;color: rgba(0,0,0,0.38);">2～3个工作日后将通知您审核结果</span>
+            </div>
+            <div class="success_content" v-show="status == '103'">
+                <img src="@/assets/global/img_page_complete.png" alt="">
+                <span style="font-size: 16PX;color: rgba(0,0,0,0.87);">商家入驻审核通过</span>
+                <span style="font-size: 12PX;color: rgba(0,0,0,0.38);">请登录商户后台管理网站管理你的商户信息</span>
+            </div>
+            <div class="success_content" v-show="status == '999'">
+                <img src="@/assets/global/img_page_failed.png" alt="">
+                <span style="font-size: 16PX;color: rgba(0,0,0,0.87);">商家入驻申请审核失败</span>
+                <span style="font-size: 12PX;color: rgba(0,0,0,0.38);">  因商家提供资料与实际不符，审核失败</span>
+                <span style="font-size: 12PX;color: rgba(0,0,0,0.38);">请重新提交，感谢您的合作</span>
+                <span class="goSearch" @click="goSearch">重新提交</span>
             </div>
         </div>
         <div class="footer">
@@ -51,21 +63,22 @@ export default {
     headNav
   },
   data(){
-    return {
+    return{
         title: '返回登录',
-        phone: '',
-        password: '',
-        codeStart: true,
-        isCode: true,
-        count: 0,
-        disabled_code: true,
-        disabled: true,
-        code: '',
-        timer: null,
+        status: '102',
+    }
+  },
+  created(){
+    let status = this.$route.query.status
+    console.log(status)
+    if(status){
+        this.status  = status
     }
   },
   methods: {
-    
+    goSearch(){
+        this.$router.push({path: '/search-pc'})
+    }
   }
 }
 </script>
@@ -240,6 +253,21 @@ export default {
                     span{
                         display: block;
                         margin-bottom: 8PX;
+                    }
+                    .goSearch{
+                        width: 240PX;
+                        height: 36PX;
+                        display: flex !important;
+                        align-items: center;
+                        justify-content: center;
+                        margin-left: auto;
+                        margin-right: auto;
+                        margin-top: 24PX;
+                        background: linear-gradient(135deg, #FFAD71 0%, #FF7F4A 100%);
+                        border-radius: 18PX;
+                        font-size: 15PX;
+                        color: #FFFFFF;
+                        cursor: pointer;
                     }
                 }
             }
