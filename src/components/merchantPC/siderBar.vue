@@ -5,7 +5,8 @@
       class="el-menu-vertical-demo"
       :router="true"
       @open="handleOpen"
-      @close="handleClose">
+      @close="handleClose"
+      @select="activeMenuSelect">
       <el-menu-item index="/home" route="/home">
         <i class="el-icon-menu"></i>
         <span slot="title">商户主页</span>
@@ -103,6 +104,50 @@ export default {
     },
     handleClose(key, keyPath) {
       console.log(key, keyPath)
+    },
+    activeMenuSelect(index, indexPath) {
+      this.initIM()
+    },
+    initIM(){
+      if (this.nim) {
+        this.nim.disconnect()
+      }
+      let that = this
+      // 提交sdk连接请求
+      this.nim = SDK.NIM.getInstance({
+          // debug: true,
+          appKey: "7cb7efab05029f8c18576aa98a9cce96",
+          account: "15515268707",
+          token: "b3e8d33f9cfbc94f4ea0e8b41c41fb1c",
+          syncSessionUnread: true,
+          syncRobots: true,
+          autoMarkRead: true, // 默认为true
+          transports: ['websocket'],
+          onsessions: onSessions,
+          onupdatesession: onUpdateSession
+      });
+      function onSessions(sessions) {
+        console.log(sessions)
+        that.sessionlist = sessions
+        for(let i=0;i<that.sessionlist.length;i++){
+          that.unread += Number(that.sessionlist[i].unread)
+        }
+      }
+      function onUpdateSession(session) {
+        console.log(session)
+        that.sessionlist = nim.mergeSessions(that.sessionlist, session)
+        that.sessionlist.sort((a, b) => {
+          return b.updateTime - a.updateTime
+        })
+        console.log(that.sessionlist)
+        that.unread = 0
+        for(let i=0;i<that.sessionlist.length;i++){
+          that.unread += Number(that.sessionlist[i].unread)
+        }
+      }
+      function updateSessionsUI() {
+        // 刷新界面
+      }
     }
   }
 }

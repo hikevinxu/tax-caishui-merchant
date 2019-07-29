@@ -57,8 +57,8 @@ export default {
     passwordInput(e){},
     login(){
       let params = {
-        phone: '18146625635',
-        password: '123456'
+        phone: this.phone,
+        password: this.password
       }
       globalApi.authLogin(params).then(res => {
         if(res.code == 0){
