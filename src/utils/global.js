@@ -1,3 +1,7 @@
+export let account = {
+  IMAppKey: '7cb7efab05029f8c18576aa98a9cce96',
+  amapKey: '54f7b2ff0b18deaefc0fd1925e434ead'
+}
 export let getQueryString = function (name) {
   var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i')
   var r = window.location.search.substr(1).match(reg)
