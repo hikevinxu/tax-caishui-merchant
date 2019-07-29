@@ -1,6 +1,6 @@
 <template>
-  <div class="home">
-    <iframe src="./IM/im/main.html" width="1450" height="800" frameborder="0"></iframe>
+  <div class="messageCenter">
+    <iframe class="chatIfream" src="./IM/im/main.html" frameborder="0"></iframe>
   </div>
 </template>
 <script>
@@ -17,18 +17,20 @@ export default {
 }
 </script>
 <style lang="scss">
-.home {
-  width: 100vw;
+.messageCenter {
   height: 100vh;
-  font-size: 48PX;
-  .container {
+  width: 100vw;
+  padding-bottom: 40Px;
+  .chatIfream {
+    box-sizing: border-box;
     width: 100%;
     height: 100%;
-    font-size: 36PX;
-    .slide_menu {
-      width: 200Px;
-      height: 100%;
-    }
+  }
+  .chatIfream::-webkit-scrollbar {
+    display: none;
   }
 }
+.messageCenter::-webkit-scrollbar {
+    display: none;
+  }
 </style>

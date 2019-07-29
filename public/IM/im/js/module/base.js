@@ -365,7 +365,7 @@ YX.fn.doLogout = function() {
   delCookie('sdktoken');
   delCookie('avatar');
   delCookie('nickName');
-  window.parent.location.href = window.location.protocol+"//"+window.location.host + '/home'
+  window.parent.location.href = window.location.protocol+"//"+window.location.host + '/login'
   // window.location.href = window.location.protocol+"//"+window.location.host + '/index'
 };
 

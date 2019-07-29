@@ -7,7 +7,7 @@ var SDKBridge = function(ctr, data) {
     userUID = readCookie('uid'),
     that = this;
   if (!sdktoken) {
-    window.parent.location.href = window.location.protocol+"//"+window.location.host + '/home'
+    window.parent.location.href = window.location.protocol+"//"+window.location.host + '/login'
     // window.location.href = '../../login.html';
     return;
   }
@@ -120,7 +120,7 @@ var SDKBridge = function(ctr, data) {
           delCookie('uid');
           delCookie('sdktoken');
           delCookie('nickName');
-          window.parent.location.href = window.location.protocol+"//"+window.location.host + '/home'
+          window.parent.location.href = window.location.protocol+"//"+window.location.host + '/login'
           // window.location.href = '../../login.html';
           break;
         // 被踢, 请提示错误后跳转到登录页面
@@ -144,7 +144,7 @@ var SDKBridge = function(ctr, data) {
           delCookie('uid');
           delCookie('sdktoken');
           delCookie('nickName');
-          window.parent.location.href = window.location.protocol+"//"+window.location.host + '/home'
+          window.parent.location.href = window.location.protocol+"//"+window.location.host + '/login'
           // window.location.href = '../../login.html';
           break;
         default:

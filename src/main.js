@@ -14,15 +14,6 @@ import 'element-ui/lib/theme-chalk/index.css'
 
 Vue.use(ElementUI)
 
-// const load = require('load-script')
-// load('../IM/3rd/NIM_Web_SDK_v6.1.0.js', (err, script) => {
-//   if (err) {
-//     console.log('LOAD NIM ERR:', err)
-//   } else {
-//     console.log('LOAD NIM SUCCESS:', script.src)
-//   }
-// })
-
 Vue.config.productionTip = false
 /* eslint-disable no-new */
 // new VConsole()
