@@ -207,6 +207,7 @@
 import headNav from '@/components/merchantPC/headNav.vue'
 import Vue from 'vue'
 import VueAMap from 'vue-amap'
+import { config } from '@/utils/global'
 import api from '@/api/apiH5'
 import apiPC from '@/api/api'
 import globalApi from '@/api/globalApi'
@@ -215,7 +216,7 @@ Vue.use(VueAMap)
 
 // 初始化高德地图的 key 和插件
 VueAMap.initAMapApiLoader({
-  key: '54f7b2ff0b18deaefc0fd1925e434ead',
+  key: config.amapKey,
   plugin: ['AMap.Autocomplete', 'AMap.PlaceSearch', 'AMap.Scale', 'AMap.OverView', 'AMap.ToolBar', 'AMap.MapType', 'AMap.PolyEditor', 'AMap.CircleEditor', 'AMap.Geocoder', 'AMap.Geolocation'],
   // 默认高德 sdk 版本为 1.4.4
   v: '1.4.4'
@@ -915,33 +916,6 @@ export default {
           }
           .formItem.map {
             height: auto;
-            // .input {
-              // .mapContainer {
-              //   height: 150Px;
-              //   margin-top: 16Px;
-              //   position: relative;
-              //   .point {
-              //     width: 20Px;
-              //     height: 40Px;
-              //     position: absolute;
-              //     top: 50%;
-              //     left: 50%;
-              //     transform: translate(-50%, -100%);
-              //     img {
-              //       width: 100%;
-              //       height: 100%;
-              //     }
-              //   }
-              //   .amap-controls {
-              //     .amap-scalecontrol {
-              //       display: none;
-              //     }
-              //     .amap-geolocation-con {
-              //       display: none;
-              //     }
-              //   }
-              // }
-            // }
           }
           .formItem.textArea {
             height: auto;

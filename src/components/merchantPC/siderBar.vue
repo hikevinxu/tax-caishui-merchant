@@ -40,7 +40,7 @@
 <script>
 import router from '../../router/index.js'
 import cookie from '@/utils/cookie.js'
-import { account } from '@/utils/global.js'
+import { config } from '@/utils/global.js'
 export default {
   name: 'siderBar',
   data(){
@@ -84,7 +84,7 @@ export default {
       // 提交sdk连接请求
       let nim = SDK.NIM.getInstance({
           // debug: true,
-          appKey: account.IMAppKey,
+          appKey: config.IMAppKey,
           account: cookie.readCookie('uid'),
           token: cookie.readCookie('sdktoken'),
           syncSessionUnread: true,

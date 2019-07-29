@@ -64,13 +64,14 @@
 <script>
 import Vue from 'vue'
 import VueAMap from 'vue-amap'
+import { config } from '@/utils/global'
 import requestApi from '@/api/requestApi'
 import globalApi from '@/api/globalApi'
 Vue.use(VueAMap)
 
 // 初始化高德地图的 key 和插件
 VueAMap.initAMapApiLoader({
-  key: '54f7b2ff0b18deaefc0fd1925e434ead',
+  key: config.amapKey,
   plugin: ['AMap.Autocomplete', 'AMap.PlaceSearch', 'AMap.Scale', 'AMap.OverView', 'AMap.ToolBar', 'AMap.MapType', 'AMap.PolyEditor', 'AMap.CircleEditor', 'AMap.Geocoder', 'AMap.Geolocation'],
   // 默认高德 sdk 版本为 1.4.4
   v: '1.4.4'
@@ -92,7 +93,6 @@ export default {
       editMark: true,
       address: '',
       center: [116.397477,39.908692],
-      // center: [],
       zoom: 16,
       events: {
         init: (o) => {

@@ -1,4 +1,4 @@
-export let account = {
+export let config = {
   IMAppKey: '7cb7efab05029f8c18576aa98a9cce96',
   amapKey: '54f7b2ff0b18deaefc0fd1925e434ead'
 }
