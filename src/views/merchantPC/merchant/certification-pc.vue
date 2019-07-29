@@ -113,7 +113,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="xieyi"><el-checkbox v-model="checked"></el-checkbox>我已阅读并同意<span>《用户服务协议》</span></div>
+                <div class="xieyi"><el-checkbox v-model="checked"></el-checkbox>我已阅读并同意<span @click="jumpXieYi">《用户服务协议》</span></div>
                 <div class="submitBtn">
                   <button @click="jumpAgreement">提交申请</button>
                 </div>
@@ -139,7 +139,7 @@ import apiPC from '@/api/api'
 import api from '@/api/apiH5'
 
 export default {
-  name: 'login',
+  name: 'certification-pc',
   components: {
     headNav
   },
@@ -161,7 +161,7 @@ export default {
     }
   },
   created(){
-    // this.getCertificationStatus()
+    this.getCertificationStatus()
   },
   methods: {
     getCertificationStatus(){
@@ -332,6 +332,9 @@ export default {
     deleteFileId2(){
       this.fileId2 = ''
       this.introduceImg2 = ''
+    },
+    jumpXieYi(){
+      this.$router.push('protocolBook-pc')
     }
   }
 }
@@ -647,6 +650,7 @@ export default {
           text-align: center;
           span {
             color: #FF7F4A;
+            cursor: pointer;
           }
         }
         .submitBtn {
@@ -672,7 +676,7 @@ export default {
             margin-bottom: 100Px;
           }
           button:hover {
-            background: #000;
+            background: #FF7F4A;
           }
         }
       }

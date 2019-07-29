@@ -11,7 +11,7 @@ import cookie from '@/utils/cookie.js'
 export default {
   data () {
     return {
-      keepAlive: ['certification-h5', 'merchant-h5']
+      keepAlive: ['certification-h5', 'merchant-h5', 'certification-pc']
     }
   },
   created(){

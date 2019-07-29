@@ -152,7 +152,7 @@ export default {
       line-height: 36Px;
     }
     button:hover {
-      background: #000;
+      background: #FF7F4A;
     }
   }
 }

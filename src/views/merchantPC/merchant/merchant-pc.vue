@@ -91,7 +91,7 @@
                           :value="item.code">
                         </el-option>
                       </el-select>
-                      <el-select v-model="areaCode" placeholder="请选择">
+                      <el-select v-model="areaCode" @change="areaCodeChange" placeholder="请选择">
                         <el-option
                           v-for="item in areaList"
                           :key="item.code"
@@ -206,8 +206,7 @@
 <script>
 import headNav from '@/components/merchantPC/headNav.vue'
 import Vue from 'vue'
-import VueAMap from 'vue-amap';
-// import province_local from '@/utils/province_local'
+import VueAMap from 'vue-amap'
 import api from '@/api/apiH5'
 import apiPC from '@/api/api'
 import globalApi from '@/api/globalApi'
@@ -241,9 +240,12 @@ export default {
       cityList: [],
       areaList: [],
       cityCode: '',
+      cityName: '',
       areaCode: '',
+      areaName: '',
       introduce: '',
       provinceCode: '',
+      provinceName: '',
       searchInput: '',
       type: '',
       typeValue: '',
@@ -365,18 +367,41 @@ export default {
       let params = {
         provinceCode: this.provinceCode
       }
-      globalApi.getAddressCitys(params).then(res => {
+      globalApi.getAddressProvinces().then(res => {
         if(res.code == 0){
-          this.cityList = res.data
-        }
-      })
-      let data = {
-        provinceCode: this.provinceCode,
-        cityCode: this.cityCode
-      }
-      globalApi.getAddressAreas(data).then(res => {
-        if(res.code == 0){
-          this.areaList = res.data
+          this.provinceList = res.data
+          for(let i=0;i<res.data.length;i++){
+            if (res.data[i].code == this.provinceCode){
+              this.provinceName = res.data[i].name
+              let params = {
+                provinceCode: this.provinceCode
+              }
+              globalApi.getAddressCitys(params).then(res => {
+                if(res.code == 0){
+                  for(let i=0;i<res.data.length;i++){
+                    this.cityList = res.data
+                    if (res.data[i].code == this.cityCode){
+                      this.cityName = res.data[i].name
+                      let data = {
+                        provinceCode: this.provinceCode,
+                        cityCode: this.cityCode
+                      }
+                      globalApi.getAddressAreas(data).then(res => {
+                        this.areaList = res.data
+                        if(res.code == 0){
+                          for(let i=0;i<res.data.length;i++){
+                            if (res.data[i].code == this.areaCode){
+                              this.areaName = res.data[i].name
+                            }
+                          }
+                        }
+                      })
+                    }
+                  }
+                }
+              })
+            }
+          }
         }
       })
     },
@@ -451,6 +476,11 @@ export default {
           this.cityList = res.data
         }
       })
+      for(let i=0;i<this.provinceList.length;i++){
+        if(this.provinceList[i].code == val){
+          this.provinceName = this.provinceList[i].name
+        }
+      }
     },
     cityCodeChange(val){
       this.areaCode = ''
@@ -464,6 +494,18 @@ export default {
           this.areaList = res.data
         }
       })
+      for(let i=0;i<this.cityList.length;i++){
+        if(this.cityList[i].code == val){
+          this.cityName = this.cityList[i].name
+        }
+      }
+    },
+    areaCodeChange(val) {
+      for(let i=0;i<this.areaList.length;i++){
+        if(this.areaList[i].code == val){
+          this.areaName = this.areaList[i].name
+        }
+      }
     },
     getProvinceList() {
       globalApi.getAddressProvinces().then(res => {
@@ -619,7 +661,7 @@ export default {
         })
         return 
       }
-      if(!this.phone.match(/0\d{2,3}(-)?\d{7,8}/) && !this.phone.match(/^(0|86|17951)?1[0-9]{10}$/)){
+      if(!this.phone.match(/(0\d{2,3}(-)?)?\d{7,8}/) && !this.phone.match(/^(0|86|17951)?1[0-9]{10}$/)){
         this.$message({
           message: '联系电话格式不正确',
           type: 'error',
@@ -628,6 +670,7 @@ export default {
         })
         return 
       }
+      
       let data = {
         name: this.name,
         type: this.type,
@@ -637,7 +680,7 @@ export default {
         areaCode: this.areaCode,
         provinceCode: this.provinceCode,
         contact: this.contact,
-        address: this.address,
+        address: this.provinceName + this.cityName + this.areaName + this.address,
         location: this.center[1].toString() + ',' + this.center[0].toString(),
         phone: this.phone,
         qq: this.qq,
@@ -998,7 +1041,7 @@ export default {
             margin-bottom: 100Px;
           }
           button:hover {
-            background: #000;
+            background: #FF7F4A;
           }
         }
       }

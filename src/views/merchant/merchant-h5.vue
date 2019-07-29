@@ -476,7 +476,7 @@ export default {
         return 
       }
 
-      if(!this.phone.match(/0\d{2,3}(-)?\d{7,8}/) && !this.phone.match(/^(0|86|17951)?1[0-9]{10}$/)){
+      if(!this.phone.match(/(0\d{2,3}(-)?)?\d{7,8}/) && !this.phone.match(/^(0|86|17951)?1[0-9]{10}$/)){
         Toast.fail('联系电话格式不正确')
         return 
       }

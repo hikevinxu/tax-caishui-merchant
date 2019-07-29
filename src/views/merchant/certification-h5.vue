@@ -178,8 +178,7 @@ export default {
       this.fileId2 = ''
     },
     jumpAgreement () {
-      // this.$router.push('agreement-h5')
-      window.location.href = 'https://res.caishuiyu.com/common/h5/platform_agreement.html'
+      this.$router.push('agreement-h5')
     },
     jumpNextStep () {
       if (!this.businessLicenseNo || this.businessLicenseNo == '') {

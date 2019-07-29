@@ -192,6 +192,14 @@ export default new Router({
       }
     },
     {
+      path: '/protocolBook-pc',
+      name: 'protocolBook-pc',
+      component: () => import('../views/merchantPC/merchant/protocolBook-pc.vue'),
+      meta: {
+        title: '用户服务协议'
+      }
+    },
+    {
       path: '/success-pc',
       name: 'success-pc',
       component: () => import('../views/merchantPC/merchant/success-pc.vue'),
