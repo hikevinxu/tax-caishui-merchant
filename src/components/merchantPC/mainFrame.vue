@@ -8,6 +8,7 @@
 <script>
 import headNav from '@/components/merchantPC/headNav.vue'
 import siderBar from '@/components/merchantPC/siderBar.vue'
+import api from '@/api/apiH5'
 export default {
   name: 'mainFrame',
   components: {
@@ -17,6 +18,41 @@ export default {
   data(){
     return {
       title: '商户入驻'
+    }
+  },
+  created() {
+    alert(13)
+    this.getCertificationStatus()
+  },
+  methods: {
+    getCertificationStatus(){
+      api.getCertificationStatus().then(res => {
+        console.log(res)
+        if(res.code == 0){
+          if(res.data.status == 100){
+            this.$router.push({path: '/search-pc'})
+          }else if(res.data.status == 101){
+            this.$router.push({path: '/certification-pc'})
+          }else if(res.data.status == 102){
+            this.$router.push({
+                path: '/success-pc',
+                query: {
+                  status: res.data.status,
+                }
+            })
+          }else if(res.data.status == 999){
+            this.$router.push({
+                path: '/success-pc',
+                query: {
+                  status: res.data.status,
+                }
+            })
+          }else if(res.data.status == 103){
+            // 进入页面
+            
+          }
+        }
+      })
     }
   }
 }
