@@ -1,7 +1,7 @@
 <template>
   <div class="loginPc">
     <div class="loginPc_container">
-        <head-nav :title="title" id="mainHeader"></head-nav>
+        <head-nav :isLogin='false' :title="title" id="mainHeader"></head-nav>
         <img class="title" src="@/assets/globalPc/title.png" alt="" srcset="">
         <div class="login_form">
             <div class="form">

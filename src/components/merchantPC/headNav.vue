@@ -25,13 +25,16 @@ import cookie from '@/utils/cookie'
 export default {
   name: 'headNav',
   props: {
-    title: String
+    title: String,
+    isLogin: {
+      type: Boolean,
+      default: true
+    }
   },
   data(){
     return {
       account: '187****7263',
-      showBtnList: false,
-      isLogin: true
+      showBtnList: false
     }
   },
   created(){
