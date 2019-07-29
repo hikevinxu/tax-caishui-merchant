@@ -32,59 +32,23 @@
       </el-menu-item>
       <el-menu-item class="msgUnreadItem" index="/messageCenter" route="/messageCenter">
         <i class="el-icon-document"></i>
-        <span slot="title">消息中心 <span v-if="unread > 0" class="msgUnread">{{unread}}</span></span>
+        <span slot="title">消息中心 <span v-if="msg && unread > 0" class="msgUnread">{{unread}}</span></span>
       </el-menu-item>
     </el-menu>
   </div>
 </template>
 <script>
 import router from '../../router/index.js'
+import cookie from '@/utils/cookie.js'
+import { account } from '@/utils/global.js'
 export default {
   name: 'siderBar',
   data(){
     return {
       activeMenu: '',
+      msg: true,
       unread: 0,
       sessionlist: []
-    }
-  },
-  // 所有页面更新都会触发此函数
-  updated () {
-    let that = this
-    // 提交sdk连接请求
-    var nim = SDK.NIM.getInstance({
-        // debug: true,
-        appKey: "7cb7efab05029f8c18576aa98a9cce96",
-        account: "15515268707",
-        token: "b3e8d33f9cfbc94f4ea0e8b41c41fb1c",
-        syncSessionUnread: true,
-        syncRobots: true,
-        autoMarkRead: true, // 默认为true
-        transports: ['websocket'],
-        onsessions: onSessions,
-        onupdatesession: onUpdateSession
-    });
-    function onSessions(sessions) {
-      console.log(sessions)
-      that.sessionlist = sessions
-      for(let i=0;i<that.sessionlist.length;i++){
-        that.unread += Number(that.sessionlist[i].unread)
-      }
-    }
-    function onUpdateSession(session) {
-      console.log(session)
-      that.sessionlist = nim.mergeSessions(that.sessionlist, session)
-      that.sessionlist.sort((a, b) => {
-        return b.updateTime - a.updateTime
-      })
-      console.log(that.sessionlist)
-      that.unread = 0
-      for(let i=0;i<that.sessionlist.length;i++){
-        that.unread += Number(that.sessionlist[i].unread)
-      }
-    }
-    function updateSessionsUI() {
-      // 刷新界面
     }
   },
   created () {
@@ -97,6 +61,7 @@ export default {
     window.addEventListener("popstate", function() {
       that.activeMenu = that.$route.path
     }, false)
+    this.initIM()
   },
   methods: {
     handleOpen(key, keyPath) {
@@ -107,18 +72,21 @@ export default {
     },
     activeMenuSelect(index, indexPath) {
       this.initIM()
+      console.log(index, indexPath)
+      if ( index == '/messageCenter') {
+        this.msg = false
+      } else {
+        this.msg = true
+      }
     },
     initIM(){
-      if (this.nim) {
-        this.nim.disconnect()
-      }
       let that = this
       // 提交sdk连接请求
-      this.nim = SDK.NIM.getInstance({
+      let nim = SDK.NIM.getInstance({
           // debug: true,
-          appKey: "7cb7efab05029f8c18576aa98a9cce96",
-          account: "15515268707",
-          token: "b3e8d33f9cfbc94f4ea0e8b41c41fb1c",
+          appKey: account.IMAppKey,
+          account: cookie.readCookie('uid'),
+          token: cookie.readCookie('sdktoken'),
           syncSessionUnread: true,
           syncRobots: true,
           autoMarkRead: true, // 默认为true
@@ -130,7 +98,9 @@ export default {
         console.log(sessions)
         that.sessionlist = sessions
         for(let i=0;i<that.sessionlist.length;i++){
-          that.unread += Number(that.sessionlist[i].unread)
+          if (that.sessionlist[i].to != '') {
+            that.unread += Number(that.sessionlist[i].unread)
+          }
         }
       }
       function onUpdateSession(session) {
