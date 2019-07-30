@@ -8,7 +8,7 @@ export default {
    * @type 'GET'
    */
   getCertificationStatus () {
-    return fetchGet('/merchant/apply/getCertificationStatus')
+    return fetchGet('/merchant/apply/status')
   },
   /**
    * 商户入驻注册
