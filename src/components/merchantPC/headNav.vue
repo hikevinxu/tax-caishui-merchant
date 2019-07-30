@@ -9,7 +9,7 @@
         <img src="@/assets/globalPc/ic_arrow_dropdown@3x.png" alt="" srcset="">
         <div @mouseenter="showBtnList = true" class="btnList" v-show="showBtnList == true">
           <div class="btnLine account">{{ account }}</div>
-          <div class="btnLine">修改密码</div>
+          <div class="btnLine" @click="goReset">修改密码</div>
           <!-- <div class="btnLine">修改手机号</div> -->
           <div class="btnLine" @click="logoOut">退出</div>
         </div>
@@ -49,6 +49,9 @@ export default {
     },
     goRegister(){
       this.$router.push('/register-pc')
+    },
+    goReset(){
+      this.$router.push('/reset')
     },
     logoOut(){
       this.$confirm('确认退出该账号?', '提示', {}).then(() => {
