@@ -1,11 +1,10 @@
 import axios from 'axios'
 import Vue from 'vue'
 import router from '@/router/index'
-// import store from '@/store/index'
-// import qs from 'qs'
 import { Toast } from 'vant'
 import { Message, MessageBox } from 'element-ui'
 import cookie from '@/utils/cookie'
+import { Terminal } from '@/utils/global'
 
 Vue.use(Toast)
 
@@ -38,12 +37,7 @@ axios.interceptors.request.use((config) => {
   // config.headers['Authorization'] = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjEwMDAsImx0IjoidmVyaWZ5Y29kZSIsImxkIjoiYXBwIiwiY3QiOiJhcHAiLCJydCI6IjAwMDAwIiwiaWF0IjoxNTU3ODg2NjgxLCJleHAiOjE4NTU0NDE0NDk4NzQ4MSwidHRsIjoiMTg1NTQyNTg3MTAwODAwMDAwIn0.1JPP2kN-S7O-9eYa4Y2Coso1JsUhUK47x7F_pShILCk'
   return config
 }, (error) => {
-  // Toast('错误的传参')
-  Message({
-    message: '错误的传参',
-    type: 'error',
-    duration: 5 * 1000
-  })
+  ToastFailInfo("错误的传参")
   return Promise.reject(error)
 })
 
@@ -51,18 +45,26 @@ axios.interceptors.request.use((config) => {
 axios.interceptors.response.use((res) => {
   // 对响应数据做些事
   if (res.status !== 200) {
-    // Toast('系统异常')
+    ToastFailInfo("系统异常")
     return Promise.reject(res)
   } else if (res.data.code !== 0) {
     let info = '系统异常'
     switch (res.data.code) {
       case 10000:
-        router.push('/login')
-        info = '您登录信息已过期'
+        if (Terminal.deviceInfo().deviceType == 'pc') {
+          router.push('/login')
+          info = '您登录信息已过期'
+        } else {
+          router.push('/merchantHome-h5')
+        }
         break;
       case 10001:
-        router.push('/login')
-        info = '您登录信息已过期'
+        if (Terminal.deviceInfo().deviceType == 'pc') {
+          router.push('/login')
+          info = '您登录信息已过期'
+        } else {
+          router.push('/merchantHome-h5')
+        }
         break;
       case 11000:
         return Promise.resolve(res)
@@ -70,22 +72,12 @@ axios.interceptors.response.use((res) => {
     if (res.data.msg) {
       info = res.data.msg
     }
-    // Toast(info)
-    Message({
-      message: info,
-      type: 'error',
-      duration: 5 * 1000
-    })
+    ToastFailInfo(info)
     return Promise.reject(res)
   }
   return Promise.resolve(res)
 }, (error) => {
-  // Toast('网络异常')
-  Message({
-    message: '网络异常',
-    type: 'error',
-    duration: 5 * 1000
-  })
+  ToastFailInfo("网络异常")
   return Promise.reject(error)
 })
 
@@ -117,4 +109,16 @@ export function fetchGet (url, param) {
         reject(error)
       })
   })
+}
+
+function ToastFailInfo (info) {
+  if (Terminal.deviceInfo().deviceType == 'pc') {
+    Message({
+      message: info,
+      type: 'error',
+      duration: 2 * 1000
+    })
+  } else {
+    Toast.fail(info)
+  }
 }

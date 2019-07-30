@@ -1,6 +1,10 @@
 export let config = {
+  // IM即时通信的 key
   IMAppKey: '7cb7efab05029f8c18576aa98a9cce96',
-  amapKey: '54f7b2ff0b18deaefc0fd1925e434ead'
+  // 高德地图的 key
+  amapKey: '54f7b2ff0b18deaefc0fd1925e434ead',
+  // 网易云盾的 key
+  captchaId: 'ed852fa384a14b579172a3f93ba4c934'
 }
 export let getQueryString = function (name) {
   var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i')
@@ -25,7 +29,20 @@ export let Terminal = {
     };
   }(),
   // 辨别移动终端的语言：zh-cn、en-us、ko-kr、ja-jp...
-  language : (navigator.browserLanguage || navigator.language).toLowerCase()
+  language : (navigator.browserLanguage || navigator.language).toLowerCase(),
+  deviceInfo: function () {
+    let ww = window.innerWidth
+    let deviceType
+    if (ww > 750) {
+      deviceType = 'pc'
+    } else {
+      deviceType = 'phone'
+    }
+    return {
+      deviceWidth: ww,
+      deviceType: deviceType
+    }
+  } 
 }
 
 export let eventManager = {
