@@ -27,6 +27,22 @@ export default {
     return fetchPost('/merchant/register/send_verifycode', data)
   },
   /**
+   * 修改密码验证码
+   * @function refreshToken
+   * @type 'POST'
+   */
+  passwordCode (data) {
+    return fetchPost('/password/send_verifycode', data)
+  },
+  /**
+   * 修改密码
+   * @function refreshToken
+   * @type 'POST'
+   */
+  passwordReset (data) {
+    return fetchPost('/password/reset', data)
+  },
+  /**
    * 公司类型
    * @function refreshToken
    * @type 'GET'

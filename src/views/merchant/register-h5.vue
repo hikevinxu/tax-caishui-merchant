@@ -212,7 +212,12 @@ export default {
                 }
             })
           }else if(res.data.status == 103){
-            // this.$router.push({path: '/home'})
+            this.$router.push({
+                path: '/success-h5',
+                query: {
+                  status: res.data.status,
+                }
+            })
           }else if(res.data.status == 999){
             this.$router.push({
                 path: '/success-h5',

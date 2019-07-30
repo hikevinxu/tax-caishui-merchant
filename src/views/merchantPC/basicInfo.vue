@@ -83,8 +83,8 @@
             <div class="tagContent">
               <div class="inputBox tagInput" v-for="(item,index) in brandTagsList" :key="index">
                 <input type="text" v-model="item.tag">
-                <!-- <img @clcik="deleteTag(item,index)" style="width:16PX;height: 16PX;display: block;margin-right: 8PX;cursor: pointer;" src="@/assets/globalPc/ic_b_deletelist.png" alt=""> -->
               </div>
+              <span class="add" @click="addTag">添加</span>
             </div>
           </div>
         </div>
@@ -189,6 +189,22 @@ export default {
         })
       }else{
         this.phonesList.push(json)
+      }
+    },
+    addTag(){
+      let json = {
+        phone: ''
+      }
+      if(this.brandTagsList.length >= 2){
+        console.log(this.brandTagsList)
+        this.$message({
+          message: '最多填写两个标签',
+          type: 'warning',
+          showClose: true,
+          duration: 1000
+        })
+      }else{
+        this.brandTagsList.push(json)
       }
     },
     deletePhone(item,index){
@@ -403,7 +419,8 @@ export default {
               cursor: pointer;
             }
           }
-          .phoneContent .add{
+          .phoneContent .add,
+          .tagContent .add{
             border: 1PX solid #5AB3A4;
             border-radius: 2PX;
             width: 48PX;
