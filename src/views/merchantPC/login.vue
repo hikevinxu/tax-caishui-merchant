@@ -15,7 +15,7 @@
                         <img src="@/assets/globalPc/ic_form_password.png" alt="">
                         <input type="password" v-model="password" class="passwordInput" maxlength="18" placeholder="请输入密码" @input="passwordInput" >
                     </div>
-                    <span style="display: block;width: 312PX;text-align: right;font-size: 12PX;color: rgba(0,0,0,0.87);cursor: pointer;" class="forgetPassword">忘记登录密码</span>
+                    <span style="display: block;width: 312PX;text-align: right;font-size: 12PX;color: rgba(0,0,0,0.87);cursor: pointer;" class="forgetPassword" @click="goReset">忘记登录密码</span>
                     <button class="login" :disabled="disabled" @click="login">登 录</button>
                     <span class="join" @click="join">注册账号，免费入驻</span>
                 </div>
@@ -102,6 +102,9 @@ export default {
     },
     join(){
       this.$router.push({path: '/register-pc'})
+    },
+    goReset(){
+      this.$router.push({path: '/reset'})
     }
   }
 }

@@ -40,7 +40,7 @@ export default {
   created(){
     if(this.isLogin){
       let str = cookie.readCookie('accountPhone')
-      this.account = str.substr(0,3)+'****'+str.substr(parseInt(str.split('').length/2+2),str.split('').length)
+      // this.account = str.substr(0,3)+'****'+str.substr(parseInt(str.split('').length/2+2),str.split('').length)
     }
   },
   methods: {

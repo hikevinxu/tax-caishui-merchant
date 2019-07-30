@@ -7,19 +7,25 @@
             <h4>重置登录密码</h4>
             <div class="inputBox">
               <span class="label">财税鱼账号</span>
-              <input type="text" v-model="phone" placeholder="请输入需重置密码的账号(手机号)">
+              <input type="text" @input="phoneInput" v-model="phone" placeholder="请输入需重置密码的账号(手机号)">
             </div>
             <div class="inputBox">
-              <span class="label">验证</span>
-              <input type="text"  placeholder="请输入需重置密码的账号(手机号)">
+                <span class="label">验证码</span>
+                <div class="codeInputBox" style="width: 50%;">
+                    <input type="text" v-model="code" class="codeInput" maxlength="4" placeholder="验证码" @input="codeInput">
+                </div>
+                <div id="captcha"></div>
+                <span v-show="codeStart == true" class="codeStart">获取验证码</span>
+                <span v-show="isCode == true && codeStart == false" class="isCode"  @click="codeClick">获取验证码</span>
+                <span class="count" v-show="isCode == false && codeStart == false">{{ count }}s后获取</span>
             </div>
             <div class="inputBox">
               <span class="label">新密码</span>
-              <input type="text" v-model="phone" placeholder="请输入需重置密码的账号(手机号)">
+              <input type="text" @input="passwordInput" v-model="password" placeholder="请输入新密码">
             </div>
             <div class="inputBox">
               <span class="label">确认密码</span>
-              <input type="text" v-model="phone" placeholder="请输入需重置密码的账号(手机号)">
+              <input type="text" @input="repasswordInput" v-model="repassword" placeholder="再次确认新密码">
             </div>
             <button class="next" :disabled="disabled">重置</button>
             <span class="explain">若手机号已停用请联系客服处理</span>
@@ -41,6 +47,8 @@
 <script>
 import headNav from '@/components/merchantPC/headNav.vue'
 import Vue from 'vue'
+import api from '@/api/apiH5'
+import cookie from '@/utils/cookie'
 
 export default {
   name: 'reset',
@@ -51,11 +59,136 @@ export default {
     return {
       title: '返回登录',
       phone: '',
-      disabled: false
+      codeStart: true,
+      isCode: true,
+      count: 0,
+      disabled_code: true,
+      disabled: true,
+      code: '',
+      password: '',
+      repassword: '',
+      timer: null,
+      captchaIns: ''
     }
   },
+  created(){
+    var that = this
+    // initNECaptcha为全局函数，可直接调用
+    initNECaptcha({
+      // config对象，参数配置
+      captchaId: '39626bde5c61453a9bba63b1eb0a7d2c',
+      element: '#captcha',
+      mode: 'bind',
+      width: '320px',
+      enableClose: true, // 由业务方控制验证码弹框关闭
+      onVerify: function(err, data){
+        // 用户验证码验证成功后，进行实际的提交行为
+        if (!err) {
+          // 验证成功后，调用close方法关闭弹框（enableClose为true时调用）
+          that.captchaIns.close()
+          if (data) {
+            that.sendCode(data)
+          }
+        } else {
+            console.log(err)
+          return
+        }
+      }
+    }, function  onload (instance) {
+        // 初始化成功后得到验证实例instance，可以调用实例的方法
+        console.log(instance)
+        that.captchaIns = instance
+    }, function  onerror (err) {
+        // 初始化失败后触发该函数，err对象描述当前错误信息
+    })
+  },
   methods: {
-    
+    getCode(){
+      let time = 60
+      if(!this.timer){
+          this.count = time
+          this.timer = setInterval(() => {
+              if(this.count > 0 && this.count <= time){
+                  this.count -- 
+                  console.log(this.count)
+              }else{
+                  clearInterval(this.timer);
+                  this.timer = null; 
+                  this.isCode = true
+                  this.codeStart = false
+              }
+          },1000)
+      }
+    },
+    phoneInput(e){
+        this.codeStart = false
+        if(this.phone == ''){
+            this.codeStart = true
+            this.disabled = true
+        }else{
+            this.codeStart = false
+            if(this.code != '' && this.password != '' && this.repassword != ''){
+                this.disabled = false
+            }else{
+                this.disabled = true
+            }
+        }
+    },
+    passwordInput(e){
+      if(this.code != '' && this.phone != '' && this.password != '' && this.repassword != ''){
+          this.disabled = false
+      }else{
+          this.disabled = true
+      }
+    },
+    codeInput(e){
+      if(this.code != '' && this.phone != '' && this.password != '' && this.repassword != ''){
+          this.disabled = false
+      }else{
+          this.disabled = true
+      }
+    },
+    repasswordInput(e){
+      if(this.code != '' && this.phone != '' && this.password != '' && this.repassword != ''){
+          this.disabled = false
+      }else{
+          this.disabled = true
+      }
+    },
+    codeClick(){
+      console.log(this.captchaIns)
+      this.captchaIns && this.captchaIns.verify()
+    },
+    sendCode(data){
+      this.isCode = false
+      let phone = this.phone
+      if(!(/^1[23456789]\d{9}$/.test(phone))){
+          this.$message({
+            message: '请输入正确的手机号',
+            type: 'error',
+            showClose: true,
+            duration: 1000
+          })
+          this.isCode = true
+      }else{
+          let json = {
+              clientType: 'pc',
+              phone: phone,
+              captchaValidate: data.validate 
+              // captchaValidate: '0000'
+          }
+          api.merchantCode(json).then(res => {
+              this.captchaIns && this.captchaIns.refresh()
+              if(res.code == 0){
+                  this.getCode()
+              }
+          })
+          .catch( err => {
+              this.captchaIns && this.captchaIns.refresh()
+              this.isCode = true
+          })
+      }
+    }
   }
 }
 </script>
@@ -129,6 +262,39 @@ export default {
             line-height: 40PX;
             color: rgba(0,0,0,0.87);
             font-size: 14PX;
+          }
+          .codeInput{
+            width: 200PX;
+          }
+          .codeStart,.count{
+            background: #FAFAFA;
+            border: 1PX solid #FFAD71;
+            border-radius: 4PX;
+            width: 88PX;
+            height: 40PX;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1PX solid rgba(0,0,0,0.20);
+            font-size: 13PX;
+            color: rgba(0,0,0,0.20);
+            margin-left: 18PX;
+            cursor: pointer;
+          }
+          .isCode{
+            background: #FAFAFA;
+            border: 1PX solid #FFAD71;
+            border-radius: 4PX;
+            width: 88PX;
+            height: 40PX;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            // border: 1PX solid rgba(0,0,0,0.60);
+            font-size: 13PX;
+            margin-left: 18PX;
+            color: #FFAD71;
+            cursor: pointer;
           }
         }
         .next{
