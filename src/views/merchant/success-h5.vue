@@ -50,7 +50,7 @@ export default {
   },
   created(){
     let status = this.$route.query.status
-    console.log(status)
+    // console.log(status)
     if(status){
         this.status  = status
     }

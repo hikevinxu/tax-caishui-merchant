@@ -361,10 +361,14 @@ YX.fn.logoutEvt = function() {
   this.$logoutDialog.delegate('.j-ok', 'click', this.doLogout.bind(this));
 };
 YX.fn.doLogout = function() {
-  delCookie('uid');
-  delCookie('sdktoken');
-  delCookie('avatar');
-  delCookie('nickName');
+  
+  delCookie('avatar')
+  delCookie('nickName')
+  delCookie("accessToken")
+  delCookie('companyId')
+  delCookie('uid')
+  delCookie('imAccid')
+  delCookie('imToken')
   window.parent.location.href = window.location.protocol+"//"+window.location.host + '/login'
   // window.location.href = window.location.protocol+"//"+window.location.host + '/index'
 };

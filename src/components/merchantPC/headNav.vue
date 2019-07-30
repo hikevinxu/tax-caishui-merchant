@@ -33,12 +33,13 @@ export default {
   },
   data(){
     return {
-      account: '187****7263',
+      account: '',
       showBtnList: false
     }
   },
   created(){
-    
+    let str = cookie.readCookie('accountPhone')
+    this.account = str.substr(0,3)+'****'+str.substr(parseInt(str.split('').length/2+2),str.split('').length)
   },
   methods: {
     goLogin(){
@@ -50,7 +51,6 @@ export default {
     logoOut(){
       this.$confirm('确认退出该账号?', '提示', {}).then(() => {
         globalApi.loginOut().then(res => {
-          console.log(res)
           if(res.code == 0){
             this.$message({
               message: '退出成功',
@@ -59,8 +59,10 @@ export default {
               duration: 1000
             })
             cookie.delCookie("accessToken")
+            cookie.delCookie('companyId')
             cookie.delCookie('uid')
-            cookie.delCookie("sdktoken")
+            cookie.delCookie('imAccid')
+            cookie.delCookie('imToken')
             this.$router.push('/login')
             this.isLogin = false
           }else{

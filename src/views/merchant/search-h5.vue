@@ -105,9 +105,7 @@ export default {
   },
   methods: {
     onConfirm(value) {
-        console.log(value)
         this.value = value[0].name + value[1].name + value[2].name
-        console.log(this.value)
         if(value[1].name == '北京市'){
             value[1].code = '110000'
         }else if(value[1].name == '天津市'){
@@ -127,7 +125,6 @@ export default {
         }
     },
     nameInput(e){
-        console.log(this.value)
         if(this.name != '' && this.value != ''){
             this.disabled = false
         }else{
@@ -146,15 +143,12 @@ export default {
                 pageSize: this.pageSize,
                 keyword: this.name
             }
-            console.log(data)
             api.merchantSearch(data).then(res => {
-                console.log(res)
                 if(res.code == 0){
                     this.loading = false
                     this.result = true
                     this.companyList = res.data.items
                     this.total = res.data.total
-                    console.log(res.data.items.length)
                     if(res.data.total <= 20){
                         this.showLoad = false
                     }else{
@@ -180,9 +174,7 @@ export default {
                 pageSize: this.pageSize,
                 keyword: this.name
             }
-            console.log(data)
             api.merchantSearch(data).then(res => {
-                console.log(res)
                 if(res.code == 0){
                     this.companyList = this.companyList.concat(res.data.items)
                     this.total = res.data.total
@@ -199,11 +191,9 @@ export default {
         }
     },
     loadingMore(){
-        console.log(pageNum)
         this.searchMore()
     },
     claim(item){
-        console.log(item.id)
         // this.$store.dispatch('save_companyInfo', item)
         this.$router.push({
             path: '/merchant-h5',
@@ -219,7 +209,6 @@ export default {
     },
     getCertificationStatus(){
       api.getCertificationStatus().then(res => {
-        console.log(res)
         if(res.code == 0){
           if(res.data.status == 100){
             this.$router.push({path: '/search-h5'})

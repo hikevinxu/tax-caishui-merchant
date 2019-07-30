@@ -62,9 +62,12 @@ export default {
       }
       globalApi.authLogin(params).then(res => {
         if(res.code == 0){
+          cookie.setCookie('accountPhone', this.phone)
           cookie.setCookie("accessToken", res.data.accessToken)
+          cookie.setCookie('companyId', res.data.authInfo.companyId)
           cookie.setCookie('uid', res.data.authInfo.uid)
-          cookie.setCookie("sdktoken", res.data.accessToken)
+          cookie.setCookie('imAccid', res.data.authInfo.imAccid)
+          cookie.setCookie('imToken', res.data.authInfo.imToken)
           this.getCertificationStatus()
         }
       })

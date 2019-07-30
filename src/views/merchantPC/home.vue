@@ -96,7 +96,6 @@
   </div>
 </template>
 <script>
-import { setCookie } from '@/utils/cookie.js'
 import api from '@/api/api'
 export default {
   data(){

@@ -3,8 +3,8 @@
  */
 
 var SDKBridge = function(ctr, data) {
-  var sdktoken = readCookie('sdktoken'),
-    userUID = readCookie('uid'),
+  var sdktoken = readCookie('imToken'),
+    userUID = readCookie('imAccid'),
     that = this;
   if (!sdktoken) {
     window.parent.location.href = window.location.protocol+"//"+window.location.host + '/login'
@@ -116,10 +116,13 @@ var SDKBridge = function(ctr, data) {
       switch (error.code) {
         // 账号或者密码错误, 请跳转到登录页面并提示错误
         case 302:
-          alert(error.message);
-          delCookie('uid');
-          delCookie('sdktoken');
-          delCookie('nickName');
+          alert(error.message)
+          delCookie('nickName')
+          delCookie("accessToken")
+          delCookie('companyId')
+          delCookie('uid')
+          delCookie('imAccid')
+          delCookie('imToken')
           window.parent.location.href = window.location.protocol+"//"+window.location.host + '/login'
           // window.location.href = '../../login.html';
           break;
@@ -140,10 +143,13 @@ var SDKBridge = function(ctr, data) {
               '被' +
               (map[str] || '其他端') +
               '踢出下线，请确定帐号信息安全!'
-          );
-          delCookie('uid');
-          delCookie('sdktoken');
-          delCookie('nickName');
+          )
+          delCookie('nickName')
+          delCookie("accessToken")
+          delCookie('companyId')
+          delCookie('uid')
+          delCookie('imAccid')
+          delCookie('imToken')
           window.parent.location.href = window.location.protocol+"//"+window.location.host + '/login'
           // window.location.href = '../../login.html';
           break;

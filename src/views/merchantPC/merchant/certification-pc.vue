@@ -1,7 +1,7 @@
 <template>
   <div class="certificationPc">
     <div class="certificationPc_container">
-        <head-nav :title="title" id="mainHeader"></head-nav>
+        <head-nav :isLogin="false" :title="title" id="mainHeader"></head-nav>
         <div class="certificationContent">
             <div class="header">
                 <div class="headerContent">
@@ -166,7 +166,6 @@ export default {
   methods: {
     getCertificationStatus(){
       api.getCertificationStatus().then(res => {
-        console.log(res)
         if(res.code == 0){
           if(res.data.status == 100){
             this.$router.push({path: '/search-pc'})
@@ -239,7 +238,6 @@ export default {
         handheldIdCardImg: this.fileId1,
         otherCertificateImg: this.fileId2
       }
-      console.log(data)
       api.merchantSaveCertification(data).then(res => {
         if(res.code == 0){
           this.$message({
@@ -256,12 +254,11 @@ export default {
     },
     //上传图片
     uploadYYZZ (files) {
-      console.log(files)
+      // console.log(files)
       let formData = new FormData()
       formData.append('files', files.file)
       apiPC.fileupload(formData).then(res => {
         if (res.code == 0) {
-          console.log(res)
           this.fileId =  res.data[0].fileId
           let reader = new FileReader();
           let file = files.file
@@ -278,12 +275,11 @@ export default {
       })
     },
     uploadSFZ (files) {
-      console.log(files)
+      // console.log(files)
       let formData = new FormData()
       formData.append('files', files.file)
       apiPC.fileupload(formData).then(res => {
         if (res.code == 0) {
-          console.log(res)
           this.fileId1 =  res.data[0].fileId
           let reader = new FileReader();
           let file = files.file
@@ -300,12 +296,11 @@ export default {
       })
     },
     uploadZZZS (files) {
-      console.log(files)
+      // console.log(files)
       let formData = new FormData()
       formData.append('files', files.file)
       apiPC.fileupload(formData).then(res => {
         if (res.code == 0) {
-          console.log(res)
           this.fileId2 =  res.data[0].fileId
           let reader = new FileReader();
           let file = files.file

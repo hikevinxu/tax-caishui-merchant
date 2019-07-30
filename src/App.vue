@@ -7,7 +7,6 @@
 </template>
 
 <script>
-import cookie from '@/utils/cookie.js'
 export default {
   data () {
     return {
@@ -15,8 +14,6 @@ export default {
     }
   },
   created(){
-    cookie.setCookie('uid', '15515268707')
-    cookie.setCookie("sdktoken", "b3e8d33f9cfbc94f4ea0e8b41c41fb1c")
   }
 }
 </script>

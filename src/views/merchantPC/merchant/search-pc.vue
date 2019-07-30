@@ -1,7 +1,7 @@
 <template>
   <div class="searchPc">
     <div class="searchPc_container">
-        <head-nav :title="title" id="mainHeader"></head-nav>
+        <head-nav :isLogin="false" :title="title" id="mainHeader"></head-nav>
         <div class="registerContent">
             <div class="header">
                 <div class="headerContent">

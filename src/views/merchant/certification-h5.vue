@@ -103,7 +103,6 @@ export default {
   methods: {
     getCertificationStatus(){
       api.getCertificationStatus().then(res => {
-        console.log(res)
         if(res.code == 0){
           if(res.data.status == 100){
             this.$router.push({path: '/search-h5'})
@@ -130,14 +129,12 @@ export default {
       })
     },
     beforeRead() {
-      console.log(123)
     },
     upload(file){
       let formData = new FormData()
       formData.append('files', file.file)
       apiPC.fileupload(formData).then(res => {
         if (res.code == 0) {
-          console.log(res)
           this.fileId =  res.data[0].fileId
         }
       }).catch(err => {
@@ -152,7 +149,6 @@ export default {
       formData.append('files', file.file)
       apiPC.fileupload(formData).then(res => {
         if (res.code == 0) {
-          console.log(res)
           this.fileId1 =  res.data[0].fileId
         }
       }).catch(err => {
@@ -167,7 +163,6 @@ export default {
       formData.append('files', file.file)
       apiPC.fileupload(formData).then(res => {
         if (res.code == 0) {
-          console.log(res)
           this.fileId2 =  res.data[0].fileId
         }
       }).catch(err => {
@@ -207,7 +202,6 @@ export default {
         handheldIdCardImg: this.fileId1,
         otherCertificateImg: this.fileId2
       }
-      console.log(data)
       api.merchantSaveCertification(data).then(res => {
         if(res.code == 0){
           Toast('保存成功')

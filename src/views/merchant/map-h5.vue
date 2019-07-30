@@ -95,7 +95,7 @@ export default {
             init: (o) => {
               // o 是高德地图定位插件实例
               if (this.$route.query.location) {
-                console.log(this.$route.query.location.split(','))
+                // console.log(this.$route.query.location.split(','))
                 this.center = this.$route.query.location.split(',')
                 this.selectAddressChange(this.$route.query.location.split(','))
               } else {

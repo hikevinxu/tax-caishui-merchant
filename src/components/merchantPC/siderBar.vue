@@ -65,14 +65,14 @@ export default {
   },
   methods: {
     handleOpen(key, keyPath) {
-      console.log(key, keyPath)
+      // console.log(key, keyPath)
     },
     handleClose(key, keyPath) {
-      console.log(key, keyPath)
+      // console.log(key, keyPath)
     },
     activeMenuSelect(index, indexPath) {
       this.initIM()
-      console.log(index, indexPath)
+      // console.log(index, indexPath)
       if ( index == '/messageCenter') {
         this.msg = false
       } else {
@@ -85,8 +85,8 @@ export default {
       let nim = SDK.NIM.getInstance({
           // debug: true,
           appKey: config.IMAppKey,
-          account: cookie.readCookie('uid'),
-          token: cookie.readCookie('sdktoken'),
+          account: cookie.readCookie('imAccid'),
+          token: cookie.readCookie('imToken'),
           syncSessionUnread: true,
           syncRobots: true,
           autoMarkRead: true, // 默认为true
@@ -95,7 +95,6 @@ export default {
           onupdatesession: onUpdateSession
       });
       function onSessions(sessions) {
-        console.log(sessions)
         that.sessionlist = sessions
         for(let i=0;i<that.sessionlist.length;i++){
           if (that.sessionlist[i].to != '') {
@@ -104,12 +103,10 @@ export default {
         }
       }
       function onUpdateSession(session) {
-        console.log(session)
         that.sessionlist = nim.mergeSessions(that.sessionlist, session)
         that.sessionlist.sort((a, b) => {
           return b.updateTime - a.updateTime
         })
-        console.log(that.sessionlist)
         that.unread = 0
         for(let i=0;i<that.sessionlist.length;i++){
           that.unread += Number(that.sessionlist[i].unread)

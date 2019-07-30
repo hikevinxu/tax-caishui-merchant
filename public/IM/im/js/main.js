@@ -1,7 +1,7 @@
 /**
  * 主要业务逻辑相关
  */
-var userUID = readCookie("uid")
+var userUID = readCookie("imAccid")
 /**
  * 实例化
  * @see module/base/js

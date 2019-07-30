@@ -84,13 +84,13 @@ export default {
             that.sendCode(data)
           }
         } else {
-            console.log(err)
+            // console.log(err)
           return
         }
       }
     }, function  onload (instance) {
         // 初始化成功后得到验证实例instance，可以调用实例的方法
-        console.log(instance)
+        // console.log(instance)
         that.captchaIns = instance
     }, function  onerror (err) {
         // 初始化失败后触发该函数，err对象描述当前错误信息
@@ -104,7 +104,7 @@ export default {
             this.timer = setInterval(() => {
                if(this.count > 0 && this.count <= time){
                    this.count -- 
-                   console.log(this.count)
+                  //  console.log(this.count)
                }else{
                    clearInterval(this.timer);
                    this.timer = null; 
@@ -143,7 +143,7 @@ export default {
         }
     },
     codeClick(){
-        console.log(this.captchaIns)
+        // console.log(this.captchaIns)
         this.captchaIns && this.captchaIns.verify()
     },
     sendCode(data){
@@ -179,20 +179,19 @@ export default {
                 password: password,
                 verifycode: this.code
             }
-            console.log(data)
-            // data = qs.stringify(data)
             api.merchantRegister(data).then(res => {
-                console.log(res)
                 if(res.code == 0){
-                    Toast('注册成功')
-                    cookie.setCookie("accessToken", res.data.accessToken)
-                    cookie.setCookie('uid', res.data.authInfo.uid)
-                    cookie.setCookie("sdktoken", res.data.accessToken)
-                    this.getCertificationStatus()
+                  Toast('注册成功')
+                  cookie.setCookie("accessToken", res.data.accessToken)
+                  cookie.setCookie('companyId', res.data.authInfo.companyId)
+                  cookie.setCookie('uid', res.data.authInfo.uid)
+                  cookie.setCookie('imAccid', res.data.authInfo.imAccid)
+                  cookie.setCookie('imToken', res.data.authInfo.imToken)
+                  this.getCertificationStatus()
                 }
             })
             .catch(err => {
-                console.log(err)
+                // console.log(err)
             })
         }else{
             Toast('密码是长度在6~16之间')
@@ -200,7 +199,6 @@ export default {
     },
     getCertificationStatus(){
       api.getCertificationStatus().then(res => {
-        console.log(res)
         if(res.code == 0){
           if(res.data.status == 100){
             this.$router.push({path: '/search-h5'})

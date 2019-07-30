@@ -222,7 +222,7 @@ export default {
     clickLeftBtn () {
       // this.currentYear--
       // this.monthList2 = this.initMonth(this.currentYear)
-      console.log(this.monthList[0].date)
+      // console.log(this.monthList[0].date)
       this.monthList.splice(this.monthList.length - 1, 1)
       this.monthList = this.getlastMonth().concat(this.monthList)
 
@@ -236,7 +236,7 @@ export default {
         alert('后面没有了！')
         return
       } else {
-        console.log(this.monthList[0].date)
+        // console.log(this.monthList[0].date)
         this.monthList.splice(0, 1)
         this.monthList = this.monthList.concat(this.getnextmonth())
       }
@@ -253,10 +253,10 @@ export default {
       this.getDatacenterStatistic(data.replace(/\//g,'-'), 'day')
     },
     changeDate(data) {
-      console.log(data); //左右点击切换月份
+      // console.log(data); //左右点击切换月份
     },
     clickToday(data) {
-      console.log(data); //跳到了本月
+      // console.log(data); //跳到了本月
     },
     getPhoneDatacenterConsultRecords(){
       requestApi.datacenterConsult_records(this.listPhoneQuery).then(res => {
@@ -388,7 +388,7 @@ export default {
           active: false
         })
       }
-      console.log(lastArr)
+      // console.log(lastArr)
       return lastArr
     }
   }

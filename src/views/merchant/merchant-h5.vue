@@ -146,7 +146,6 @@ import Vue from 'vue'
 import api from '@/api/apiH5'
 import apiPC from '@/api/api'
 import globalApi from '@/api/globalApi'
-import { setCookie } from '@/utils/cookie.js'
 import { eventManager } from '@/utils/global'
 import areaList from '@/utils/areaList'
 import { Field, Picker, Popup, Uploader, Toast, Button, Icon, Loading, Area } from 'vant'
@@ -227,7 +226,6 @@ export default {
   methods: {
     getCertificationStatus(){
       api.getCertificationStatus().then(res => {
-        console.log(res)
         if(res.code == 0){
           if(res.data.status == 100){
             this.$router.push({path: '/search-h5'})
@@ -305,24 +303,19 @@ export default {
       })
     },
     onConfirm(val,index){
-      console.log(val)
-      console.log(index)
       this.type = val.name
       this.typeValue = this.columns[index].value
       this.showPicker = false
     },
     getCompanyTypes(){
       api.merchantCompanyTypes().then(res => {
-        console.log(res)
         if(res.code == 0){
           this.columns = res.data
         }
       })
     },
     selectArea(value){
-      console.log(value)
       this.value = value[0].name + value[1].name + value[2].name
-      console.log(this.value)
       if(value[1].name == '北京市'){
           value[1].code = '110000'
       }else if(value[1].name == '天津市'){
@@ -341,7 +334,6 @@ export default {
     beforeRead(file) {
       var reader = new FileReader()
       reader.onload = function(evt){
-        console.log(evt)
 				var image = new Image();
         image.src=evt.target.result;
         image.onload = function(){
@@ -358,9 +350,7 @@ export default {
       return true;
     },
     beforeReadIntro(file, detail) {
-      console.log(detail)
       this.fileLength = this.fileIntroList.length
-      console.log(this.fileLength)
       return true
     },
     upload(file){
@@ -368,21 +358,19 @@ export default {
       formData.append('files', file.file)
       apiPC.fileupload(formData).then(res => {
         if (res.code == 0) {
-          console.log(res)
           this.fileId =  res.data[0].fileId
           this.fileList[0].fileId = res.data[0].fileId
-          console.log(this.fileList)
         }
       }).catch(err => {
         this.$message.error('上传失败，请重新上传')
       })
     },
     deleteUpload(file) {
-      console.log(file)
-      console.log(this.fileList)
+      // console.log(file)
+      // console.log(this.fileList)
     },
     uploadIntro(file){
-      console.log(file)
+      // console.log(file)
       if(file instanceof Array){
         for (let i = 0; i < file.length; i++) {
           let image = file[i].file;
@@ -394,7 +382,7 @@ export default {
               let num =  Number(Number(this.fileLength) + i)
               this.fileIntroList[num].fileId = res.data[0].fileId
               // this.introList.push(this.fileIdIntro)
-              console.log(this.fileIntroList)
+              // console.log(this.fileIntroList)
             }
           }).catch(err => {
             this.$message.error('上传失败，请重新上传')
@@ -415,11 +403,11 @@ export default {
       }
     },
     fileIntroDelete(file){
-      console.log(this.fileIntroList)
+      // console.log(this.fileIntroList)
     },
     showMapDialog(){
       eventManager.addEvent('mapLagLng', (data) => {
-        console.log(data)
+        // console.log(data)
         this.laglng = data.address
         eventManager.removeEvent('mapLagLng')
         this.center = data.center
@@ -447,8 +435,6 @@ export default {
         Toast.fail('机构LOGO不能为空')
         return
       }
-
-      console.log(this.provinceCode)
 
       if (!this.provinceCode || this.provinceCode == '' || !this.cityCode || this.cityCode == '' || !this.areaCode || this.areaCode == '') {
         Toast.fail('所选地区不能为空')
@@ -485,14 +471,14 @@ export default {
         name: this.name,
         type: this.typeValue,
         logo: this.fileList[0].fileId,
-        bindCompanyId: '1353',
+        bindCompanyId: this.companyId,
         cityCode:this.cityCode,
         areaCode: this.areaCode,
         provinceCode: this.provinceCode,
-        contact: this.contact,
+        contactName: this.contact,
         address: this.value + this.address,
         location: this.center[1].toString() + ',' + this.center[0].toString(),
-        phone: this.phone,
+        contactPhone: this.phone,
         qq: this.QQAccount,
         email: this.email,
         introduce: this.introduce,
@@ -501,7 +487,6 @@ export default {
       for (let i=0;i<this.fileIntroList.length;i++) {
         data.publicityImgs.push(this.fileIntroList[i].fileId)
       }
-      console.log(data)
       api.merchantSaveCompany(data).then(res => {
         if(res.code == 0){
           Toast('保存成功')

@@ -21,13 +21,11 @@ export default {
     }
   },
   created() {
-    alert(13)
     this.getCertificationStatus()
   },
   methods: {
     getCertificationStatus(){
       api.getCertificationStatus().then(res => {
-        console.log(res)
         if(res.code == 0){
           if(res.data.status == 100){
             this.$router.push({path: '/search-pc'})

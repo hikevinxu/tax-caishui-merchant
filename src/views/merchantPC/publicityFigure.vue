@@ -20,9 +20,8 @@
   </div>
 </template>
 <script>
-import api from '@/api/api'
+import api from '@/api/api' 
 import qs from 'qs'
-import { setCookie } from '@/utils/cookie.js'
 export default {
   data(){
     return {
@@ -41,7 +40,6 @@ export default {
       formData.append('files', files.file)
       api.fileupload(formData).then(res => {
         if (res.code == 0) {
-          console.log(res)
           this.fileId =  res.data[0].fileId
           let data = {
             img: this.fileId
@@ -49,7 +47,6 @@ export default {
           data = qs.stringify(data)
           api.publictyImgAdd(data).then(res => {
             if(res.code == 0){
-              console.log(res)
               this.$message({
                 message: '添加成功',
                 type: 'success',
@@ -74,7 +71,6 @@ export default {
     },
     getImglist(){
       api.publictyImgList().then(res => {
-        console.log(res)
         if(res.code == 0){
           let fileList = []
           if(res.data.length > 0){
@@ -94,14 +90,12 @@ export default {
       })
     },
     handleRemove (res, file, fileList) {
-      console.log(res.uid)
       let data = {
         imgid: res.uid
       }
       data = qs.stringify(data)
       api.publictyImgDelete(data).then(res => {
         if(res.code == 0){
-          console.log(res)
           this.$message({
             message: '删除成功',
             type: 'success',

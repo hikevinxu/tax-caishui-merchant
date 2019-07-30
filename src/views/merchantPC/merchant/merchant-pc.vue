@@ -1,7 +1,7 @@
 <template>
   <div class="merchantPc">
     <div class="merchantPc_container">
-        <head-nav :title="title" id="mainHeader"></head-nav>
+        <head-nav :isLogin="false" :title="title" id="mainHeader"></head-nav>
         <div class="merchantContent">
             <div class="header">
                 <div class="headerContent">
@@ -680,10 +680,10 @@ export default {
         cityCode:this.cityCode,
         areaCode: this.areaCode,
         provinceCode: this.provinceCode,
-        contact: this.contact,
+        contactName: this.contact,
         address: this.provinceName + this.cityName + this.areaName + this.address,
         location: this.center[1].toString() + ',' + this.center[0].toString(),
-        phone: this.phone,
+        contactPhone: this.phone,
         qq: this.qq,
         email: this.email,
         introduce: this.introduce,
