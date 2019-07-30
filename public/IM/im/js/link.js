@@ -20,23 +20,23 @@ var SDKBridge = function(ctr, data) {
   this.cache = data;
   window.nim = ctr.nim = this.nim = SDK.NIM.getInstance({
     //控制台日志，上线时应该关掉
-    debug: true || {
-      api: 'info',
-      style: 'font-size:14px;color:blue;background-color:rgba(0,0,0,0.1)'
-    },
+    // debug: true || {
+    //   api: 'info',
+    //   style: 'font-size:14px;color:blue;background-color:rgba(0,0,0,0.1)'
+    // },
     db: true,
     appKey: CONFIG.appkey,
     account: userUID,
     token: sdktoken,
     // 私有化配置文件
-    privateConf: CONFIG.privateConf,
+    // privateConf: CONFIG.privateConf,
     //连接
     onconnect: onConnect.bind(this),
     ondisconnect: onDisconnect.bind(this),
     onerror: onError.bind(this),
     onwillreconnect: onWillReconnect.bind(this),
     // 多端登录变化
-    onloginportschange: onLoginPortsChange.bind(this),
+    // onloginportschange: onLoginPortsChange.bind(this),
     // 群
     onteams: onTeams.bind(this),
     syncTeamMembers: false, //全成员先不同步了
@@ -110,53 +110,53 @@ var SDKBridge = function(ctr, data) {
   }
   function onDisconnect(error) {
     // 此时说明 `SDK` 处于断开状态，开发者此时应该根据错误码提示相应的错误信息，并且跳转到登录页面
-    var that = this;
-    console.log('连接断开');
-    if (error) {
-      switch (error.code) {
-        // 账号或者密码错误, 请跳转到登录页面并提示错误
-        case 302:
-          alert(error.message)
-          delCookie('nickName')
-          delCookie("accessToken")
-          delCookie('companyId')
-          delCookie('uid')
-          delCookie('imAccid')
-          delCookie('imToken')
-          window.parent.location.href = window.location.protocol+"//"+window.location.host + '/login'
-          // window.location.href = '../../login.html';
-          break;
-        // 被踢, 请提示错误后跳转到登录页面
-        case 'kicked':
-          var map = {
-            PC: '电脑版',
-            Web: '网页版',
-            Android: '手机版',
-            iOS: '手机版',
-            Mac: '电脑版',
-            WindowsPhone: '手机版'
-          };
-          var str = error.from;
-          alert(
-            '你的帐号于' +
-              dateFormat(+new Date(), 'HH:mm') +
-              '被' +
-              (map[str] || '其他端') +
-              '踢出下线，请确定帐号信息安全!'
-          )
-          delCookie('nickName')
-          delCookie("accessToken")
-          delCookie('companyId')
-          delCookie('uid')
-          delCookie('imAccid')
-          delCookie('imToken')
-          window.parent.location.href = window.location.protocol+"//"+window.location.host + '/login'
-          // window.location.href = '../../login.html';
-          break;
-        default:
-          break;
-      }
-    }
+    // var that = this;
+    // console.log('连接断开');
+    // if (error) {
+    //   switch (error.code) {
+    //     // 账号或者密码错误, 请跳转到登录页面并提示错误
+    //     case 302:
+    //       alert(error.message)
+    //       delCookie('nickName')
+    //       delCookie("accessToken")
+    //       delCookie('companyId')
+    //       delCookie('uid')
+    //       delCookie('imAccid')
+    //       delCookie('imToken')
+    //       window.parent.location.href = window.location.protocol+"//"+window.location.host + '/login'
+    //       // window.location.href = '../../login.html';
+    //       break;
+    //     // 被踢, 请提示错误后跳转到登录页面
+    //     case 'kicked':
+    //       var map = {
+    //         PC: '电脑版',
+    //         Web: '网页版',
+    //         Android: '手机版',
+    //         iOS: '手机版',
+    //         Mac: '电脑版',
+    //         WindowsPhone: '手机版'
+    //       };
+    //       var str = error.from;
+    //       alert(
+    //         '你的帐号于' +
+    //           dateFormat(+new Date(), 'HH:mm') +
+    //           '被' +
+    //           (map[str] || '其他端') +
+    //           '踢出下线，请确定帐号信息安全!'
+    //       )
+    //       delCookie('nickName')
+    //       delCookie("accessToken")
+    //       delCookie('companyId')
+    //       delCookie('uid')
+    //       delCookie('imAccid')
+    //       delCookie('imToken')
+    //       window.parent.location.href = window.location.protocol+"//"+window.location.host + '/login'
+    //       // window.location.href = '../../login.html';
+    //       break;
+    //     default:
+    //       break;
+    //   }
+    // }
   }
   function onLoginPortsChange(loginPorts) {
     console.log('当前登录帐号在其它端的状态发生改变了', loginPorts);
