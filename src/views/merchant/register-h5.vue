@@ -48,6 +48,7 @@ import { Toast } from 'vant';
 import api from '@/api/apiH5'
 import qs from 'qs'
 import cookie from '@/utils/cookie'
+import { config } from '@/utils/global.js'
 Vue.use(Toast);
 export default {
   name: 'register-h5',
@@ -70,7 +71,7 @@ export default {
     // initNECaptcha为全局函数，可直接调用
     initNECaptcha({
       // config对象，参数配置
-      captchaId: '39626bde5c61453a9bba63b1eb0a7d2c',
+      captchaId: config.captchaId,
       element: '#captcha',
       mode: 'bind',
       width: '320px',
