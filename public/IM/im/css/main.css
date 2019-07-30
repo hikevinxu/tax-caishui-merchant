@@ -138,6 +138,7 @@
     background-color: #e5f4ff;
 }
 .title {
+  height: 80px;
     background-color: #e5f4ff;
     line-height: 80px;
     color:#666;
@@ -158,6 +159,7 @@
     margin: 12px 10px 0 14px;
 }
 .title .u-modify{
+  display: none;
     width: 13px;height: 13px;
     float: none;
     margin: 0;
