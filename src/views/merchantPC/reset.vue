@@ -21,13 +21,13 @@
             </div>
             <div class="inputBox">
               <span class="label">新密码</span>
-              <input type="text" @input="passwordInput" v-model="password" placeholder="请输入新密码">
+              <input type="password" @input="passwordInput" v-model="password" placeholder="请输入新密码">
             </div>
             <div class="inputBox">
               <span class="label">确认密码</span>
-              <input type="text" @input="repasswordInput" v-model="repassword" placeholder="再次确认新密码">
+              <input type="password" @input="repasswordInput" v-model="repassword" placeholder="再次确认新密码">
             </div>
-            <button class="next" :disabled="disabled">重置</button>
+            <button class="next" :disabled="disabled" @click="reset">重置</button>
             <span class="explain">若手机号已停用请联系客服处理</span>
           </div>
         </div>
@@ -172,12 +172,11 @@ export default {
           this.isCode = true
       }else{
           let json = {
-              clientType: 'pc',
               phone: phone,
               captchaValidate: data.validate 
               // captchaValidate: '0000'
           }
-          api.merchantCode(json).then(res => {
+          api.passwordCode(json).then(res => {
               this.captchaIns && this.captchaIns.refresh()
               if(res.code == 0){
                   this.getCode()
@@ -188,7 +187,52 @@ export default {
               this.isCode = true
           })
       }
-    }
+    },
+    reset(){
+      if(this.password != this.repassword){
+        this.$message({
+          message: '两次密码输入不一致',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        return
+      }
+      if(this.password.length >= 6){
+        let phone = this.phone,
+            password = this.password
+        let data = {
+            phone: phone,
+            password: password,
+            verifycode: this.code
+        }
+        console.log(data)
+        // data = qs.stringify(data)
+        api.passwordReset(data).then(res => {
+            console.log(res)
+            if(res.code == 0){
+                this.$message({
+                    message: '修改成功',
+                    type: 'success',
+                    showClose: true,
+                    duration: 1000
+                })
+                this.$router.push({path: '/login'})
+            }
+        })
+        .catch(err => {
+            console.log(res)
+            this.isCode = true
+        })
+        }else{
+            this.$message({
+              message: '密码6~16位',
+              type: 'error',
+              showClose: true,
+              duration: 1000
+            })
+        }
+    },
   }
 }
 </script>
