@@ -101,7 +101,9 @@ export default {
     }
   },
   created(){
-    this.getCertificationStatus()
+    if(this.$route.query.reSearch != 1){
+      this.getCertificationStatus()
+    }
   },
   methods: {
     onConfirm(value) {
@@ -222,7 +224,7 @@ export default {
                 }
             })
           }else if(res.data.status == 103){
-            this.$router.push({path: '/home'})
+            // this.$router.push({path: '/home'})
           }else if(res.data.status == 999){
             this.$router.push({
                 path: '/success-h5',

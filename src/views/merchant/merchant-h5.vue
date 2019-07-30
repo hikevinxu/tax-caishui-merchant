@@ -239,7 +239,7 @@ export default {
                 }
             })
           }else if(res.data.status == 103){
-            this.$router.push({path: '/home'})
+            // this.$router.push({path: '/home'})
           }else if(res.data.status == 999){
             this.$router.push({
                 path: '/success-h5',
@@ -354,15 +354,23 @@ export default {
       return true
     },
     upload(file){
+      Toast.loading({
+        duration: 0,       // 持续展示 toast
+        forbidClick: true, // 禁用背景点击
+        loadingType: 'spinner',
+        message: '正在上传图片'
+      })
       let formData = new FormData()
       formData.append('files', file.file)
       apiPC.fileupload(formData).then(res => {
         if (res.code == 0) {
           this.fileId =  res.data[0].fileId
           this.fileList[0].fileId = res.data[0].fileId
+          Toast.clear()
         }
       }).catch(err => {
-        this.$message.error('上传失败，请重新上传')
+        Toast.clear()
+        Toast.fail('上传失败，请重新上传')
       })
     },
     deleteUpload(file) {
@@ -373,6 +381,12 @@ export default {
       // console.log(file)
       if(file instanceof Array){
         for (let i = 0; i < file.length; i++) {
+          Toast.loading({
+            duration: 0,       // 持续展示 toast
+            forbidClick: true, // 禁用背景点击
+            loadingType: 'spinner',
+            message: '正在上传图片'
+          })
           let image = file[i].file;
           let formData = new FormData()
           formData.append('files', image)
@@ -383,12 +397,20 @@ export default {
               this.fileIntroList[num].fileId = res.data[0].fileId
               // this.introList.push(this.fileIdIntro)
               // console.log(this.fileIntroList)
+              Toast.clear()
             }
           }).catch(err => {
-            this.$message.error('上传失败，请重新上传')
+            Toast.clear()
+            Toast.fail('上传失败，请重新上传')
           })
         }
       }else{
+        Toast.loading({
+          duration: 0,       // 持续展示 toast
+          forbidClick: true, // 禁用背景点击
+          loadingType: 'spinner',
+          message: '正在上传图片'
+        })
         let formData = new FormData()
         formData.append('files', file.file)
         apiPC.fileupload(formData).then(res => {
@@ -396,9 +418,11 @@ export default {
             this.fileIdIntro =  res.data[0].fileId
             this.fileIntroList[this.fileIntroList.length-1].fileId = res.data[0].fileId
             // this.introList.push(this.fileIdIntro)
+            Toast.clear()
           }
         }).catch(err => {
-          this.$message.error('上传失败，请重新上传')
+          Toast.clear()
+          Toast.fail('上传失败，请重新上传')
         })
       }
     },

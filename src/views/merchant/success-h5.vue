@@ -57,7 +57,7 @@ export default {
   },
   methods: {
     goSearch(){
-        this.$router.push({path: '/search-h5'})
+      this.$router.push('/search-h5?reSearch=1')
     }
   }
 }
