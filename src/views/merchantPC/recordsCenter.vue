@@ -216,7 +216,6 @@ export default {
       }
       this.monthList[index].active = true
       this.activeMonth = this.monthList[index].date
-      alert(this.activeMonth)
       this.getDatacenterStatistic(date.replace(/\//g,'-'), 'month')
     },
     clickLeftBtn () {
@@ -233,7 +232,12 @@ export default {
       let year = date.getFullYear()
       let month = date.getMonth()+1
       if (this.currentYear == year && this.getToday().split('-')[1] == this.monthList[this.monthList.length - 1].date.split('-')[1]) {
-        alert('后面没有了！')
+        this.$message({
+          message: '后面没有了！',
+          type: 'warning',
+          showClose: true,
+          duration: 1000
+        })
         return
       } else {
         // console.log(this.monthList[0].date)
@@ -261,7 +265,6 @@ export default {
     getPhoneDatacenterConsultRecords(){
       requestApi.datacenterConsult_records(this.listPhoneQuery).then(res => {
         if(res.code == 0){
-          // console.log(res)
           this.phoneDataList = res.data.items
           this.phoneTotal = res.data.total
         }
@@ -270,7 +273,6 @@ export default {
     getIMDatacenterConsultRecords(){
       requestApi.datacenterConsult_records(this.listIMQuery).then(res => {
         if(res.code == 0){
-          // console.log(res)
           this.imDataList = res.data.items
           this.imTotal = res.data.total
         }
@@ -299,7 +301,6 @@ export default {
         time: date,
         type: type
       }
-      // console.log(params)
       requestApi.datacenterStatistic(params).then(res => {
         if(res.code == 0){
           if(type == 'month'){
@@ -388,7 +389,6 @@ export default {
           active: false
         })
       }
-      // console.log(lastArr)
       return lastArr
     }
   }
