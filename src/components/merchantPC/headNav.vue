@@ -38,8 +38,10 @@ export default {
     }
   },
   created(){
-    let str = cookie.readCookie('accountPhone')
-    this.account = str.substr(0,3)+'****'+str.substr(parseInt(str.split('').length/2+2),str.split('').length)
+    if(this.isLogin){
+      let str = cookie.readCookie('accountPhone')
+      this.account = str.substr(0,3)+'****'+str.substr(parseInt(str.split('').length/2+2),str.split('').length)
+    }
   },
   methods: {
     goLogin(){
