@@ -15,8 +15,8 @@ export default {
     }
   },
   created(){
-    cookie.setCookie('uid', '22c7c89039ea4b0fbbcdc29c4ea92f6f')
-    cookie.setCookie("sdktoken", "7b845f4716fdfb2410f65297de41cdaf")
+    cookie.setCookie('uid', '15515268707')
+    cookie.setCookie("sdktoken", "b3e8d33f9cfbc94f4ea0e8b41c41fb1c")
   }
 }
 </script>
