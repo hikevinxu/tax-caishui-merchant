@@ -217,6 +217,7 @@ export default {
       this.monthList[index].active = true
       this.activeMonth = this.monthList[index].date
       this.getDatacenterStatistic(date.replace(/\//g,'-'), 'month')
+      this.$refs.Calendar.ChoseMonth(date)
     },
     clickLeftBtn () {
       // this.currentYear--
