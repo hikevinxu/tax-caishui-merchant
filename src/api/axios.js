@@ -16,7 +16,9 @@ axios.defaults.timeout = 100000
 // axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8'
 // 配置接口地址
 // 测试地址（内网)
-axios.defaults.baseURL = 'http://tax-caishui-merchant.int.anniu-inc.com'
+// axios.defaults.baseURL = 'http://tax-caishui-merchant.int.anniu-inc.com'
+// 测试地址（外网)
+axios.defaults.baseURL = 'http://tax-caishui-merchant.int.anniu-tech.com'
 // 线上环境地址
 // axios.defaults.baseURL = 'https://wap-api.wei.taxlioner.com'
 // 本地环境地址
