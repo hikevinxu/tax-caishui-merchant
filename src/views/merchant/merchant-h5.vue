@@ -209,18 +209,8 @@ export default {
       }
     })
     this.getCompanyTypes()
-    if(this.$route.query.item){
+    if(this.$route.query.id){
       this.getCompanyInfo()
-    } else {
-      this.name = ''
-      this.companyId = ''
-      this.provinceCode = ''
-      this.cityCode = ''
-      this.areaCode = ''
-      this.value = ''
-      this.center = ''
-      this.phone = ''
-      this.address = ''
     }
   },
   methods: {
@@ -252,55 +242,65 @@ export default {
       })
     },
     getCompanyInfo(){
-      this.companyInfo = JSON.parse(this.$route.query.item)
-      this.name = this.companyInfo.name
-      this.companyId = this.companyInfo.id
-      this.provinceCode = this.companyInfo.provinceCode
-      this.cityCode = this.companyInfo.cityCode
-      this.areaCode = this.companyInfo.areaCode
-      this.value = this.companyInfo.areaCode
-      if(this.companyInfo.location){
-        this.center[0] = this.companyInfo.location.split(',')[1]
-        this.center[1] = this.companyInfo.location.split(',')[0]
-      }
-      if(this.companyInfo.phones.length > 0){
-        this.phone = this.companyInfo.phones[0]
-      }
-      this.address = this.companyInfo.address
-      globalApi.getAddressProvinces().then(res => {
-        if(res.code == 0){
-          for(let i=0;i<res.data.length;i++){
-            if (res.data[i].code == this.provinceCode){
-              this.value = res.data[i].name
-              let params = {
-                provinceCode: this.provinceCode
-              }
-              globalApi.getAddressCitys(params).then(res => {
-                if(res.code == 0){
-                  for(let i=0;i<res.data.length;i++){
-                    if (res.data[i].code == this.cityCode){
-                      this.value += res.data[i].name
-                      let data = {
-                        provinceCode: this.provinceCode,
-                        cityCode: this.cityCode
-                      }
-                      globalApi.getAddressAreas(data).then(res => {
-                        if(res.code == 0){
-                          for(let i=0;i<res.data.length;i++){
-                            if (res.data[i].code == this.areaCode){
-                              this.value += res.data[i].name
+      if (this.$route.query.id) {
+        let companyParams = {
+          id: this.$route.query.id
+        }
+        api.getMerchantCompanyDetail(companyParams).then(res => {
+          if(res.code == 0){
+            this.companyId = this.$route.query.id
+            this.companyInfo = res.data
+            this.name = this.companyInfo.name
+            this.provinceCode = this.companyInfo.provinceCode
+            this.cityCode = this.companyInfo.cityCode
+            this.areaCode = this.companyInfo.areaCode
+            this.value = this.companyInfo.areaCode
+            if(this.companyInfo.location){
+              this.center[0] = this.companyInfo.location.split(',')[1]
+              this.center[1] = this.companyInfo.location.split(',')[0]
+            }
+            if(this.companyInfo.phones.length > 0){
+              this.phone = this.companyInfo.phones[0]
+            }
+            this.address = this.companyInfo.address
+            this.laglng = this.companyInfo.address
+            globalApi.getAddressProvinces().then(res => {
+              if(res.code == 0){
+                for(let i=0;i<res.data.length;i++){
+                  if (res.data[i].code == this.provinceCode){
+                    this.value = res.data[i].name
+                    let params = {
+                      provinceCode: this.provinceCode
+                    }
+                    globalApi.getAddressCitys(params).then(res => {
+                      if(res.code == 0){
+                        for(let i=0;i<res.data.length;i++){
+                          if (res.data[i].code == this.cityCode){
+                            this.value += res.data[i].name
+                            let data = {
+                              provinceCode: this.provinceCode,
+                              cityCode: this.cityCode
                             }
+                            globalApi.getAddressAreas(data).then(res => {
+                              if(res.code == 0){
+                                for(let i=0;i<res.data.length;i++){
+                                  if (res.data[i].code == this.areaCode){
+                                    this.value += res.data[i].name
+                                  }
+                                }
+                              }
+                            })
                           }
                         }
-                      })
-                    }
+                      }
+                    })
                   }
                 }
-              })
-            }
+              }
+            })
           }
-        }
-      })
+        })
+      }
     },
     onConfirm(val,index){
       this.type = val.name
@@ -437,6 +437,7 @@ export default {
         this.center = data.center
       })
       if (this.center.length > 0) {
+
         this.$router.push('/map-h5?location=' + this.center[0]+','+ this.center[1])
       } else {
         this.$router.push('/map-h5')

@@ -313,101 +313,87 @@ export default {
         }, 0)
       }
     })
-    // this.getCertificationStatus()
     this.getProvinceList()
     this.getCompanyTypes()
   },
   methods: {
-    getCertificationStatus(){
-      api.getCertificationStatus().then(res => {
-        console.log(res)
-        if(res.code == 0){
-          if(res.data.status == 100){
-            this.$router.push({path: '/search-pc'})
-          }else if(res.data.status == 101){
-            this.$router.push({path: '/certification-pc'})
-          }else if(res.data.status == 102){
-            this.$router.push({
-                path: '/success-pc',
-                query: {
-                  status: res.data.status,
-                }
-            })
-          }else if(res.data.status == 103){
-            this.$router.push({path: '/home'})
-          }else if(res.data.status == 999){
-            this.$router.push({
-                path: '/success-pc',
-                query: {
-                  status: res.data.status,
-                }
-            })
-          }
-        }
-      })
-    },
     getCompanyInfo(){
-      console.log(this.$store.getters.getCompanyInfo)
-      this.companyInfo = this.$store.getters.getCompanyInfo
-      this.name = this.companyInfo.name
-      this.companyId = this.companyInfo.id
-      this.provinceCode = this.companyInfo.provinceCode
-      this.cityCode = this.companyInfo.cityCode
-      this.areaCode = this.companyInfo.areaCode
-      if(this.companyInfo.location){
-        this.center[0] = this.companyInfo.location.split(',')[1]
-        this.center[1] = this.companyInfo.location.split(',')[0]
-        this.selectAddressChange(this.center)
-      } else {
-        this.getCurrentPositionLaglng()
-      }
-      if(this.companyInfo.phones.length > 0){
-        this.phone = this.companyInfo.phones[0]
-      }
-      this.address = this.companyInfo.address
-      let params = {
-        provinceCode: this.provinceCode
-      }
-      globalApi.getAddressProvinces().then(res => {
-        if(res.code == 0){
-          this.provinceList = res.data
-          for(let i=0;i<res.data.length;i++){
-            if (res.data[i].code == this.provinceCode){
-              this.provinceName = res.data[i].name
-              let params = {
-                provinceCode: this.provinceCode
-              }
-              globalApi.getAddressCitys(params).then(res => {
-                if(res.code == 0){
-                  for(let i=0;i<res.data.length;i++){
-                    this.cityList = res.data
-                    if (res.data[i].code == this.cityCode){
-                      this.cityName = res.data[i].name
-                      let data = {
-                        provinceCode: this.provinceCode,
-                        cityCode: this.cityCode
-                      }
-                      globalApi.getAddressAreas(data).then(res => {
-                        this.areaList = res.data
-                        if(res.code == 0){
-                          for(let i=0;i<res.data.length;i++){
-                            if (res.data[i].code == this.areaCode){
-                              this.areaName = res.data[i].name
+      if (this.$route.query.id) {
+        console.log(this.$route.query.id)
+        let companyParams = {
+          id: this.$route.query.id
+        }
+        api.getMerchantCompanyDetail(companyParams).then(res => {
+          if(res.code == 0) {
+            this.companyInfo = res.data
+            this.name = this.companyInfo.name
+            this.companyId = this.companyInfo.id
+            this.provinceCode = this.companyInfo.provinceCode
+            this.cityCode = this.companyInfo.cityCode
+            this.areaCode = this.companyInfo.areaCode
+            if(this.companyInfo.location){
+              this.center[0] = this.companyInfo.location.split(',')[1]
+              this.center[1] = this.companyInfo.location.split(',')[0]
+              this.selectAddressChange(this.center)
+            } else {
+              this.getCurrentPositionLaglng()
+            }
+            if(this.companyInfo.phones.length > 0){
+              this.phone = this.companyInfo.phones[0]
+            }
+            this.address = this.companyInfo.address
+            let params = {
+              provinceCode: this.provinceCode
+            }
+            globalApi.getAddressProvinces().then(res => {
+              if(res.code == 0){
+                this.provinceList = res.data
+                for(let i=0;i<res.data.length;i++){
+                  if (res.data[i].code == this.provinceCode){
+                    this.provinceName = res.data[i].name
+                    let params = {
+                      provinceCode: this.provinceCode
+                    }
+                    globalApi.getAddressCitys(params).then(res => {
+                      if(res.code == 0){
+                        for(let i=0;i<res.data.length;i++){
+                          this.cityList = res.data
+                          if (res.data[i].code == this.cityCode){
+                            this.cityName = res.data[i].name
+                            let data = {
+                              provinceCode: this.provinceCode,
+                              cityCode: this.cityCode
                             }
+                            globalApi.getAddressAreas(data).then(res => {
+                              this.areaList = res.data
+                              if(res.code == 0){
+                                for(let i=0;i<res.data.length;i++){
+                                  if (res.data[i].code == this.areaCode){
+                                    this.areaName = res.data[i].name
+                                  }
+                                }
+                              }
+                            })
                           }
                         }
-                      })
-                    }
+                      }
+                    })
                   }
                 }
-              })
-            }
+              }
+            })
           }
-        }
-      })
+        })
+      }
     },
     //上传图片
     upload (files) {
+      const loading = this.$loading({
+        lock: true,
+        text: '正在上传图片，请稍后...',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
       console.log(files)
       let formData = new FormData()
       formData.append('files', files.file)
@@ -422,10 +408,12 @@ export default {
             imgUrlBase64 = reader.readAsDataURL(file);
             reader.onload = (e) => {
               this.introduceImg = reader.result
+              loading.close()
             }
           }
         }
       }).catch(err => {
+        loading.close()
         this.$message.error('上传失败，请重新上传')
       })
     },
@@ -434,6 +422,12 @@ export default {
       this.fileId = ''
     },
     uploadList(files){
+      const loading = this.$loading({
+        lock: true,
+        text: '正在上传图片，请稍后...',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
       let formData = new FormData()
       formData.append('files', files.file)
       apiPC.fileupload(formData).then(res => {
@@ -442,8 +436,10 @@ export default {
           let img =  res.data[0].fileId
           this.fileIntroList.push(img)
           this.imgTotal = this.fileIntroList.length
+          loading.close()
         }
       }).catch(err => {
+        loading.close()
         this.$message.error('上传失败，请重新上传')
       })
     },

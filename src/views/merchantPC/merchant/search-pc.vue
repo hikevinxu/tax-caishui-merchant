@@ -318,9 +318,11 @@ export default {
         this.$router.push('/merchant-pc')
     },
     claim(item){
-      this.$store.dispatch('save_companyInfo', item)
       this.$router.push({
-          path: '/merchant-pc'
+          path: '/merchant-pc',
+          query: {
+            id: item.id
+          }
       })
     },
     getCertificationStatus(){

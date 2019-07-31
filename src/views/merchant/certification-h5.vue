@@ -94,7 +94,7 @@ export default {
       fileId1: '',
       fileList2: [],
       fileId2: '',
-      checked: true
+      checked: false
     }
   },
   created(){
@@ -300,6 +300,7 @@ export default {
         height: 104px;
         .input {
           margin-top: 16px;
+          margin-right: 10px;
           flex: 0;
         }
         .prompt {
@@ -341,78 +342,93 @@ export default {
 }
 </style>
 <style lang="scss">
-.enterpriseInfo .form .formItem.introPic .van-uploader__upload,
-.enterpriseInfo .form .formItem.upload .van-uploader__upload {
-  background-color: #f5f5f5;
-  border: 0;
-}
-.enterpriseInfo .form .formItem.introPic .van-uploader__upload .van-icon-plus:before,
-.enterpriseInfo .form .formItem.upload .van-uploader__upload .van-icon-plus:before {
-  content: "\F098";
-}
-.enterpriseInfo {
-  .van-uploader__upload {
-    width: 72px;
-    height: 72px;
-  }
-  .submitbtn .van-button--large {
-    height: 36px;
-    border-radius: 18px;
-    line-height: 36px;
-    background-image: linear-gradient(135deg, #FFAD71 0%, #FF7F4A 100%);
+.certification-h5 {
+  .enterpriseInfo .form .formItem.introPic .van-uploader__upload,
+  .enterpriseInfo .form .formItem.upload .van-uploader__upload {
+    background-color: #f5f5f5;
     border: 0;
   }
-  input::-webkit-input-placeholder{
-    color: rgba(0,0,0,0.26);
+  .enterpriseInfo .form .formItem.introPic .van-uploader__upload .van-icon-plus:before,
+  .enterpriseInfo .form .formItem.upload .van-uploader__upload .van-icon-plus:before {
+    content: "\F098";
   }
-  input::-moz-placeholder{
-    color: rgba(0,0,0,0.26);      
-  }
-  input:-ms-input-placeholder{ 
-    color: rgba(0,0,0,0.26);
-  }
-}
-.xieyi {
-  .xieyiInner {
-    // position: absolute;
-    // top: 0;
-    // left: 50%;
-    // transform: translate(-50%, 0);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 312px;
-    margin-left: auto;
-    margin-right: auto;
-    .agreement{
-      display: block;
-      width: 100px;
+  .enterpriseInfo {
+    .van-uploader__upload {
+      width: 72px;
+      height: 72px;
+      margin: 0;
+    }
+    .van-uploader {
+      width: 72px;
+      height: 72px;
+    }
+    .van-uploader__wrapper {
+      width: 72px;
+      height: 72px;
+    }
+    .van-uploader__preview-image {
+      width: 72px;
+      height: 72px;
+    }
+    .submitbtn .van-button--large {
+      height: 36px;
+      border-radius: 18px;
+      line-height: 36px;
+      background-image: linear-gradient(135deg, #FFAD71 0%, #FF7F4A 100%);
+      border: 0;
+    }
+    input::-webkit-input-placeholder{
+      color: rgba(0,0,0,0.26);
+    }
+    input::-moz-placeholder{
+      color: rgba(0,0,0,0.26);      
+    }
+    input:-ms-input-placeholder{ 
+      color: rgba(0,0,0,0.26);
     }
   }
-  .van-checkbox {
-    display: inline-flex;
-  }
-  .van-checkbox__icon--checked .van-icon {
-    color: #FFAD71 ;
-    background-color: #f5f5f5;
-    border-color: #FFAD71;
-  }
-  .van-checkbox__label {
-    color: rgba(0,0,0,0.60);
-    width: 90px;
-  }
-  .van-checkbox__icon {
-    height: auto;
-  }
-  .van-checkbox__icon .van-icon {
-    width: 14px;
-    height: 14px;
-    border-color: #FFAD71;
-  }
-  .van-icon-success:before {
-    position: relative;
-    top: -3px;
-    left: -1px;
+  .xieyi {
+    .xieyiInner {
+      // position: absolute;
+      // top: 0;
+      // left: 50%;
+      // transform: translate(-50%, 0);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 312px;
+      margin-left: auto;
+      margin-right: auto;
+      .agreement{
+        display: block;
+        width: 100px;
+      }
+    }
+    .van-checkbox {
+      display: inline-flex;
+    }
+    .van-checkbox__icon--checked .van-icon {
+      color: #FFAD71 ;
+      background-color: #f5f5f5;
+      border-color: #FFAD71;
+    }
+    .van-checkbox__label {
+      color: rgba(0,0,0,0.60);
+      width: 90px;
+    }
+    .van-checkbox__icon {
+      height: auto;
+    }
+    .van-checkbox__icon .van-icon {
+      width: 14px;
+      height: 14px;
+      border-color: #FFAD71;
+    }
+    .van-icon-success:before {
+      position: relative;
+      top: -3px;
+      left: -1px;
+    }
   }
 }
 </style>

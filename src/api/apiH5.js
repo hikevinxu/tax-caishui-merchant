@@ -51,6 +51,14 @@ export default {
     return fetchGet('/merchant/apply/company_types')
   },
   /**
+   * 获取公司详情
+   * @function getMerchantCompanyDetail
+   * @type 'Get'
+   */
+  getMerchantCompanyDetail (params) {
+    return fetchGet('/merchant/apply/company_detail', params)
+  },
+  /**
    * 保存公司信息
    * @function refreshToken
    * @type 'POST'

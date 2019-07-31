@@ -196,12 +196,10 @@ export default {
         this.searchMore()
     },
     claim(item){
-        // this.$store.dispatch('save_companyInfo', item)
         this.$router.push({
             path: '/merchant-h5',
             query: {
-              id: item.id,
-              item: JSON.stringify(item)
+              id: item.id
             }
         })
     },
