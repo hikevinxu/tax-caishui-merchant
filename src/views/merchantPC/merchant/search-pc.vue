@@ -191,7 +191,9 @@ export default {
     }
   },
   created(){
-      this.getCertificationStatus()
+        if(this.$route.query.reSearch != 1){
+            this.getCertificationStatus()
+        }
   },
   methods: {
     proviceChange(val){
