@@ -204,7 +204,7 @@ export default {
         })
     },
     goClaim(){
-      this.$store.dispatch('save_companyInfo', {})
+      localStorage.setItem('initAddCompany', true)
       this.$router.push('/merchant-h5')
     },
     getCertificationStatus(){

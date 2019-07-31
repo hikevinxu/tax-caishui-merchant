@@ -212,6 +212,27 @@ export default {
     if(this.$route.query.id){
       this.getCompanyInfo()
     }
+    if(localStorage.getItem('initAddCompany')) {
+      localStorage.removeItem('initAddCompany')
+      this.name = ''
+      this.provinceCode = ''
+      this.cityCode = ''
+      this.areaCode = ''
+      this.center = []
+      this.phone = ''
+      this.value = ''
+      this.address = ''
+      this.fileList = []
+      this.laglng = ''
+      this.type = ''
+      this.typeValue = ''
+      this.companyId = ''
+      this.contact = ''
+      this.QQAccount = ''
+      this.email = ''
+      this.introduce = ''
+      this.fileIntroList = []
+    }
   },
   methods: {
     getCertificationStatus(){
