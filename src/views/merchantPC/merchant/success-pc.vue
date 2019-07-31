@@ -88,7 +88,7 @@ export default {
   },
   methods: {
     goSearch(){
-        this.$router.push({path: '/search-pc'})
+        this.$router.push({path: '/search-pc?reSearch=1'})
     }
   }
 }
