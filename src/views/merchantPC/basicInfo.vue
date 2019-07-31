@@ -245,14 +245,14 @@ export default {
       //标签数据处理
       for (let i = 0; i < this.brandTagsList.length; i++) {
         this.brandTagsList[i].tag;
-        if(this.brandTagsList[i].tag != ''){
+        if(this.brandTagsList[i].tag != '' && this.brandTagsList[i].tag != null){
           this.brandTags.push(this.brandTagsList[i].tag)
         }
       }
       //电话数据处理
       for (let i = 0; i < this.phonesList.length; i++) {
         this.phonesList[i].phone;
-        if(this.brandTagsList[i].tag != ''){
+        if(this.phonesList[i].phone != '' && this.phonesList[i].phone != null){
           this.phones.push(this.phonesList[i].phone)
         }
       }
