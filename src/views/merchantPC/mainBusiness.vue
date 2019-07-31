@@ -45,7 +45,7 @@
           </el-table-column>
 
         </el-table>
-        <pagination :total="total" :page.sync="pageNum" :limit.sync="pageSize" @pagination="getList" />
+        <pagination :total="total" :page.sync="listQuery.pageNum" :limit.sync="listQuery.pageSize" @pagination="getList" />
         
         <!-- 添加 -->
         <el-dialog :visible.sync="dialogPvVisible" title="添加业务">
@@ -252,9 +252,11 @@ export default {
   },
   data(){
     return {
+      listQuery: {
+        pageNum: 1,
+        pageSize: 20,
+      },
       total: 0,
-      pageNum: 1,
-      pageSize: 20,
       fileId: '',
       fileIdDetail: '',
       list: [
@@ -369,11 +371,7 @@ export default {
       })
     },
     getList(){
-      let listQuery = {
-        pageNum: 1,
-        pageSize: 20
-      }
-      api.serviceList(listQuery).then(res => {
+      api.serviceList(this.listQuery).then(res => {
         console.log(res)
         if(res.code == 0){
           this.list = res.data.items
