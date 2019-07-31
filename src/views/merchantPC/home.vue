@@ -81,15 +81,15 @@
         <div class="container">
           <div class="new_title">
             <h4>商家新鲜事</h4>
-            <span class="date">编辑于{{ notice.modifyTime }}</span>
+            <span v-if="notice.modifyTime" class="date">编辑于{{ notice.modifyTime }}</span>
           </div>
           <div class="newContent" @click="edit = true">
             <p v-show="!edit">{{ notice.content }}</p>
             <textarea v-show="edit" class="text" v-model="notice.content" name="" id="" cols="30" rows="10"></textarea>
           </div>
           <span v-show="edit" slot="footer" class="dialog-footer">
-            <el-button type="success" @click="save()">保存</el-button>
             <el-button @click="edit = false">取消</el-button>
+            <el-button type="success" @click="save()">保存</el-button>
           </span>
         </div>
       </div>
