@@ -287,6 +287,11 @@ export default {
         border: none;
         background: #FAFAFA;
         font-size: 14px;
+        height: 40px;
+        box-sizing: border-box;
+        padding-top: 13px;
+        padding-bottom: 13px;
+        line-height: 20px;
         color: rgba(0,0,0,0.60);
     }
 

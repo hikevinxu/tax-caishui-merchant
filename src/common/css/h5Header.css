@@ -14,7 +14,7 @@
 }
 
 .header .headerContent .steps{
-    width: 48px;
+    width: 60px;
     height: 100%;
     display: flex;
     flex-flow: column;
@@ -60,7 +60,7 @@
     display: block;
     content: '';
     top: 50%;
-    left: -68px;
+    left: -62px;
     width: 55px;
     height: 1px;
     background:  rgba(0,0,0,0.12);
@@ -71,7 +71,7 @@
     display: block;
     content: '';
     top: 50%;
-    right: -68px;
+    right: -62px;
     width: 55px;
     height: 1px;
     background:  rgba(0,0,0,0.12);
@@ -82,7 +82,7 @@
     display: block;
     content: '';
     top: 50%;
-    left: -68px;
+    left: -62px;
     width: 55px;
     height: 1px;
     background:  #FFAD71;
@@ -93,7 +93,7 @@
     display: block;
     content: '';
     top: 50%;
-    right: -68px;
+    right: -62px;
     width: 55px;
     height: 1px;
     background:  rgba(0,0,0,0.12);
@@ -104,7 +104,7 @@
     display: block;
     content: '';
     top: 50%;
-    left: -68px;
+    left: -62px;
     width: 55px;
     height: 1px;
     background:  #FFAD71;
@@ -115,7 +115,7 @@
     display: block;
     content: '';
     top: 50%;
-    right: -68px;
+    right: -62px;
     width: 55px;
     height: 1px;
     background:  #FFAD71;

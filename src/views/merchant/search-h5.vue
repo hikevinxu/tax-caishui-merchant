@@ -44,7 +44,7 @@
                             </div>
                             <div class="phone">
                                 <img style="display: block;width: 16px;height: 16px;margin-right: 8px;" src="@/assets/global/firm_ic_phone.png" alt="">
-                                <span v-for="(items, index) in item.phones" :key="index">{{ items }}</span>
+                                <span v-show="item.phones.length > 0">{{ item.phones[0] }}</span>
                             </div>
                         </div>
                         <div class="conpanyBtn" @click="claim(item)">认领</div>

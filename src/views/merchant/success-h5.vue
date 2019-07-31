@@ -33,7 +33,7 @@
         <div class="success-content" v-show="status == '999'">
             <img style="display: block;width: 120px;height: 120px;margin-bottom: 16px;" src="@/assets/global/img_page_failed.png" alt="">
             <h4 style="display: block;margin-bottom: 8px;font-size: 16px;color: rgba(0,0,0,0.87);">商家入驻申请审核失败</h4>
-            <span style="font-size: 12px;color: rgba(0,0,0,0.38);">因商家提供资料与实际不符，审核失败</span>
+            <span style="font-size: 12px;color: rgba(0,0,0,0.38);">失败原因：{{failCause}}</span>
             <span style="font-size: 12px;color: rgba(0,0,0,0.38);display: block;margin-top: 8px;">请重新提交，感谢您的合作</span>
             <span class="goSearch" @click="goSearch">重新提交</span>
         </div>
@@ -41,11 +41,13 @@
 </template>
 
 <script>
+import api from '@/api/apiH5'
 export default {
   name: 'success-h5',
   data(){
     return{
         status: '102',
+        failCause: '因商家提供资料与实际不符，审核失败'
     }
   },
   created(){
@@ -53,6 +55,16 @@ export default {
     // console.log(status)
     if(status){
         this.status  = status
+        if(status == 999){
+            api.getCertificationStatus().then(res => {
+                console.log(res)
+                if(res.code == 0){
+                    if(res.data.status == 999){
+                        this.failCause = res.data.failCause
+                    }
+                }
+            })
+        }
     }
   },
   methods: {

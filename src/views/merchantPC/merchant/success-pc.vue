@@ -36,7 +36,7 @@
             <div class="success_content" v-show="status == '999'">
                 <img src="@/assets/global/img_page_failed.png" alt="">
                 <span style="font-size: 16PX;color: rgba(0,0,0,0.87);">商家入驻申请审核失败</span>
-                <span style="font-size: 12PX;color: rgba(0,0,0,0.38);">  因商家提供资料与实际不符，审核失败</span>
+                <span style="font-size: 12PX;color: rgba(0,0,0,0.38);">失败原因：{{failCause}}</span>
                 <span style="font-size: 12PX;color: rgba(0,0,0,0.38);">请重新提交，感谢您的合作</span>
                 <span class="goSearch" @click="goSearch">重新提交</span>
             </div>
@@ -56,7 +56,7 @@
 </template>
 <script>
 import headNav from '@/components/merchantPC/headNav.vue'
-
+import api from '@/api/apiH5'
 export default {
   name: 'login',
   components: {
@@ -66,6 +66,7 @@ export default {
     return{
         title: '返回登录',
         status: '102',
+        failCause: '因商家提供资料与实际不符，审核失败'
     }
   },
   created(){
@@ -73,6 +74,16 @@ export default {
     console.log(status)
     if(status){
         this.status  = status
+        if(status == 999){
+            api.getCertificationStatus().then(res => {
+                console.log(res)
+                if(res.code == 0){
+                    if(res.data.status == 999){
+                        this.failCause = res.data.failCause
+                    }
+                }
+            })
+        }
     }
   },
   methods: {

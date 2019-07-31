@@ -117,7 +117,7 @@
                                         </div>
                                         <div class="phone">
                                             <img style="display: block;width: 16PX;height: 16PX;margin-right: 8PX;" src="@/assets/globalPc/firm_ic_phone@3x.png" alt="">
-                                            <span style="margin-right:8PX;" v-for="(items, index) in item.phones" :key="index">{{ items }}</span>
+                                            <span v-show="item.phones.length > 0" style="margin-right:8PX;">{{ item.phones[0] }}</span>
                                         </div>
                                     </div>
                                     <div class="conpanyBtn" @click="claim(item)">认领</div>
