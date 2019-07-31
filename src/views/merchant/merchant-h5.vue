@@ -210,10 +210,17 @@ export default {
     })
     this.getCompanyTypes()
     if(this.$route.query.id){
+      this.init()
       this.getCompanyInfo()
     }
     if(localStorage.getItem('initAddCompany')) {
       localStorage.removeItem('initAddCompany')
+      this.init()
+    }
+  },
+  methods: {
+    // 初始化表单信息
+    init() {
       this.name = ''
       this.provinceCode = ''
       this.cityCode = ''
@@ -232,9 +239,7 @@ export default {
       this.email = ''
       this.introduce = ''
       this.fileIntroList = []
-    }
-  },
-  methods: {
+    },
     getCertificationStatus(){
       api.getCertificationStatus().then(res => {
         if(res.code == 0){
