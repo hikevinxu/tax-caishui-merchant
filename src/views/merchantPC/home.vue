@@ -81,7 +81,7 @@
         <div class="container">
           <div class="new_title">
             <h4>商家新鲜事</h4>
-            <span class="date">编辑与{{ notice.modifyTime }}</span>
+            <span class="date">编辑于{{ notice.modifyTime }}</span>
           </div>
           <div class="newContent" @click="edit = true">
             <p v-show="!edit">{{ notice.content }}</p>

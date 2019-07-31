@@ -82,7 +82,7 @@
             <span class="label">品牌标签</span>
             <div class="tagContent">
               <div class="inputBox tagInput" v-for="(item,index) in brandTagsList" :key="index">
-                <input type="text" v-model="item.tag">
+                <input maxlength="10" type="text" v-model="item.tag">
               </div>
               <span class="add" @click="addTag">添加</span>
             </div>
@@ -94,7 +94,8 @@
         </div>
         <div class="saveContent">
           <span class="cancel" @click="compile = false">取消</span>
-          <span class="save" @click="save">保存</span>
+          <span v-show="!disable" class="save" @click="save">保存</span>
+          <span v-show="disable" class="save" style="background: #e0e0e0;color: rgba(255,255,255,0.7)">保存</span>
         </div>
       </div>
     </div>
@@ -116,6 +117,7 @@ export default {
       phones: [],
       files: [],
       fileId: '',
+      disable: false
     }
   },
   created(){
@@ -123,26 +125,33 @@ export default {
   },
   methods: {
     upload (files) {
-      let formData = new FormData()
-      formData.append('files', files.file)
-      api.fileupload(formData).then(res => {
-        if (res.code == 0) {
-          console.log(res)
-          this.fileId =  res.data[0].fileId
-          let reader = new FileReader();
-          let file = files.file
-          let imgUrlBase64
-          if(file){
-            imgUrlBase64 = reader.readAsDataURL(file);
-            reader.onload = (e) => {
-              this.logo = reader.result
-              console.log(reader.result)
+      if(/\.(jpg|jpeg|png|JPG|PNG)$/.test(files.file.name)){
+        this.disable = true
+        let formData = new FormData()
+        formData.append('files', files.file)
+        api.fileupload(formData).then(res => {
+          if (res.code == 0) {
+            this.disable = false
+            console.log(res)
+            this.fileId =  res.data[0].fileId
+            let reader = new FileReader();
+            let file = files.file
+            let imgUrlBase64
+            if(file){
+              imgUrlBase64 = reader.readAsDataURL(file);
+              reader.onload = (e) => {
+                this.logo = reader.result
+                console.log(reader.result)
+              }
             }
           }
-        }
-      }).catch(err => {
-        this.$message.error('上传失败，请重新上传')
-      })
+        }).catch(err => {
+          this.$message.error('上传失败，请重新上传')
+        })
+      }else{
+        this.$message.error('图片暂不支持该格式')
+        return
+      }
     },
     getBaseInfo(){
       api.baseInfo().then(res => {
@@ -236,12 +245,16 @@ export default {
       //标签数据处理
       for (let i = 0; i < this.brandTagsList.length; i++) {
         this.brandTagsList[i].tag;
-        this.brandTags.push(this.brandTagsList[i].tag)
+        if(this.brandTagsList[i].tag != ''){
+          this.brandTags.push(this.brandTagsList[i].tag)
+        }
       }
       //电话数据处理
       for (let i = 0; i < this.phonesList.length; i++) {
         this.phonesList[i].phone;
-        this.phones.push(this.phonesList[i].phone)
+        if(this.brandTagsList[i].tag != ''){
+          this.phones.push(this.phonesList[i].phone)
+        }
       }
       let data = {
         brandTags: this.brandTags,
@@ -252,28 +265,28 @@ export default {
         workTime: this.workTime
       }
       console.log(data)
-      api.baseUpdate(data).then(res => {
-        console.log(res)
-        if(res.code == 0){
-          this.$message({
-            message: '保存成功',
-            type: 'success',
-            showClose: true,
-            duration: 1000
-          })
-          this.compile = false
-          this.getBaseInfo()
-        }else{
-          this.$message({
-            message: '保存失败',
-            type: 'error',
-            showClose: true,
-            duration: 1000
-          })
-          this.compile = false
-          this.getBaseInfo()
-        }
-      })
+      // api.baseUpdate(data).then(res => {
+      //   console.log(res)
+      //   if(res.code == 0){
+      //     this.$message({
+      //       message: '保存成功',
+      //       type: 'success',
+      //       showClose: true,
+      //       duration: 1000
+      //     })
+      //     this.compile = false
+      //     this.getBaseInfo()
+      //   }else{
+      //     this.$message({
+      //       message: '保存失败',
+      //       type: 'error',
+      //       showClose: true,
+      //       duration: 1000
+      //     })
+      //     this.compile = false
+      //     this.getBaseInfo()
+      //   }
+      // })
     }
   }
 }

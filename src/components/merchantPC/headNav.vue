@@ -9,7 +9,7 @@
         <img src="@/assets/globalPc/ic_arrow_dropdown@3x.png" alt="" srcset="">
         <div @mouseenter="showBtnList = true" class="btnList" v-show="showBtnList == true">
           <div class="btnLine account">{{ account }}</div>
-          <div class="btnLine" @click="goReset">修改密码</div>
+          <!-- <div class="btnLine" @click="goReset">修改密码</div> -->
           <!-- <div class="btnLine">修改手机号</div> -->
           <div class="btnLine" @click="logoOut">退出</div>
         </div>
@@ -118,7 +118,7 @@ export default {
       position: relative;
       .btnList{
         position: absolute;
-        bottom: -130PX;
+        bottom: -95PX;
         right: 0;
         width: 200PX;
         padding-top: 8PX;

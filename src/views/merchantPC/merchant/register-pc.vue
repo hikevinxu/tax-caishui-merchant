@@ -207,12 +207,12 @@ export default {
             api.merchantRegister(data).then(res => {
                 console.log(res)
                 if(res.code == 0){
-                    this.$message({
-                        message: '保存成功',
-                        type: 'success',
-                        showClose: true,
-                        duration: 1000
-                    })
+                    // this.$message({
+                    //     message: '保存成功',
+                    //     type: 'success',
+                    //     showClose: true,
+                    //     duration: 1000
+                    // })
                     cookie.setCookie("accessToken", res.data.accessToken)
                     cookie.setCookie('companyId', res.data.authInfo.companyId)
                     cookie.setCookie('uid', res.data.authInfo.uid)

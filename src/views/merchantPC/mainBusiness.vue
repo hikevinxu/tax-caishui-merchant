@@ -130,8 +130,8 @@
             </div>
           </div>
           <span slot="footer" class="dialog-footer">
-            <el-button type="success" @click="create()">保存</el-button>
             <el-button @click="dialogPvVisible = false">取消</el-button>
+            <el-button type="success" @click="create()">保存</el-button>
           </span>
         </el-dialog>
 
@@ -218,8 +218,8 @@
             </div>
           </div>
           <span slot="footer" class="dialog-footer">
-            <el-button type="success" @click="upDate()">保存</el-button>
             <el-button @click="dialogUpdate = false">取消</el-button>
+            <el-button type="success" @click="upDate()">保存</el-button>
           </span>
         </el-dialog>
       </div>
