@@ -265,28 +265,28 @@ export default {
         workTime: this.workTime
       }
       console.log(data)
-      // api.baseUpdate(data).then(res => {
-      //   console.log(res)
-      //   if(res.code == 0){
-      //     this.$message({
-      //       message: '保存成功',
-      //       type: 'success',
-      //       showClose: true,
-      //       duration: 1000
-      //     })
-      //     this.compile = false
-      //     this.getBaseInfo()
-      //   }else{
-      //     this.$message({
-      //       message: '保存失败',
-      //       type: 'error',
-      //       showClose: true,
-      //       duration: 1000
-      //     })
-      //     this.compile = false
-      //     this.getBaseInfo()
-      //   }
-      // })
+      api.baseUpdate(data).then(res => {
+        console.log(res)
+        if(res.code == 0){
+          this.$message({
+            message: '保存成功',
+            type: 'success',
+            showClose: true,
+            duration: 1000
+          })
+          this.compile = false
+          this.getBaseInfo()
+        }else{
+          this.$message({
+            message: '保存失败',
+            type: 'error',
+            showClose: true,
+            duration: 1000
+          })
+          this.compile = false
+          this.getBaseInfo()
+        }
+      })
     }
   }
 }
