@@ -119,7 +119,7 @@ export default {
             display: flex;
             flex-flow: column;
             align-items: center;
-            background-size: 100% 400PX;
+            background-size: 100% 320PX;
             img{
                 display: block;
                 width: 856PX;
@@ -134,8 +134,9 @@ export default {
                 border: none;
                 font-size: 15PX;
                 color: #FFFFFF;
-                background: linear-gradient(135deg, #FFAD71 0%, #FF7F4A 100%);
-                border-radius: 4PX;
+                background: linear-gradient(135deg, #FF7F4A 0%, #FB5332 100%);
+                box-shadow: 0 4PX 8PX 0 rgba(255,173,113,0.30);
+                border-radius: 18PX;
                 margin-top: 16PX;
                 margin-bottom: 16PX;
                 cursor: pointer;
