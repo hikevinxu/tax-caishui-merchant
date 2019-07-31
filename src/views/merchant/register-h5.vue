@@ -171,6 +171,11 @@ export default {
         }
     },
     login(){
+        // console.log((/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,16}$/).test(this.password))
+        if(!(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,16}$/).test(this.password)){
+            Toast('密码是6-16位字母数字组合')
+            return
+        }
         if(this.password.length >= 6){
             let phone = this.phone,
                 password = this.password

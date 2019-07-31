@@ -189,6 +189,10 @@ export default {
       }
     },
     reset(){
+      if(!(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,16}$/).test(this.password)){
+          Toast('密码是6-16位字母数字组合')
+          return
+      }
       if(this.password != this.repassword){
         this.$message({
           message: '两次密码输入不一致',
