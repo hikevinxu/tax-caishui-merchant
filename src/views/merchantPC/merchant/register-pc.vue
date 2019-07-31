@@ -39,7 +39,7 @@
                     </div>
                     <div class="inputBox">
                         <img src="@/assets/globalPc/ic_form_password.png" alt="">
-                        <input type="text" v-model="password" class="passwordInput" maxlength="11" placeholder="密码, 6～16位数字字母组合" @input="passwordInput" >
+                        <input type="password" v-model="password" class="passwordInput" maxlength="11" placeholder="密码, 6～16位数字字母组合" @input="passwordInput" >
                     </div>
                     <button id="register" :disabled="disabled" @click="login">注 册</button>
                 </div>
