@@ -460,8 +460,8 @@ export default {
       .save {
         background: #FF7F4A;
       }
-      button:hover {
-        background: #000;
+      .save:hover {
+        background: #FF5332;
       }
     }
   }
