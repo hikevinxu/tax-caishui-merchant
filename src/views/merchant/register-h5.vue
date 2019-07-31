@@ -181,7 +181,7 @@ export default {
             }
             api.merchantRegister(data).then(res => {
                 if(res.code == 0){
-                  Toast('注册成功')
+                  // Toast('注册成功')
                   cookie.setCookie("accessToken", res.data.accessToken)
                   cookie.setCookie('companyId', res.data.authInfo.companyId)
                   cookie.setCookie('uid', res.data.authInfo.uid)

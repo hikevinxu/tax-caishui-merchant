@@ -47,35 +47,6 @@ table {
 	border-spacing: 0;
 }
 
-* {
-  -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none; /* Chrome/Safari/Opera */
-  -khtml-user-select: none; /* Konqueror */
-  -moz-user-select: none; /* Firefox */
-  -ms-user-select: none; /* Internet Explorer/Edge */
-  user-select: none; /* Non-prefixed version, currently not supported by any browser */
-}
-
-input {
-  -webkit-user-select:auto; /*webkit浏览器*/
-  outline: none;
-}
-
-textarea {
-  -webkit-select-user: auto!important;
-  -webkit-user-select:auto; /*webkit浏览器*/
-  -khtml-user-select: auto; 
-  -moz-user-select: auto;
-  -ms-user-select: auto;
-  user-select: auto; 
-}
-
-button[disabled] {
-  color: rgba(255,255,255,0.7) !important;
-  background: #E0E0E0 !important;
-  border: none !important;
-}
-
 input::-webkit-input-placeholder{
   color: rgba(0,0,0,0.26);
 }
