@@ -298,10 +298,13 @@ export default {
       }
       .formItem.upload {
         height: 104px;
+        box-sizing: border-box;
         .input {
-          margin-top: 16px;
+          margin-top: 16.7px;
           margin-right: 10px;
           flex: 0;
+          width: 72px;
+          height: 72px;
         }
         .prompt {
           font-family: PingFangSC-Regular;
@@ -365,10 +368,18 @@ export default {
     .van-uploader__wrapper {
       width: 72px;
       height: 72px;
+      .van-uploader__preview {
+        margin: 0;
+      }
     }
     .van-uploader__preview-image {
       width: 72px;
       height: 72px;
+      img {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
     }
     .submitbtn .van-button--large {
       height: 36px;

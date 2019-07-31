@@ -55,7 +55,7 @@ axios.interceptors.response.use((res) => {
           router.push('/login')
           info = '您登录信息已过期'
         } else {
-          router.push('/merchantHome-h5')
+          router.push('/merchantHome')
         }
         break;
       case 10001:
@@ -63,7 +63,7 @@ axios.interceptors.response.use((res) => {
           router.push('/login')
           info = '您登录信息已过期'
         } else {
-          router.push('/merchantHome-h5')
+          router.push('/merchantHome')
         }
         break;
       case 11000:
