@@ -473,7 +473,7 @@ export default {
           if(this.showOptions3 == true){
             if(this.value2 != ''){
               this.createData.code = this.value2
-              this.createData.introduceContent = this.introduceContent
+              this.createData.introduceContent = ''
               this.submit(this.createData)
             }else{
               this.$message({
@@ -584,7 +584,7 @@ export default {
             if(this.value5 != ''){
               this.createData.code = this.value5
               this.createData.id = this.id
-              this.createData.introduceContent = this.introduceContent
+              this.createData.introduceContent = ''
               console.log(this.createData)
               this.submitUpdate(this.createData)
             }else{
@@ -849,6 +849,8 @@ export default {
       this.introduceImgUpload = false
       this.detailTitle = ''
       this.detailImg = ''
+      this.fileId = ''
+      this.fileIdDetail = ''
       this.detailImgUpload = false
       this.introduceContent = ''
     },
