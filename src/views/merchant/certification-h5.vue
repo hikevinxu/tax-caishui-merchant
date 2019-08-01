@@ -300,6 +300,10 @@ export default {
         height: 104px;
         box-sizing: border-box;
         .input {
+          margin: 0;
+          padding: 0;
+          list-style: none;
+          display: block;
           margin-top: 16.7px;
           margin-right: 10px;
           flex: 0;
@@ -368,6 +372,7 @@ export default {
     .van-uploader__wrapper {
       width: 72px;
       height: 72px;
+      overflow: hidden;
       .van-uploader__preview {
         margin: 0;
       }
@@ -375,6 +380,7 @@ export default {
     .van-uploader__preview-image {
       width: 72px;
       height: 72px;
+      overflow: hidden;
       img {
         display: block;
         width: 100%;
