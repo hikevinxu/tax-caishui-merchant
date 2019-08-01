@@ -134,8 +134,10 @@ export default {
         }
     },
     search(){
+        pageNum = 1
         this.result = false
         this.loading = true
+        this.noMore = false
         if(this.value != '' && this.name != ''){
             let data = {
                 areaCode: this.areaCode,
@@ -146,6 +148,7 @@ export default {
                 keyword: this.name
             }
             api.merchantSearch(data).then(res => {
+                console.log(res)
                 if(res.code == 0){
                     this.loading = false
                     this.result = true
@@ -181,7 +184,7 @@ export default {
                     this.companyList = this.companyList.concat(res.data.items)
                     this.total = res.data.total
                     this.loading_more = false
-                    if(res.data.items.length <= 20){
+                    if(res.data.items.length < 20){
                         this.noMore = true
                     }else{
                         this.noMore = false
