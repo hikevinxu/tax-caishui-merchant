@@ -327,10 +327,17 @@ export default {
   methods: {
     //上传图片
     upload (files) {
+      const loading = this.$loading({
+        lock: true,
+        text: '图片上传中',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      });
       let formData = new FormData()
       formData.append('files', files.file)
       api.fileupload(formData).then(res => {
         if (res.code == 0) {
+          loading.close()
           console.log(res)
           this.fileId =  res.data[0].fileId
           let reader = new FileReader();
@@ -349,9 +356,16 @@ export default {
       })
     },
     uploadDetail(files) {
+      const loading = this.$loading({
+        lock: true,
+        text: '图片上传中',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      });
       let formData = new FormData()
       formData.append('files', files.file)
       api.fileupload(formData).then(res => {
+        loading.close()
         if (res.code == 0) {
           console.log(res)
           this.fileIdDetail =  res.data[0].fileId
@@ -392,6 +406,10 @@ export default {
       })
     },
     getType1(){
+      this.value1 = ''
+      this.value2 = ''
+      this.options3 = []
+      this.showOptions3 = false
       let data = {
         parentCode: this.value
       }
@@ -567,6 +585,7 @@ export default {
               this.createData.code = this.value5
               this.createData.id = this.id
               this.createData.introduceContent = this.introduceContent
+              console.log(this.createData)
               this.submitUpdate(this.createData)
             }else{
               this.$message({
@@ -577,8 +596,9 @@ export default {
               })
             }
           }else{
-            this.createData.code = this.value1
+            this.createData.code = this.value4
             this.createData.id = this.id
+            console.log(this.createData)
             this.submitUpdate(this.createData)
           }
         }else{
@@ -599,10 +619,24 @@ export default {
                 this.createData.id = this.id
                 let introduceContent = {}
                 introduceContent.detailJump = false
-                if(this.fileId == ''){
-                  introduceContent.introduceImg = this.introduceImg
+                if(this.introduceImg == ''){
+                  if(this.fileId == ''){
+                    this.$message({
+                      message: '请填写数据后保存',
+                      type: 'warning',
+                      showClose: true,
+                      duration: 1000
+                    })
+                    return
+                  }else{
+                    introduceContent.introduceImg = this.fileId
+                  }
                 }else{
-                  introduceContent.introduceImg = this.fileId
+                  if(this.fileId == ''){
+                    introduceContent.introduceImg = this.introduceImg
+                  }else{
+                    introduceContent.introduceImg = this.fileId
+                  }
                 }
                 this.createData.introduceContent = JSON.stringify(introduceContent)
                 console.log(this.createData)
@@ -620,10 +654,24 @@ export default {
               this.createData.id = this.id
               let introduceContent = {}
               introduceContent.detailJump = false
-              if(this.fileId == ''){
-                introduceContent.introduceImg = this.introduceImg
+              if(this.introduceImg == ''){
+                if(this.fileId == ''){
+                  this.$message({
+                    message: '请填写数据后保存',
+                    type: 'warning',
+                    showClose: true,
+                    duration: 1000
+                  })
+                  return
+                }else{
+                  introduceContent.introduceImg = this.fileId
+                }
               }else{
-                introduceContent.introduceImg = this.fileId
+                if(this.fileId == ''){
+                  introduceContent.introduceImg = this.introduceImg
+                }else{
+                  introduceContent.introduceImg = this.fileId
+                }
               }
               console.log(introduceContent)
               this.createData.introduceContent = JSON.stringify(introduceContent)
@@ -672,20 +720,50 @@ export default {
               this.createData.id = this.id
               let introduceContent = {}
               introduceContent.detailJump = true
-              if(this.fileId == ''){
-                introduceContent.introduceImg = this.introduceImg
+              //编辑判断图片是否自带
+              if(this.introduceImg == ''){
+                if(this.fileId == ''){
+                  this.$message({
+                    message: '请填写数据后保存',
+                    type: 'warning',
+                    showClose: true,
+                    duration: 1000
+                  })
+                  return
+                }else{
+                  introduceContent.introduceImg = this.fileId
+                }
               }else{
-                introduceContent.introduceImg = this.fileId
+                if(this.fileId == ''){
+                  introduceContent.introduceImg = this.introduceImg
+                }else{
+                  introduceContent.introduceImg = this.fileId
+                }
               }
-              if(this.fileIdDetail == ''){
-                introduceContent.detailImg = this.detailImg
+              //编辑判断图片是否自带
+              if(this.detailImg == ''){
+                if(this.fileIdDetail == ''){
+                  this.$message({
+                    message: '请填写数据后保存',
+                    type: 'warning',
+                    showClose: true,
+                    duration: 1000
+                  })
+                  return
+                }else{
+                  introduceContent.detailImg = this.fileIdDetail
+                }
               }else{
-                introduceContent.detailImg = this.fileIdDetail
+                if(this.fileIdDetail == ''){
+                  introduceContent.detailImg = this.detailImg
+                }else{
+                  introduceContent.detailImg = this.fileIdDetail
+                }
               }
               introduceContent.detailTitle = this.detailTitle
               console.log(introduceContent)
               this.createData.introduceContent = JSON.stringify(introduceContent)
-              // this.submitUpdate(this.createData)
+              this.submitUpdate(this.createData)
             }
           }else{
             this.$message({
@@ -750,7 +828,15 @@ export default {
     handleFetchPv(){
       this.dialogPvVisible = true
       //重新赋值
+      this.resetForm()
+    },
+    //重置表单
+    resetForm(){
+      this.value = ''
+      this.value1 = ''
       this.value3 = ''
+      this.showOptions3 = false
+      this.options3 = []
       this.options5 = []
       this.value4 = ''
       this.options6 = []
@@ -764,9 +850,11 @@ export default {
       this.detailTitle = ''
       this.detailImg = ''
       this.detailImgUpload = false
+      this.introduceContent = {}
     },
     //调起编辑页面
     handleUpdate(row){
+      this.resetForm()
       this.dialogUpdate = true
       this.id = row.id
       this.disabled = true
@@ -805,14 +893,14 @@ export default {
         this.checked = false
       }else{
         this.radio = '2'
-        row.introduceContent = JSON.parse(row.introduceContent)
-        this.introduceImg = row.introduceContent.introduceImg
+        this.introduceContent = JSON.parse(row.introduceContent)
+        this.introduceImg = this.introduceContent.introduceImg
         this.introduceImgUpload = true
         // console.log(this.introduceImg)
-        if(row.introduceContent.detailJump == true){
+        if(this.introduceContent.detailJump == true){
           this.checked = true
-          this.detailTitle = row.introduceContent.detailTitle
-          this.detailImg = row.introduceContent.detailImg
+          this.detailTitle = this.introduceContent.detailTitle
+          this.detailImg = this.introduceContent.detailImg
           this.detailImgUpload = true
         }else{
           this.detailTitle = ''

@@ -94,8 +94,7 @@
         </div>
         <div class="saveContent">
           <span class="cancel" @click="compile = false">取消</span>
-          <span v-show="!disable" class="save" @click="save">保存</span>
-          <span v-show="disable" class="save" style="background: #e0e0e0;color: rgba(255,255,255,0.7)">保存</span>
+          <span class="save" @click="save">保存</span>
         </div>
       </div>
     </div>
@@ -126,12 +125,17 @@ export default {
   methods: {
     upload (files) {
       if(/\.(jpg|jpeg|png|JPG|PNG)$/.test(files.file.name)){
-        this.disable = true
+        const loading = this.$loading({
+          lock: true,
+          text: '图片上传中',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
         let formData = new FormData()
         formData.append('files', files.file)
         api.fileupload(formData).then(res => {
           if (res.code == 0) {
-            this.disable = false
+            loading.close()
             console.log(res)
             this.fileId =  res.data[0].fileId
             let reader = new FileReader();

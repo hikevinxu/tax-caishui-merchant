@@ -161,36 +161,38 @@ export default {
         }
     },
     codeClick(){
-        console.log(this.captchaIns)
-        this.captchaIns && this.captchaIns.verify()
-    },
-    sendCode(data){
         this.isCode = false
         let phone = this.phone
-        if(!(/^1[23456789]\d{9}$/.test(phone))){
+        if(!(/^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/.test(phone))){
             this.$message({
               message: '请输入正确的手机号',
               type: 'error',
               showClose: true,
               duration: 1000
             })
-        }else{
-            let json = {
-                clientType: 'pc',
-                phone: phone,
-                captchaValidate: data.validate 
-            }
-            api.merchantCode(json).then(res => {
-                this.captchaIns && this.captchaIns.refresh()
-                if(res.code == 0){
-                    this.getCode()
-                }
-            })
-            .catch( err => {
-                this.captchaIns && this.captchaIns.refresh()
-                this.isCode = true
-            })
+            this.isCode = true
+            return
         }
+        console.log(this.captchaIns)
+        this.captchaIns && this.captchaIns.verify()
+    },
+    sendCode(data){
+        let phone = this.phone
+        let json = {
+            clientType: 'pc',
+            phone: phone,
+            captchaValidate: data.validate 
+        }
+        api.merchantCode(json).then(res => {
+            this.captchaIns && this.captchaIns.refresh()
+            if(res.code == 0){
+                this.getCode()
+            }
+        })
+        .catch( err => {
+            this.captchaIns && this.captchaIns.refresh()
+            this.isCode = true
+        })
     },
     login(){
         if(!(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,16}$/).test(this.password)){

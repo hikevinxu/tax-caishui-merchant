@@ -145,33 +145,32 @@ export default {
     },
     codeClick(){
         // console.log(this.captchaIns)
+        this.isCode = false
+        let phone = this.phone
+        if(!(/^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/.test(phone))){
+            Toast('请输入正确的手机号')
+        }
         this.captchaIns && this.captchaIns.verify()
     },
     sendCode(data){
-        this.isCode = false
         let phone = this.phone
-        if(!(/^1[23456789]\d{9}$/.test(phone))){
-            Toast('请输入正确的手机号')
-        }else{
-            let json = {
-                clientType: 'h5',
-                phone: phone,
-                captchaValidate: data.validate 
-            }
-            api.merchantCode(json).then(res => {
-                this.captchaIns && this.captchaIns.refresh()
-                if(res.code == 0){
-                    this.getCode()
-                }
-            })
-            .catch( err => {
-                this.isCode = true
-                this.captchaIns && this.captchaIns.refresh()
-            })
+        let json = {
+            clientType: 'h5',
+            phone: phone,
+            captchaValidate: data.validate 
         }
+        api.merchantCode(json).then(res => {
+            this.captchaIns && this.captchaIns.refresh()
+            if(res.code == 0){
+                this.getCode()
+            }
+        })
+        .catch( err => {
+            this.isCode = true
+            this.captchaIns && this.captchaIns.refresh()
+        })
     },
     login(){
-        // console.log((/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,16}$/).test(this.password))
         if(!(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,16}$/).test(this.password)){
             Toast('密码是6-16位字母数字组合')
             return

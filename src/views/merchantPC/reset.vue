@@ -162,7 +162,7 @@ export default {
     sendCode(data){
       this.isCode = false
       let phone = this.phone
-      if(!(/^1[23456789]\d{9}$/.test(phone))){
+      if(!(/^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/.test(phone))){
           this.$message({
             message: '请输入正确的手机号',
             type: 'error',
@@ -221,7 +221,7 @@ export default {
             console.log(res)
             if(res.code == 0){
                 this.$message({
-                    message: '修改成功',
+                    message: '重置成功',
                     type: 'success',
                     showClose: true,
                     duration: 1000
