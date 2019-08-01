@@ -181,8 +181,6 @@ export default {
       var month = date.getMonth()+1
       var day = date.getDate()
       let today = year + '/' + (month >= 10 ? month : '0' + month) + '/' + (day >= 10 ? day : '0' + day)
-
-      console.log(today)
       
       function getDate(s){
         return new Date(s)
@@ -190,16 +188,16 @@ export default {
 
       let timer = timeFormatter.getPreMonthDay(today.replace(/\//g,'-'), 10)
 
-      console.log(timer)
-
       var arr = [], startD = getDate(timer),endD = getDate(today)
+      if (day == 1) {
+        startD.setDate(startD.getDate() + 1)
+        endD.setDate(endD.getDate() + 1)
+      }
       while(endD > startD){
         let d = startD.getDate()
         if(d === 1)arr.push(timeFormatter.formatter(startD))
         startD.setDate(startD.getDate() + 1)
       }
-
-      console.log(arr)
 
       for (let i=0;i<arr.length;i++) {
         if (arr[i].split('-')[0] == today.split('/')[0] && arr[i].split('-')[1] == today.split('/')[1]) {
