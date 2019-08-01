@@ -342,15 +342,15 @@ export default {
     },
     selectArea(value){
       this.value = value[0].name + value[1].name + value[2].name
-      if(value[1].name == '北京市'){
-          value[1].code = '110000'
-      }else if(value[1].name == '天津市'){
-          value[1].code = '120000'
-      }else if(value[1].name == '上海市'){
-          value[1].code = '310000'
-      }else if(value[1].name == '重庆市'){
-          value[1].code = '500000'
-      }
+      // if(value[1].name == '北京市'){
+      //     value[1].code = '110000'
+      // }else if(value[1].name == '天津市'){
+      //     value[1].code = '120000'
+      // }else if(value[1].name == '上海市'){
+      //     value[1].code = '310000'
+      // }else if(value[1].name == '重庆市'){
+      //     value[1].code = '500000'
+      // }
       this.provinceCode = value[0].code
       this.cityCode = value[1].code
       this.areaCode = value[2].code
