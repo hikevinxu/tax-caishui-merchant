@@ -850,7 +850,7 @@ export default {
       this.detailTitle = ''
       this.detailImg = ''
       this.detailImgUpload = false
-      this.introduceContent = {}
+      this.introduceContent = ''
     },
     //调起编辑页面
     handleUpdate(row){
