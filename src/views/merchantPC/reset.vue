@@ -171,6 +171,7 @@ export default {
       this.captchaIns && this.captchaIns.verify()
     },
     sendCode(data){
+      let phone = this.phone
       let json = {
           phone: phone,
           captchaValidate: data.validate 
