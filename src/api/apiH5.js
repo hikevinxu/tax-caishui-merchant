@@ -81,5 +81,13 @@ export default {
    */
   merchantSearch (data) {
     return fetchPost('/merchant/apply/search_company', data)
+  },
+  /**
+   * 状态重置
+   * @function refreshToken
+   * @type 'POST'
+   */
+  merchantApplyReset () {
+    return fetchGet('/merchant/apply/reset')
   }
 }

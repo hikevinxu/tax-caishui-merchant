@@ -69,7 +69,11 @@ export default {
   },
   methods: {
     goSearch(){
-      this.$router.push('/search-h5?reSearch=1')
+        api.merchantApplyReset().then(res => {
+            if(res.code == 0){
+                this.$router.push('/search-h5')
+            }
+        })
     }
   }
 }

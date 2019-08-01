@@ -88,7 +88,11 @@ export default {
   },
   methods: {
     goSearch(){
-        this.$router.push({path: '/search-pc?reSearch=1'})
+        api.merchantApplyReset().then(res => {
+            if(res.code == 0){
+                this.$router.push('/search-pc')
+            }
+        })
     }
   }
 }
