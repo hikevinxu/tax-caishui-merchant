@@ -188,11 +188,11 @@ export default {
         return new Date(s)
       }
 
-      let aaa = timeFormatter.getPreMonthDay('2018-08-01', 10)
+      let timer = timeFormatter.getPreMonthDay(today.replace(/\//g,'-'), 10)
 
-      console.log(aaa)
-      
-      var arr = [], startD = getDate(aaa),endD = getDate('2018/08/01')
+      console.log(timer)
+
+      var arr = [], startD = getDate(timer),endD = getDate(today)
       while(endD > startD){
         let d = startD.getDate()
         if(d === 1)arr.push(timeFormatter.formatter(startD))
