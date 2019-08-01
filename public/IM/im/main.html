@@ -33,7 +33,7 @@
               <span class="exit" title="退出" id="logout">退出</span>
             </div>
             <div class="m-devices hide">正在使用云信web版</div>
-            <div class="panel" id="switchPanel">
+            <div class="panel" id="switchPanel" style="display: none;">
               <a class="box-sizing tc m-unread panel_tab cur" data-type="sessions">
                 <span class="icon icon-session"></span>
                 <b class="u-unread hide"> </b>
@@ -49,7 +49,7 @@
             <div class="item" id="sessionsWrap" data-type="sessions">
               <!-- 最近联系人 -->
               <div class="list">
-                <div class="m-panel">
+                <!-- <div class="m-panel">
                   <div class="panel_item m-sysMsg" id="showNotice">
                     <div class="panel_avatar">
                       <img class="panel_image" src="./images/notice.png" alt="消息中心" />
@@ -59,7 +59,7 @@
                     </div>
                     <b class="count j-sysMsgCount hide"></b>
                   </div>
-                </div>
+                </div> -->
                 <div id="sessions">
                   <p style="text-align: center;margin-top: 10px;">正在获取最近联系人...</p>
                 </div>
@@ -286,13 +286,13 @@
                 <!-- <a class="chat-btn u-netcall-video-link" id="showNetcallVideoLink">&nbsp;</a> -->
                 <!-- 在netcall_ui.js的fn.whenOpenChatBox中隐藏 -->
                 <!-- <a class="chat-btn u-whiteboard" id="showWhiteboard">&nbsp;</a> -->
-                <div class="chat-btn">
+                <!-- <div class="chat-btn">
                   <a class="chat-btn u-voice" id="toRecord"></a>
                   <span id="toRecordBox" class="u-voice-duration-box">
                     <i id="toRecordTime" class="u-voice-duration-time">00:00</i>
                     <i id="toRecordCancle" class="u-voice-duration-action"></i>
                   </span>
-                </div>
+                </div> -->
                 <textarea id="messageText" class="chat-btn msg-input box-sizing radius5px p2p" rows="1" autofocus="autofocus" maxlength="500"></textarea>
                 <!-- <span class="chat-context" id="showTeamMsgReceipt">
                   <label for="needTeamMsgReceipt">
