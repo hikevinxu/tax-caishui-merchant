@@ -259,26 +259,7 @@ export default {
       total: 0,
       fileId: '',
       fileIdDetail: '',
-      list: [
-        {
-          id: 1,
-          business: '公司注册业务',
-          type: '文字',
-          status: '已下架'
-        },
-        {
-          id: 2,
-          business: '代理记账',
-          type: '文字',
-          status: '已上架'
-        },
-        {
-          id: 3,
-          business: '公司注册业务',
-          type: '文字',
-          status: '已下架'
-        }
-      ],
+      list: [],
       listLoading: false,
       dialogPvVisible: false,
       dialogUpdate: false,
