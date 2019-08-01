@@ -156,10 +156,6 @@ export default {
       }
     },
     codeClick(){
-      console.log(this.captchaIns)
-      this.captchaIns && this.captchaIns.verify()
-    },
-    sendCode(data){
       this.isCode = false
       let phone = this.phone
       if(!(/^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/.test(phone))){
@@ -170,23 +166,26 @@ export default {
             duration: 1000
           })
           this.isCode = true
-      }else{
-          let json = {
-              phone: phone,
-              captchaValidate: data.validate 
-              // captchaValidate: '0000'
-          }
-          api.passwordCode(json).then(res => {
-              this.captchaIns && this.captchaIns.refresh()
-              if(res.code == 0){
-                  this.getCode()
-              }
-          })
-          .catch( err => {
-              this.captchaIns && this.captchaIns.refresh()
-              this.isCode = true
-          })
+          return
       }
+      this.captchaIns && this.captchaIns.verify()
+    },
+    sendCode(data){
+      let json = {
+          phone: phone,
+          captchaValidate: data.validate 
+          // captchaValidate: '0000'
+      }
+      api.passwordCode(json).then(res => {
+          this.captchaIns && this.captchaIns.refresh()
+          if(res.code == 0){
+              this.getCode()
+          }
+      })
+      .catch( err => {
+          this.captchaIns && this.captchaIns.refresh()
+          this.isCode = true
+      })
     },
     reset(){
       if(!(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,16}$/).test(this.password)){
