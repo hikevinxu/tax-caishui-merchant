@@ -255,6 +255,12 @@ export default {
     //上传图片
     uploadYYZZ (files) {
       // console.log(files)
+      const loading = this.$loading({
+        lock: true,
+        text: '正在上传图片，请稍后...',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
       let formData = new FormData()
       formData.append('files', files.file)
       apiPC.fileupload(formData).then(res => {
@@ -267,14 +273,24 @@ export default {
             imgUrlBase64 = reader.readAsDataURL(file);
             reader.onload = (e) => {
               this.introduceImg = reader.result
+              loading.close()
             }
           }
+        } else {
+          loading.close()
         }
       }).catch(err => {
+        loading.close()
         this.$message.error('上传失败，请重新上传')
       })
     },
     uploadSFZ (files) {
+      const loading = this.$loading({
+        lock: true,
+        text: '正在上传图片，请稍后...',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
       // console.log(files)
       let formData = new FormData()
       formData.append('files', files.file)
@@ -288,15 +304,25 @@ export default {
             imgUrlBase64 = reader.readAsDataURL(file);
             reader.onload = (e) => {
               this.introduceImg1 = reader.result
+              loading.close()
             }
           }
+        } else {
+          loading.close()
         }
       }).catch(err => {
+        loading.close()
         this.$message.error('上传失败，请重新上传')
       })
     },
     uploadZZZS (files) {
       // console.log(files)
+      const loading = this.$loading({
+        lock: true,
+        text: '正在上传图片，请稍后...',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
       let formData = new FormData()
       formData.append('files', files.file)
       apiPC.fileupload(formData).then(res => {
@@ -309,10 +335,14 @@ export default {
             imgUrlBase64 = reader.readAsDataURL(file);
             reader.onload = (e) => {
               this.introduceImg2 = reader.result
+              loading.close()
             }
           }
+        } else {
+          loading.close()
         }
       }).catch(err => {
+        loading.close()
         this.$message.error('上传失败，请重新上传')
       })
     },

@@ -171,7 +171,7 @@ export default {
       var year = date.getFullYear()
       var month = date.getMonth()+1
       var day = date.getDate()
-      let today = year + '-' + (month > 10 ? month : '0' + month) + '-' + day
+      let today = year + '-' + (month >= 10 ? month : '0' + month) + '-' + (day >= 10 ? day : '0' + day)
       return today
     },
     initMonth () {
@@ -180,16 +180,26 @@ export default {
       var year = date.getFullYear()
       var month = date.getMonth()+1
       var day = date.getDate()
-      let today = year + '/' + (month > 10 ? month : '0' + month) + '/' + day
+      let today = year + '/' + (month >= 10 ? month : '0' + month) + '/' + (day >= 10 ? day : '0' + day)
+
+      console.log(today)
+      
       function getDate(s){
         return new Date(s)
       }
-      var arr = [], startD = getDate('2018/10/01'),endD = getDate(today)
+
+      let aaa = timeFormatter.getPreMonthDay('2018-08-01', 10)
+
+      console.log(aaa)
+      
+      var arr = [], startD = getDate(aaa),endD = getDate('2018/08/01')
       while(endD > startD){
         let d = startD.getDate()
         if(d === 1)arr.push(timeFormatter.formatter(startD))
         startD.setDate(startD.getDate() + 1)
       }
+
+      console.log(arr)
 
       for (let i=0;i<arr.length;i++) {
         if (arr[i].split('-')[0] == today.split('/')[0] && arr[i].split('-')[1] == today.split('/')[1]) {
@@ -220,19 +230,18 @@ export default {
       this.$refs.Calendar.ChoseMonth(date)
     },
     clickLeftBtn () {
-      // this.currentYear--
-      // this.monthList2 = this.initMonth(this.currentYear)
       // console.log(this.monthList[0].date)
       this.monthList.splice(this.monthList.length - 1, 1)
       this.monthList = this.getlastMonth().concat(this.monthList)
 
     },
     clickRightBtn () {
+      console.log(this.monthList[9])
       // this.$refs.Calendar.ChoseMonth('2018-12-12');
-      let date = new Date()
-      let year = date.getFullYear()
-      let month = date.getMonth()+1
-      if (this.currentYear == year && this.getToday().split('-')[1] == this.monthList[this.monthList.length - 1].date.split('-')[1]) {
+      let date = this.monthList[9].date
+      let year = this.monthList[9].date.split('-')[0]
+      let month = this.monthList[9].date.split('-')[1]
+      if (this.getToday().split('-')[0] == year && this.getToday().split('-')[1] == month) {
         this.$message({
           message: '后面没有了！',
           type: 'warning',
@@ -248,14 +257,15 @@ export default {
     },
     clickDay(data) {
       // console.log(data) //选中某天
-      this.currentDate = data.replace(/\//g,'-')
+      let timeFormatter = data.split('/')[0] + '-' + (parseInt(data.split('/')[1]) >= 10 ? data.split('/')[1] : '0' + data.split('/')[1]) + '-' + (parseInt(data.split('/')[2]) >= 10 ? data.split('/')[2] : '0' + data.split('/')[2])
+      this.currentDate = timeFormatter.replace(/\//g,'-')
       this.listPhoneQuery.pageNum = 1
       this.listIMQuery.pageNum = 1
-      this.listPhoneQuery.time = data.replace(/\//g,'-')
-      this.listIMQuery.time = data.replace(/\//g,'-')
+      this.listPhoneQuery.time = timeFormatter.replace(/\//g,'-')
+      this.listIMQuery.time = timeFormatter.replace(/\//g,'-')
       this.getPhoneDatacenterConsultRecords()
       this.getIMDatacenterConsultRecords()
-      this.getDatacenterStatistic(data.replace(/\//g,'-'), 'day')
+      this.getDatacenterStatistic(timeFormatter.replace(/\//g,'-'), 'day')
     },
     changeDate(data) {
       // console.log(data); //左右点击切换月份

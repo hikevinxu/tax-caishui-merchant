@@ -36,11 +36,18 @@ export default {
   methods: {
     //上传图片
     upload (files) {
+      const loading = this.$loading({
+        lock: true,
+        text: '正在上传图片，请稍后...',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
       let formData = new FormData()
       formData.append('files', files.file)
       api.fileupload(formData).then(res => {
         if (res.code == 0) {
           this.fileId =  res.data[0].fileId
+          loading.close()
           let data = {
             img: this.fileId
           }
@@ -64,8 +71,11 @@ export default {
               this.getImglist()
             }
           })
+        } else {
+          loading.close()
         }
       }).catch(err => {
+        loading.close()
         this.$message.error('上传失败，请重新上传')
       })
     },
@@ -73,7 +83,7 @@ export default {
       api.publictyImgList().then(res => {
         if(res.code == 0){
           let fileList = []
-          if(res.data.length > 0){
+          if(res.data.length >= 0){
             this.imgTotal = res.data.length
           }
           for (let i = 0; i < res.data.length; i++) {

@@ -145,16 +145,21 @@ export default {
         if(res.code == 0){
           console.log(res)
           this.address = res.data.address
-          if (res.data.location != '') {
-            this.center[1] = res.data.location.split(',')[0]
-            this.center[0] = res.data.location.split(',')[1]
-            this.selectAddressChange(this.center)
-          } else {
-            this.getCurrentPositionLaglng()
-          }
           this.provinceCode = res.data.provinceCode
           this.cityCode = res.data.cityCode
           this.areaCode = res.data.areaCode
+          if (res.data.location != '') {
+            this.center[1] = res.data.location.split(',')[0]
+            this.center[0] = res.data.location.split(',')[1]
+            try {
+              this.selectAddressChange(this.center)
+            }
+            catch {
+
+            }
+          } else {
+            this.getCurrentPositionLaglng()
+          }
           let params = {
             provinceCode: this.provinceCode
           }
