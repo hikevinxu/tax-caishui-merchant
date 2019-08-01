@@ -9,7 +9,8 @@ import '@/common/css/reset.css'
 import '@/common/css/animate.css'
 import '@/common/css/h5Header.css'
 import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css'
+// import 'element-ui/lib/theme-chalk/index.css'
+import '@/common/css/element-variables.scss'
 // import VConsole from 'vconsole'
 
 Vue.use(ElementUI)
