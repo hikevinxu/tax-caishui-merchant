@@ -185,7 +185,7 @@ export default {
     transform: translate(0, -50%);
     width: 20Px;
     height: 20Px;
-    background-color: red;
+    background-color: #FB5332;
     color: #fff;
     border-radius: 50%;
     font-size: 12Px;
