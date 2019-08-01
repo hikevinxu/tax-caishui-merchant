@@ -194,7 +194,12 @@ export default {
     },
     login(){
         if(!(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,16}$/).test(this.password)){
-            Toast('密码是6-16位字母数字组合')
+            this.$message({
+              message: '密码是6-16位字母数字组合',
+              type: 'error',
+              showClose: true,
+              duration: 1000
+            })
             return
         }
       if(this.password.length >= 6){
