@@ -48,8 +48,8 @@ YX.fn.showMyInfo = function () {
     $node.find(".j-tel").text(user.tel ===undefined?"--":user.tel||"--")
     $node.find(".j-email").text(user.email ===undefined?"--":user.email||"--")
     $node.find(".j-sign").text(user.sign ===undefined?"--":user.sign||"--")
-    $node.removeClass('hide')
-    this.$mask.removeClass('hide')
+    // $node.removeClass('hide')
+    // this.$mask.removeClass('hide')
 }
 YX.fn.hideMyInfoBox = function(){
     this.$myInfo.addClass('hide')
@@ -420,7 +420,7 @@ YX.fn.cbSaveMyAvatar = function (err,data) {
 YX.fn.showInfo = function (account,type) {
 	if(type=="p2p"){
         var user = this.cache.getUserById(account)
-        this.showInfoBox(user) 
+        // this.showInfoBox(user) 
     }
 }
 // 从聊天面板头部头像点进去
@@ -428,7 +428,7 @@ YX.fn.showInfo2 = function(){
     if(this.crtSessionType==="p2p"){
         var account = this.crtSessionAccount
         var user = this.cache.getUserById(account)
-        this.showInfoBox(user) 
+        // this.showInfoBox(user) 
     }
 }
 // 从聊天面板头像点进去
@@ -439,9 +439,9 @@ YX.fn.showInfoInChat = function(account){
         return
     }
     if(yunXin.$teamInfo.data('gtype')==='advanced'){
-        yunXin.showInfoBox(user,'team') 
+        // yunXin.showInfoBox(user,'team') 
     }else{
-        yunXin.showInfoBox(user) 
+        // yunXin.showInfoBox(user) 
     }
 }
 
