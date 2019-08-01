@@ -197,7 +197,7 @@ export default {
     login(){
         if(!(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,16}$/).test(this.password)){
             this.$message({
-              message: '密码是6-16位字母数字组合',
+              message: '密码需6~16位字母数字组合',
               type: 'error',
               showClose: true,
               duration: 1000

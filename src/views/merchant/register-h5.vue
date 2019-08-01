@@ -172,7 +172,7 @@ export default {
     },
     login(){
         if(!(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,16}$/).test(this.password)){
-            Toast('密码是6-16位字母数字组合')
+            Toast('密码需6~16位字母数字组合')
             return
         }
         if(this.password.length >= 6){
