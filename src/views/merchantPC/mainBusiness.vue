@@ -693,15 +693,44 @@ export default {
                 this.createData.id = this.id
                 let introduceContent = {}
                 introduceContent.detailJump = true
-                if(this.fileId == ''){
-                  introduceContent.introduceImg = this.introduceImg
+                if(this.introduceImg == ''){
+                  if(this.fileId == ''){
+                    this.$message({
+                      message: '请填写数据后保存',
+                      type: 'warning',
+                      showClose: true,
+                      duration: 1000
+                    })
+                    return
+                  }else{
+                    introduceContent.introduceImg = this.fileId
+                  }
                 }else{
-                  introduceContent.introduceImg = this.fileId
+                  if(this.fileId == ''){
+                    introduceContent.introduceImg = this.introduceImg
+                  }else{
+                    introduceContent.introduceImg = this.fileId
+                  }
                 }
-                if(this.fileIdDetail == ''){
-                  introduceContent.detailImg = this.detailImg
+                //编辑判断图片是否自带
+                if(this.detailImg == ''){
+                  if(this.fileIdDetail == ''){
+                    this.$message({
+                      message: '请填写数据后保存',
+                      type: 'warning',
+                      showClose: true,
+                      duration: 1000
+                    })
+                    return
+                  }else{
+                    introduceContent.detailImg = this.fileIdDetail
+                  }
                 }else{
-                  introduceContent.detailImg = this.fileIdDetail
+                  if(this.fileIdDetail == ''){
+                    introduceContent.detailImg = this.detailImg
+                  }else{
+                    introduceContent.detailImg = this.fileIdDetail
+                  }
                 }
                 introduceContent.detailTitle = this.detailTitle
                 console.log(introduceContent)
