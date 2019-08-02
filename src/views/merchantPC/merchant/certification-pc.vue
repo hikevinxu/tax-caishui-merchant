@@ -212,16 +212,6 @@ export default {
         return 
       }
 
-      if(this.fileId1 == ''){
-        this.$message({
-          message: '请先上传法人手持身份证照片',
-          type: 'error',
-          showClose: true,
-          duration: 1000
-        })
-        return 
-      }
-
       if(!this.checked){
         this.$message({
           message: '请先勾选服务协议',
