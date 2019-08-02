@@ -133,7 +133,7 @@
             </div>
           </div>
           <div class="submitbtn">
-            <van-button type="primary" size="large" @click="jumpNextStep">下一步</van-button>
+            <van-button :loading="submitLoading"  loading-type="spinner" type="primary" size="large" @click="jumpNextStep">下一步</van-button>
           </div>
         </div>
       </div>
@@ -184,7 +184,8 @@ export default {
       introList: [],
       phone: '',
       fileId: '',
-      fileLength: 0
+      fileLength: 0,
+      submitLoading: false
     }
   },
   // created() {
@@ -538,11 +539,17 @@ export default {
       for (let i=0;i<this.fileIntroList.length;i++) {
         data.publicityImgs.push(this.fileIntroList[i].fileId)
       }
+      this.submitLoading = true
       api.merchantSaveCompany(data).then(res => {
         if(res.code == 0){
           Toast('保存成功')
+          this.submitLoading = false
           this.$router.push('certification-h5')
+        } else {
+          this.submitLoading = false
         }
+      }).catch(err => {
+        this.submitLoading = false
       })
     }
   }

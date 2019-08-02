@@ -68,7 +68,7 @@
           </div>
         </div>
         <div class="submitbtn">
-          <van-button type="primary" size="large" @click="jumpNextStep">提交申请</van-button>
+          <van-button type="primary" :loading="submitLoading" loading-type="spinner" size="large" @click="jumpNextStep">提交申请</van-button>
         </div>
       </div>
     </div>
@@ -94,7 +94,8 @@ export default {
       fileId1: '',
       fileList2: [],
       fileId2: '',
-      checked: false
+      checked: false,
+      submitLoading: false
     }
   },
   created(){
@@ -226,13 +227,17 @@ export default {
         handheldIdCardImg: this.fileId1,
         otherCertificateImg: this.fileId2
       }
+      this.submitLoading = true
       api.merchantSaveCertification(data).then(res => {
-        if(res.code == 0){
+        if (res.code == 0){
           Toast('保存成功')
-          setTimeout(res => {
-            this.$router.push('success-h5')
-          },1000)
+          this.submitLoading = false
+          this.$router.push('success-h5')
+        } else {
+          this.submitLoading = false
         }
+      }).catch(err => {
+        this.submitLoading = false
       })
     }
   }
