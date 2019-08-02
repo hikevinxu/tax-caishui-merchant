@@ -14,7 +14,7 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/merchantHome'
+      redirect: '/login'
     },
     {
       path: '/merchantHome',
