@@ -71,20 +71,23 @@ export default {
   },
   created(){
     let status = this.$route.query.status
-    console.log(status)
-    if(status){
-        this.status  = status
-        if(status == 999){
-            api.getCertificationStatus().then(res => {
-                console.log(res)
-                if(res.code == 0){
-                    if(res.data.status == 999){
-                        this.failCause = res.data.failCause
-                    }
-                }
-            })
+    api.getCertificationStatus().then(res => {
+        console.log(res)
+        if(res.code == 0){
+            if(res.data.status == 100){
+                this.$router.push({path: '/search-pc'})
+            }else if(res.data.status == 101){
+                this.$router.push({path: '/certification-pc'})
+            }else if(res.data.status == 102){
+                this.status  = res.data.status
+            }else if(res.data.status == 103){
+                this.status  = res.data.status
+            }else if(res.data.status == 999){
+                this.status  = res.data.status
+                this.failCause = res.data.failCause
+            }
         }
-    }
+    })
   },
   methods: {
     goSearch(){
