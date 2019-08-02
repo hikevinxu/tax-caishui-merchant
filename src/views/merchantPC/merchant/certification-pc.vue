@@ -59,7 +59,7 @@
                     </div>
                   </div>
                   <div class="formItem uploadImg">
-                    <label class="longLabel" for="name">法人手持身份证照片<span>*</span></label>
+                    <label class="longLabel" for="name">法人手持身份证照片</label>
                     <div class="input">
                       <div class="imgItem">
                         <div class="imgList fl">

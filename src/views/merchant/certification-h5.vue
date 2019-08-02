@@ -42,7 +42,7 @@
           </div>
         </div>
         <div class="formItem upload">
-          <label for="fileList">法人手持身份证照片<span class="notNull">*</span></label>
+          <label for="fileList">法人手持身份证照片</label>
           <div class="input">
             <van-uploader v-model="fileList1" multiple @delete="uploadDelete1" :max-count="1" :after-read="upload1"/>
           </div>
@@ -212,11 +212,6 @@ export default {
 
       if (!this.fileId || this.fileId == '') {
         Toast.fail('请先上传营业执照')
-        return
-      }
-
-      if (!this.fileId1 || this.fileId1 == '') {
-        Toast.fail('请先上传法人手持身份证照片')
         return
       }
 
