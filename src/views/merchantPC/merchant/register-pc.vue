@@ -29,7 +29,7 @@
                     <span class="phoneExplain">该手机号将作为商户登录账号</span>
                     <div class="code">
                         <div class="codeInputBox">
-                            <img src="@/assets/globalPc/ic_form_cellnum.png" alt="">
+                            <img src="@/assets/global/form_cellpass.png" alt="">
                             <input type="text" v-model="code" class="codeInput" maxlength="4" placeholder="验证码" @input="codeInput">
                         </div>
                         <div id="captcha"></div>
