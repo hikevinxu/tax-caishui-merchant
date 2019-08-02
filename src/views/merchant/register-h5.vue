@@ -32,7 +32,7 @@
                     <span class="count" v-show="isCode == false && codeStart == false">{{ count }}s后获取</span>
                 </div>
                 <div class="inputBox">
-                    <img src="@/assets/global/form_cellpass.png" alt="">
+                    <img src="@/assets/globalPc/ic_form_password.png" alt="">
                     <input type="password" v-model="password" class="passwordInput" maxlength="11" placeholder="密码, 6～16位数字字母组合" @input="passwordInput" >
                 </div>
             </div>
