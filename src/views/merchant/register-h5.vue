@@ -63,11 +63,17 @@ export default {
         disabled: true,
         code: '',
         timer: null,
-        captchaIns: undefined
+        captchaIns: undefined,
+        inviteCode: ''
+        
     }
   },
   created(){
-      var that = this
+    let inviteCode = this.$route.query.inviteCode
+    if(inviteCode){
+        this.inviteCode = inviteCode
+    }
+    var that = this
     // initNECaptcha为全局函数，可直接调用
     initNECaptcha({
       // config对象，参数配置
@@ -184,7 +190,8 @@ export default {
                 clientType: 'h5',
                 phone: phone,
                 password: password,
-                verifycode: this.code
+                verifycode: this.code,
+                inviteCode: this.inviteCode
             }
             api.merchantRegister(data).then(res => {
                 if(res.code == 0){

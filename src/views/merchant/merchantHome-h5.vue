@@ -14,16 +14,6 @@
                 <span @click="goRegisterPC">商户入驻</span>
                 <img src="@/assets/global/body_02_pc.png" alt="">
             </div>
-            <!-- <div class="footer">
-                <div class="footerContent">
-                    <div class="qrcode">
-                        <img style="display: block;width: 120PX;height: 120PX;margin-bottom: 8PX;" src="@/assets/globalPc/qrcode.png" alt="">
-                        <span style="font-size: 12PX;color: #FFFFFF;">下载财税鱼APP</span>
-                    </div>
-                    <span class="line">Copyright 2019  |  杭州税牛科技有限公司  |  浙ICP备19028668号  |  <a href="https://res.caishuiyu.com/common/h5/privacy_agreement.html" style="text-decoration-line: none;color: #ffffff;">用户隐私协议</a>  |  All Rights Reserved</span>
-                    <span class="line">E-mail：kf@taxlioner.com  |  地址：杭州市西湖区金色西溪商务中心B座</span>
-                </div>
-            </div> -->
         </div>
     </div>
 </template>
@@ -43,9 +33,14 @@ export default {
     return{
         title: '',
         h5: false,
+        inviteCode: ''
     }
   },
   created(){
+    let inviteCode = this.$route.query.inviteCode
+    if(inviteCode){
+        this.inviteCode = inviteCode
+    }
     // if (Terminal.deviceInfo().deviceType == 'pc') {
     //     this.h5 = false
     // } else {
@@ -56,10 +51,22 @@ export default {
   },
   methods: {
     goRegisterH5(){
-        this.$router.push({ path: '/register-h5' })
+        // this.$router.push({ path: '/register-h5' })
+        this.$router.push({
+            path: '/register-h5',
+            query: {
+                inviteCode: this.inviteCode,
+            }
+        })
     },
     goRegisterPC(){
-        this.$router.push({ path: '/register-pc' })
+        // this.$router.push({ path: '/register-pc' })
+        this.$router.push({
+            path: '/register-pc',
+            query: {
+                inviteCode: this.inviteCode,
+            }
+        })
     },
     resize() {
       let ww = window.innerWidth
