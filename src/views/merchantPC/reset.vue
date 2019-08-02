@@ -34,8 +34,8 @@
         <div class="footer">
           <div class="footerContent">
             <div class="qrcode">
-              <img style="display: block;width: 120PX;height: 120PX;margin-bottom: 8PX;" src="@/assets/globalPc/qrcode.png" alt="">
-              <span style="font-size: 12PX;color: #FFFFFF;">下载财税鱼APP</span>
+              <!-- <img style="display: block;width: 120PX;height: 120PX;margin-bottom: 8PX;" src="@/assets/globalPc/qrcode.png" alt=""> -->
+              <!-- <span style="font-size: 12PX;color: #FFFFFF;">下载财税鱼APP</span> -->
             </div>
             <span class="line">Copyright 2019  |  杭州税牛科技有限公司  |  浙ICP备19028668号  |  <a href="https://res.caishuiyu.com/common/h5/privacy_agreement.html" style="text-decoration-line: none;color: #ffffff;">用户隐私协议</a>  |  All Rights Reserved</span>
             <span class="line">E-mail：kf@taxlioner.com  |  地址：杭州市西湖区金色西溪商务中心B座</span>
@@ -297,7 +297,7 @@ export default {
           margin-bottom: 24PX;
           .label{
             display: block;
-            width: 70PX;
+            width: 80PX;
             margin-right: 24PX;
             text-align: left;
             font-size: 14PX;
@@ -331,7 +331,7 @@ export default {
             border: 1PX solid rgba(0,0,0,0.20);
             font-size: 13PX;
             color: rgba(0,0,0,0.20);
-            margin-left: 18PX;
+            margin-left: 14PX;
             cursor: pointer;
           }
           .isCode{
@@ -352,7 +352,7 @@ export default {
         }
         .next{
           display: block;
-          width: 226PX;
+          width: 215PX;
           height: 36PX;
           line-height: 36PX;
           text-align: center;
