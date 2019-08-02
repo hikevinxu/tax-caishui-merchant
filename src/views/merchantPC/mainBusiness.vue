@@ -1041,7 +1041,7 @@ export default {
   justify-content: center;
 }
 .mainBusinesss {
-  width: 100vw;
+  // width: 100vw;
   min-height: 100vh;
   padding-bottom: 20PX;
   .business{

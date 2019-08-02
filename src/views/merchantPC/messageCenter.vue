@@ -19,7 +19,7 @@ export default {
 <style lang="scss">
 .messageCenter {
   height: 100vh;
-  width: 100vw;
+  // width: 100vw;
   padding-bottom: 40Px;
   .chatIfream {
     box-sizing: border-box;

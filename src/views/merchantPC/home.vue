@@ -221,7 +221,7 @@ export default {
 </script>
 <style lang="scss">
   .homePc {
-      width: 100vw;
+      // width: 100vw;
       height: 100vh;
       padding-bottom: 30PX;
       .basics {

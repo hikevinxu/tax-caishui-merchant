@@ -28,7 +28,7 @@
                     <input placeholder="请输入公司名称" v-model="name" type="text" class="nameInput" @input="nameInput">  
                 </div>
                 <van-popup v-model="showPicker" position="bottom">
-                    <van-area :area-list="areaList" value="110000" @confirm="onConfirm" />
+                    <van-area :area-list="areaList" value="110000" @confirm="onConfirm" @cancel="showPicker = false" />
                 </van-popup>
                 <button id="search" :disabled="disabled" @click="search">搜索企业</button>
             </div>

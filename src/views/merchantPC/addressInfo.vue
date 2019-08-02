@@ -326,7 +326,7 @@ export default {
 </script>
 <style lang="scss">
 .addressInfo {
-  width: 100vw;
+  // width: 100vw;
   height: 100vh;
   font-size: 48PX;
   .address {

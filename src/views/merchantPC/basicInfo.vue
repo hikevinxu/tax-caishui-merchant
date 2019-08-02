@@ -297,7 +297,7 @@ export default {
 </script>
 <style lang="scss">
 .basicInfo{
-  width: 100vw;
+  // width: 100vw;
   height: 100vh;
   .basic{
     width: 100%;

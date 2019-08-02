@@ -132,7 +132,7 @@ export default {
   display: none !important;
 }
 .publictyFigure {
-  width: 100vw;
+  // width: 100vw;
   height: 100vh;
   font-family: PingFangSC-Medium;
   font-size: 16Px;
