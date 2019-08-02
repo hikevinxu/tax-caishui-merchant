@@ -52,26 +52,23 @@ export default {
   },
   created(){
     let status = this.$route.query.status
-    if(status){
-        this.status  = status
-        api.getCertificationStatus().then(res => {
-            console.log(res)
-            if(res.code == 0){
-                if(res.data.status == 100){
-                    this.$router.push({path: '/search-h5'})
-                }else if(res.data.status == 101){
-                    this.$router.push({path: '/certification-h5'})
-                }else if(res.data.status == 102){
-                    this.status  = res.data.status
-                }else if(res.data.status == 103){
-                    this.status  = res.data.status
-                }else if(res.data.status == 999){
-                    this.status  = res.data.status
-                    this.failCause = res.data.failCause
-                }
+    api.getCertificationStatus().then(res => {
+        console.log(res)
+        if(res.code == 0){
+            if(res.data.status == 100){
+                this.$router.push({path: '/search-h5'})
+            }else if(res.data.status == 101){
+                this.$router.push({path: '/certification-h5'})
+            }else if(res.data.status == 102){
+                this.status  = res.data.status
+            }else if(res.data.status == 103){
+                this.status  = res.data.status
+            }else if(res.data.status == 999){
+                this.status  = res.data.status
+                this.failCause = res.data.failCause
             }
-        })
-    }
+        }
+    })
   },
   methods: {
     goSearch(){
