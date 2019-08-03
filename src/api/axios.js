@@ -55,17 +55,15 @@ axios.interceptors.response.use((res) => {
       case 10000:
         if (Terminal.deviceInfo().deviceType == 'pc') {
           router.push('/login')
-          info = '您登录信息已过期'
         } else {
-          router.push('/merchantHome')
+          router.push('/in')
         }
         break;
       case 10001:
         if (Terminal.deviceInfo().deviceType == 'pc') {
           router.push('/login')
-          info = '您登录信息已过期'
         } else {
-          router.push('/merchantHome')
+          router.push('/in')
         }
         break;
       case 11000:
@@ -74,7 +72,9 @@ axios.interceptors.response.use((res) => {
     if (res.data.msg) {
       info = res.data.msg
     }
-    ToastFailInfo(info)
+    if (res.data.code != 10000) {
+      ToastFailInfo(info)
+    }
     return Promise.reject(res)
   }
   return Promise.resolve(res)
