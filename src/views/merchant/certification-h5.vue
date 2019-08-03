@@ -34,7 +34,7 @@
         <div class="formItem upload">
           <label for="fileList">营业执照<span class="notNull">*</span></label>
           <div class="input">
-            <van-uploader v-model="fileList" multiple @delete="uploadDelete" :max-count="1" :after-read="upload"/>
+            <van-uploader v-model="fileList" multiple @delete="uploadDelete" :before-read="beforeRead" :max-count="1" :after-read="upload"/>
           </div>
           <div class="prompt">
             <p>请上传营业执照</p>
@@ -44,7 +44,7 @@
         <div class="formItem upload">
           <label for="fileList">法人手持身份证照片</label>
           <div class="input">
-            <van-uploader v-model="fileList1" multiple @delete="uploadDelete1" :max-count="1" :after-read="upload1"/>
+            <van-uploader v-model="fileList1" multiple @delete="uploadDelete1" :before-read="beforeRead" :max-count="1" :after-read="upload1"/>
           </div>
           <div class="prompt">
             <p>请上传手持身份证</p>
@@ -54,7 +54,7 @@
         <div class="formItem upload">
           <label for="fileList">资质证书</label>
           <div class="input">
-            <van-uploader v-model="fileList2" multiple @delete="uploadDelete2" :max-count="1" :after-read="upload2"/>
+            <van-uploader v-model="fileList2" multiple @delete="uploadDelete2" :before-read="beforeRead" :max-count="1" :after-read="upload2"/>
           </div>
           <div class="prompt">
             <p>可上传其他资质</p>
@@ -79,6 +79,7 @@
 import Vue from 'vue'
 import api from '@/api/apiH5'
 import apiPC from '@/api/api'
+import { regExp } from '@/utils/global'
 import { Field, Uploader, Toast, Button, Checkbox } from 'vant'
 import { setTimeout } from 'timers';
 Vue.use(Field).use(Uploader).use(Toast).use(Button).use(Checkbox)
@@ -134,7 +135,15 @@ export default {
         }
       })
     },
-    beforeRead() {
+    beforeRead(file) {
+      console.log(file)
+      let reg = regExp.imgNameEx
+      if (reg.test(file.name)) {
+        Toast('文件名不能包含特殊字符！')
+        return false
+      } else {
+        return true
+      }
     },
     upload(file){
       Toast.loading({

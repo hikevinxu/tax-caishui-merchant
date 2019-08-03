@@ -146,7 +146,7 @@ import Vue from 'vue'
 import api from '@/api/apiH5'
 import apiPC from '@/api/api'
 import globalApi from '@/api/globalApi'
-import { eventManager } from '@/utils/global'
+import { eventManager, regExp } from '@/utils/global'
 import areaList from '@/utils/areaList'
 import { Field, Picker, Popup, Uploader, Toast, Button, Icon, Loading, Area } from 'vant'
 Vue.use(Field).use(Picker).use(Popup).use(Uploader).use(Toast).use(Button).use(Icon).use(Loading).use(Area)
@@ -359,28 +359,34 @@ export default {
     },
     // 返回布尔值
     beforeRead(file) {
-      var reader = new FileReader()
-      reader.onload = function(evt){
-				var image = new Image();
-        image.src=evt.target.result;
-        image.onload = function(){
-          var height = image.height;
-          var width = image.width;
-          var filesize = image.fileSize;
-        }
+      let reg = regExp.imgNameEx
+      if (reg.test(file.name)) {
+        Toast('文件名不能包含特殊字符！')
+        return false
       }
-      reader.readAsDataURL(file)
-      // if (file.type !== 'image/jpeg') {
-      //   Toast('请上传 jpg 格式图片');
-      //   return false;
-      // }
       return true;
     },
     beforeReadIntro(file, detail) {
+      let reg = regExp.imgNameEx
+      console.log(file)
+      if (file instanceof Array) {
+        for(let i=0;i<file.length;i++){
+          if(reg.test(file[i].name)){
+            Toast('文件名不能包含特殊字符！')
+            return false
+          }
+        }
+      } else {
+        if (reg.test(file.name)) {
+          Toast('文件名不能包含特殊字符！')
+          return false
+        }
+      }
       this.fileLength = this.fileIntroList.length
       return true
     },
     upload(file){
+      console.log(file.file)
       Toast.loading({
         duration: 0,       // 持续展示 toast
         forbidClick: true, // 禁用背景点击
@@ -390,12 +396,14 @@ export default {
       let formData = new FormData()
       formData.append('files', file.file)
       apiPC.fileupload(formData).then(res => {
+        console.log(res)
         if (res.code == 0) {
           this.fileId =  res.data[0].fileId
           this.fileList[0].fileId = res.data[0].fileId
           Toast.clear()
         }
       }).catch(err => {
+        console.log(err)
         Toast.clear()
         Toast.fail('上传失败，请重新上传')
       })

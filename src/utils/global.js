@@ -6,6 +6,10 @@ export let config = {
   // 网易云盾的 key
   captchaId: 'ed852fa384a14b579172a3f93ba4c934'
 }
+export let regExp = {
+  // 上传图片 名字中含有非法字符
+  imgNameEx: /\*|\?|<|>|\\|\/|:|"|\|/
+}
 export let getQueryString = function (name) {
   var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i')
   var r = window.location.search.substr(1).match(reg)
