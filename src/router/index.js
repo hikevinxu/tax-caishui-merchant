@@ -17,7 +17,7 @@ export default new Router({
       redirect: '/login'
     },
     {
-      path: '/merchantHome',
+      path: '/in',
       name: 'merchantHome',
       component: () => import('../views/merchant/merchantHome-h5.vue'),
       meta: {
