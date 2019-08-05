@@ -88,6 +88,7 @@ export default {
     let inviteCode = this.$route.query.inviteCode
     if(inviteCode){
         this.inviteCode = inviteCode
+        this.title = ''
     }
     var that = this
     // initNECaptcha为全局函数，可直接调用
