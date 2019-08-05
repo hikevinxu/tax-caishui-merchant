@@ -4,6 +4,7 @@
   </div>
 </template>
 <script>
+import api from '@/api/api'
 export default {
   data(){
     return {
@@ -11,8 +12,12 @@ export default {
     }
   },
   created() {
+    this.getInfo()
   },
   methods: {
+    getInfo(){
+      api.companyInfo().then(res => {})
+    },
   }
 }
 </script>

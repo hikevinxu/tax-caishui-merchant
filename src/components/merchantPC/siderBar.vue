@@ -13,7 +13,7 @@
       </el-menu-item>
       <el-submenu index="/merchantInfo">
         <template slot="title">
-          <i class="el-icon-location"></i>
+          <i class="el-icon-s-custom"></i>
           <span>商户信息</span>
         </template>
         <el-menu-item-group>
@@ -23,15 +23,15 @@
         </el-menu-item-group>
       </el-submenu>
       <el-menu-item index="/mainBusiness" route="/mainBusiness">
-        <i class="el-icon-menu"></i>
+        <i class="el-icon-s-cooperation"></i>
         <span slot="title">主营业务管理</span>
       </el-menu-item>
       <el-menu-item index="/recordsCenter" route="/recordsCenter">
-        <i class="el-icon-setting"></i>
+        <i class="el-icon-s-data"></i>
         <span slot="title">数据中心</span>
       </el-menu-item>
       <el-menu-item class="msgUnreadItem" index="/messageCenter" route="/messageCenter">
-        <i class="el-icon-document"></i>
+        <i class="el-icon-s-comment"></i>
         <span slot="title">消息中心 <span v-if="msg && unread > 0" class="msgUnread">{{unread}}</span></span>
       </el-menu-item>
     </el-menu>

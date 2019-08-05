@@ -1,3 +1,4 @@
+// 第三方 sdk key值
 export let config = {
   // IM即时通信的 key
   IMAppKey: '7cb7efab05029f8c18576aa98a9cce96',
@@ -6,10 +7,20 @@ export let config = {
   // 网易云盾的 key
   captchaId: 'ed852fa384a14b579172a3f93ba4c934'
 }
+// 全局定时器
+export let globalTimer = {
+  // 总开关
+  onOff: true,
+  timerFunction: function(){
+    console.log(123)
+  }
+}
+// 正则表达式
 export let regExp = {
   // 上传图片 名字中含有非法字符
   imgNameEx: /\*|\?|<|>|\\|\/|:|"|\|/
 }
+// 从url获取参数
 export let getQueryString = function (name) {
   var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i')
   var r = window.location.search.substr(1).match(reg)
@@ -18,6 +29,7 @@ export let getQueryString = function (name) {
   }
   return null
 }
+// 设备类型
 export let Terminal = {
   // 辨别移动终端类型
   platform : function () {
@@ -48,7 +60,7 @@ export let Terminal = {
     }
   } 
 }
-
+// 自定义事件
 export let eventManager = {
   handlers: {},
   addEvent: function (eventName, callback) {

@@ -36,7 +36,7 @@ var SDKBridge = function(ctr, data) {
     onerror: onError.bind(this),
     onwillreconnect: onWillReconnect.bind(this),
     // 多端登录变化
-    // onloginportschange: onLoginPortsChange.bind(this),
+    onloginportschange: onLoginPortsChange.bind(this),
     // 群
     onteams: onTeams.bind(this),
     syncTeamMembers: false, //全成员先不同步了
