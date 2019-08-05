@@ -82,14 +82,14 @@
         <div class="itemRow">
           <div class="phoneRecordsTitle">电话记录（{{phoneTotal}}）</div>
           <ul>
-            <li v-for="(item, index) in phoneDataList" :key="'phoneData' + index"><span>{{item.consultUser | phoneFilter}}</span><span>发起时间 {{item.consultTime}}</span></li>
+            <li v-for="(item, index) in phoneDataList" :key="'phoneData' + index"><span>{{item.consultUser}}</span><span>发起时间 {{item.consultTime}}</span></li>
             <li class="loadMore" @click="getPhoneNextPageList"><i v-if="phoneDataList.length < phoneTotal">点击加载更多</i><i v-else>没有更多数据了</i></li>
           </ul>
         </div>
         <div class="itemRow">
           <div class="phoneRecordsTitle">IM咨询记录（{{imTotal}}）</div>
           <ul>
-            <li v-for="(item, index) in imDataList" :key="'imData' + index"><span>{{item.consultUser | phoneFilter}}</span><span>发起时间 {{item.consultTime}}</span></li>
+            <li v-for="(item, index) in imDataList" :key="'imData' + index"><span>{{item.consultUser}}</span><span>发起时间 {{item.consultTime}}</span></li>
             <li class="loadMore" @click="getImNextPageList"><i v-if="imDataList.length < imTotal">点击加载更多</i><i v-else>没有更多数据了</i></li>
           </ul>
         </div>
