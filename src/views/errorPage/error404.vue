@@ -8,22 +8,13 @@
         您要访问的页面已丢失
       </div>
     </div>
-    <div class="wscn-http404-container" v-else> 
-      <div class="wscn-http404">
-        <div class="pic-404">
-          <img class="pic-404__parent" src="@/assets/404_images/404.png" alt="404">
-          <img class="pic-404__child left" src="@/assets/404_images/404_cloud.png" alt="404">
-          <img class="pic-404__child mid" src="@/assets/404_images/404_cloud.png" alt="404">
-          <img class="pic-404__child right" src="@/assets/404_images/404_cloud.png" alt="404">
-        </div>
-        <div class="bullshit">
-          <div class="bullshit__oops">OOPS!</div>
-          <div class="bullshit__info">版权所有
-            <a class="link-type" href="https://wallstreetcn.com" target="_blank">华尔街见闻</a>
-          </div>
-          <div class="bullshit__headline">{{ message }}</div>
-          <div class="bullshit__info">请检查您输入的网址是否正确，请点击以下按钮返回主页或者发送错误报告</div>
-          <a @click="goHome" class="bullshit__return-home">返回首页</a>
+    <div class="http404-pc" v-else> 
+      <div class="http404">
+        <div class="title">估计你把网址打错了</div>
+        <div class="check">请检查你输入的网址是否正确</div>
+        <div class="warning">可点击以下按钮返回正确网址</div>
+        <div class="backBtn">
+          <el-button type="primary" @click="goHome">返回商户中心</el-button>
         </div>
       </div>
     </div>
@@ -103,194 +94,48 @@ export default {
     text-align: center;
   }
 }
-.wscn-http404-container{
-  transform: translate(-50%,-50%);
-  position: absolute;
-  top: 40%;
-  left: 50%;
-}
-.wscn-http404 {
+.http404-pc {
+  width: 100vw;
+  min-width: 1080Px;
+  height: 100vh;
+  background: url('../../assets/404_images/404_image.png') no-repeat;
+  background-size: cover;
+  background-position: center;
   position: relative;
-  width: 1200Px;
-  padding: 0 50Px;
-  overflow: hidden;
-  .pic-404 {
-    position: relative;
-    float: left;
-    width: 600Px;
-    overflow: hidden;
-    &__parent {
-      width: 100%;
-    }
-    &__child {
-      position: absolute;
-      &.left {
-        width: 80Px;
-        top: 17Px;
-        left: 220Px;
-        opacity: 0;
-        animation-name: cloudLeft;
-        animation-duration: 2s;
-        animation-timing-function: linear;
-        animation-fill-mode: forwards;
-        animation-delay: 1s;
-      }
-      &.mid {
-        width: 46Px;
-        top: 10Px;
-        left: 420Px;
-        opacity: 0;
-        animation-name: cloudMid;
-        animation-duration: 2s;
-        animation-timing-function: linear;
-        animation-fill-mode: forwards;
-        animation-delay: 1.2s;
-      }
-      &.right {
-        width: 62Px;
-        top: 100Px;
-        left: 500Px;
-        opacity: 0;
-        animation-name: cloudRight;
-        animation-duration: 2s;
-        animation-timing-function: linear;
-        animation-fill-mode: forwards;
-        animation-delay: 1s;
-      }
-      @keyframes cloudLeft {
-        0% {
-          top: 17Px;
-          left: 220Px;
-          opacity: 0;
-        }
-        20% {
-          top: 33Px;
-          left: 188Px;
-          opacity: 1;
-        }
-        80% {
-          top: 81Px;
-          left: 92Px;
-          opacity: 1;
-        }
-        100% {
-          top: 97Px;
-          left: 60Px;
-          opacity: 0;
-        }
-      }
-      @keyframes cloudMid {
-        0% {
-          top: 10Px;
-          left: 420Px;
-          opacity: 0;
-        }
-        20% {
-          top: 40Px;
-          left: 360Px;
-          opacity: 1;
-        }
-        70% {
-          top: 130Px;
-          left: 180Px;
-          opacity: 1;
-        }
-        100% {
-          top: 160Px;
-          left: 120Px;
-          opacity: 0;
-        }
-      }
-      @keyframes cloudRight {
-        0% {
-          top: 100Px;
-          left: 500Px;
-          opacity: 0;
-        }
-        20% {
-          top: 120Px;
-          left: 460Px;
-          opacity: 1;
-        }
-        80% {
-          top: 180Px;
-          left: 340Px;
-          opacity: 1;
-        }
-        100% {
-          top: 200Px;
-          left: 300Px;
-          opacity: 0;
-        }
-      }
-    }
-  }
-  .bullshit {
-    position: relative;
-    float: left;
-    width: 300Px;
-    padding: 30Px 0;
-    overflow: hidden;
-    &__oops {
-      font-size: 32Px;
-      font-weight: bold;
-      line-height: 40Px;
-      color: #1482f0;
-      opacity: 0;
-      margin-bottom: 20Px;
-      animation-name: slideUp;
-      animation-duration: 0.5s;
-      animation-fill-mode: forwards;
-    }
-    &__headline {
-      font-size: 20Px;
-      line-height: 24Px;
-      color: #222;
-      font-weight: bold;
-      opacity: 0;
-      margin-bottom: 10Px;
-      animation-name: slideUp;
-      animation-duration: 0.5s;
-      animation-delay: 0.1s;
-      animation-fill-mode: forwards;
-    }
-    &__info {
-      font-size: 13Px;
-      line-height: 21Px;
-      color: grey;
-      opacity: 0;
-      margin-bottom: 30Px;
-      animation-name: slideUp;
-      animation-duration: 0.5s;
-      animation-delay: 0.2s;
-      animation-fill-mode: forwards;
-    }
-    &__return-home {
-      display: block;
-      float: left;
-      width: 110Px;
-      height: 36Px;
-      background: #1482f0;
-      border-radius: 100Px;
-      text-align: center;
-      color: #ffffff;
-      opacity: 0;
+  .http404 {
+    position: absolute;
+    top: 300Px;
+    right: 25%;
+    font-size: 23Px;
+    font-family: PingFangSC-Medium;
+    font-weight: 500;
+    color: rgba(51,51,51,1);
+    line-height: 30Px;
+    .check {
       font-size: 14Px;
-      line-height: 36Px;
-      cursor: pointer;
-      animation-name: slideUp;
-      animation-duration: 0.5s;
-      animation-delay: 0.3s;
-      animation-fill-mode: forwards;
+      margin-top: 17Px;
+      font-family: PingFangSC-Regular;
+      font-weight:400;
+      color: rgba(153,153,153,1);
+      line-height: 30Px;
     }
-    @keyframes slideUp {
-      0% {
-        transform: translateY(60Px);
-        opacity: 0;
-      }
-      100% {
-        transform: translateY(0);
-        opacity: 1;
+    .warning{ 
+      margin-top: 60Px;
+      font-size: 11Px;
+      font-family: PingFangSC-Light;
+      font-weight: 300;
+      color: rgba(153,153,153,1);
+      line-height: 30Px;
+    }
+    .backBtn {
+      width: 113PX;
+      height: 34Px;
+      margin-top: 21PX;
+      .el-button--primary {
+        background: linear-gradient(0deg,rgba(255,109,75,1) 0%,rgba(255,147,112,1) 100%);
+        box-shadow: 4Px 4Px 15Px 1Px rgba(255,137,102,0.46);
+        border-radius: 17Px;
+        border: none;
       }
     }
   }
