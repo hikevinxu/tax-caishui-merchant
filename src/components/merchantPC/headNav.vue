@@ -96,7 +96,7 @@ export default {
   align-items: center;
   justify-content: space-between;
   .logo {
-    width: 150Px;
+    width: 240Px;
     height: 40Px;
     margin-left: 24PX;
     img {
