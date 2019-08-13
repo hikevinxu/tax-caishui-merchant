@@ -224,13 +224,9 @@ export default {
             api.merchantRegister(data).then(res => {
                 console.log(res)
                 if(res.code == 0){
-                    // this.$message({
-                    //     message: '保存成功',
-                    //     type: 'success',
-                    //     showClose: true,
-                    //     duration: 1000
-                    // })
-                    cookie.setCookie('accountPhone', this.phone)
+                    if (this.phone) {
+                      cookie.setCookie('accountPhone', this.phone)
+                    }
                     cookie.setCookie("accessToken", res.data.accessToken)
                     cookie.setCookie('companyId', res.data.authInfo.companyId)
                     cookie.setCookie('uid', res.data.authInfo.uid)
@@ -240,7 +236,8 @@ export default {
                 }
             })
             .catch(err => {
-                this.c
+                this.captchaIns && this.captchaIns.refresh()
+                this.isCode = true
             })
         }else{
             this.$message({
