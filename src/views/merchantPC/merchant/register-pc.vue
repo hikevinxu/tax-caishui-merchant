@@ -230,6 +230,7 @@ export default {
                     //     showClose: true,
                     //     duration: 1000
                     // })
+                    cookie.setCookie('accountPhone', this.phone)
                     cookie.setCookie("accessToken", res.data.accessToken)
                     cookie.setCookie('companyId', res.data.authInfo.companyId)
                     cookie.setCookie('uid', res.data.authInfo.uid)
