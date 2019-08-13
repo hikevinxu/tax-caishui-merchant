@@ -57,7 +57,7 @@
                     </div>
                     <div class="inputBox">
                         <span class="label">企业全称</span>
-                        <input type="text" v-model="name" class="phoneInput" maxlength="11" placeholder="请输入企业名称" @input="nameInput" >
+                        <input type="text" v-model="name" class="phoneInput" placeholder="请输入企业名称" @input="nameInput" >
                     </div>
                     <button @click="searchFirst" class="search" :disabled="disabled">搜索企业</button>
                 </div>
