@@ -119,7 +119,7 @@
         </div>
         <div class="submit">
           <el-button @click="cancel">取消</el-button>
-          <el-button @click="submit" type="primary">保存</el-button>
+          <el-button @click="submit" :loading="submitLoading" type="primary">保存</el-button>
         </div>
       </div>
     </div>
@@ -163,7 +163,8 @@ export default {
       servicePrice: [{
         name: '',
         price: ''
-      }]
+      }],
+      submitLoading: false
     }
   },
   created() {
@@ -177,6 +178,12 @@ export default {
   },
   methods: {
     init() {
+      const loading = this.$loading({
+        lock: true,
+        text: '正在上传图片，请稍后...',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
       let params = {
         id: this.$route.query.id
       }
@@ -232,6 +239,7 @@ export default {
                       let secondCode = cityTree[j].childs[i].code
                       cityArr.push([firstCode, secondCode])
                       cityCodes.push(secondCode)
+                      loading.close()
                     }
                   }
                 }
@@ -400,7 +408,7 @@ export default {
       this.servicePrice.splice(index, 1)
     },
     submit() {
-      console.log(this.fileIntroList)
+      this.submitLoading = true
       if(!this.serviceCode || this.serviceCode == '') {
         this.$message({
           message: '请先选择关联类目',
@@ -408,6 +416,7 @@ export default {
           showClose: true,
           duration: 1000
         })
+        this.submitLoading = false
         return
       }
       if(!this.title || this.title == '') {
@@ -417,6 +426,7 @@ export default {
           showClose: true,
           duration: 1000
         })
+        this.submitLoading = false
         return
       }
 
@@ -427,6 +437,7 @@ export default {
           showClose: true,
           duration: 1000
         })
+        this.submitLoading = false
         return
       }
 
@@ -449,15 +460,9 @@ export default {
               showClose: true,
               duration: 1000
             })
+            this.submitLoading = false
             this.$router.push('/serviceManager')
           }
-        }).catch(err => {
-          this.$message({
-            message: '修改失败',
-            type: 'error',
-            showClose: true,
-            duration: 1000
-          })
         })
       } else {
         let params = {
@@ -469,7 +474,6 @@ export default {
           title: this.title,
           items: this.servicePrice
         }
-        console.log(params)
         serviceManager.serviceAdd(params).then(res => {
           if(res.code == 0){
             this.$message({
@@ -478,15 +482,9 @@ export default {
               showClose: true,
               duration: 1000
             })
+            this.submitLoading = false
             this.$router.push('/serviceManager')
           }
-        }).catch(err => {
-          this.$message({
-            message: '保存失败',
-            type: 'error',
-            showClose: true,
-            duration: 1000
-          })
         })
       }
     },

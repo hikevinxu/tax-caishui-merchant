@@ -7,6 +7,7 @@
       </div>
       <div class="serviceManager_table">
         <el-table
+          v-loading="listLoading"
           :data="list"
           class="tableClass"
           stripe
@@ -76,6 +77,7 @@ export default {
   },
   data() {
     return {
+      listLoading: false,
       listQuery: {
         pageNum: 1,
         pageSize: 10,
@@ -90,10 +92,12 @@ export default {
   },
   methods: {
     getList() {
+      this.listLoading = true
       serviceManager.serviceList(this.listQuery).then(res => {
         if(res.code == 0){
           this.total = res.data.total
           this.list = res.data.items
+          this.listLoading = false
         }
       })
     },

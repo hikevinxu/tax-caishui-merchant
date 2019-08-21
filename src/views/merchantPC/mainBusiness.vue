@@ -341,13 +341,7 @@ export default {
           childs: [
             {
               name: '2级',
-              code: 1,
-              childs: [
-                {
-                  name: '3级',
-                  code: 1,
-                }
-              ]
+              code: 1
             },
             {
               name: '2级',
@@ -569,6 +563,14 @@ export default {
               num += this.list[i].childs.length
             }
             for (let j=0;j<this.list[i].childs.length;j++) {
+              if (!this.list[i].childs[j].childs || this.list[i].childs[j].childs.length == 0 ) {
+                this.list[i].childs[j].childs = [
+                  {
+                    name: '空',
+                    code: 2
+                  }
+                ]
+              }
               for (let k=0;k<this.list[i].childs[j].childs.length;k++) {
                 this.listData.push({
                   id: this.list[i].id,
