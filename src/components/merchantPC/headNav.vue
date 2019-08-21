@@ -16,6 +16,7 @@
       </div>
       <button @click="goRegister" v-show="title == '商户入驻'">{{ title }}</button>
       <button @click="goLogin" v-show="title == '返回登录'">{{ title }}</button>
+      <button @click="goHome" v-show="title == '返回首页'">{{ title }}</button>
     </div>
   </div>
 </template>
@@ -52,6 +53,9 @@ export default {
     },
     goReset(){
       this.$router.push('/reset')
+    },
+    goHome(){
+      this.$router.push('/home')
     },
     logoOut(){
       this.$confirm('确认退出该账号?', '提示', {}).then(() => {

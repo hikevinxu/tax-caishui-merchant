@@ -9,25 +9,37 @@
         <el-table
           v-loading="listLoading"
           :data="list"
+          :span-method="objectSpanMethod"
           border
           fit
           highlight-current-row
           style="width: 100%;">
           <el-table-column type="index" label="序号" prop="id" align="center" width="80PX">
-            
           </el-table-column>
-
-          <el-table-column label="业务类型" width="300PX" align="center">
+          
+          <el-table-column label="一级业务类型" width="320PX" align="center">
             <template slot-scope="scope">
               <span>{{ scope.row.name }}</span>
             </template>
           </el-table-column>
 
-          <el-table-column label="介绍类型" width="300PX" align="center">
+          <el-table-column label="二级业务类型" width="320PX" align="center">
+            <template slot-scope="scope">
+              <span>{{ scope.row.name }}</span>
+            </template>
+          </el-table-column>
+
+          <el-table-column label="三级业务类型" width="320PX" align="center">
+            <template slot-scope="scope">
+              <span>{{ scope.row.name }}</span>
+            </template>
+          </el-table-column>
+
+          <!-- <el-table-column label="介绍类型" width="300PX" align="center">
             <template slot-scope="scope">
               <span>{{ scope.row.introduceType | typeChange }}</span>
             </template>
-          </el-table-column>
+          </el-table-column> -->
 
           <el-table-column label="状态" width="120PX" align="center">
             <template slot-scope="scope">
@@ -37,7 +49,7 @@
 
           <el-table-column label="操作" align="center" min-width="200PX" class-name="small-padding fixed-width">
             <template slot-scope="scope">
-              <el-button style="margin-left: 12PX;" type="success" size="small" @click="handleUpdate(scope.row)">编辑</el-button>
+              <!-- <el-button style="margin-left: 12PX;" type="success" size="small" @click="handleUpdate(scope.row)">编辑</el-button> -->
               <el-button v-show="scope.row.shelf == false" style="margin-left: 12PX;" type="warning" size="small" @click="changeShelfUp(scope.row)">上架</el-button>
               <el-button v-show="scope.row.shelf == false" style="margin-left: 12PX;" type="danger" size="small" @click="serviceDelete(scope.row)">删除</el-button>
               <el-button v-show="scope.row.shelf == true" style="margin-left: 12PX;" type="danger" size="small" @click="changeShelfDown(scope.row)">下架</el-button>
@@ -80,8 +92,8 @@
                 </el-option>
               </el-select>
             </div>
-            <div class="title" style="font-size: 14PX;color: rgba(0,0,0,0.60);">业务描述</div>
-            <div class="describeContent">
+            <!-- <div class="title" style="font-size: 14PX;color: rgba(0,0,0,0.60);">业务描述</div> -->
+            <!-- <div class="describeContent">
               <div class="describe">
                 <div class="choseType">
                   <div class="chose_radio">
@@ -127,16 +139,22 @@
                   </div>  
                 </el-upload>
               </div>
-            </div>
+            </div> -->
           </div>
-          <span slot="footer" class="dialog-footer">
-            <el-button @click="dialogPvVisible = false">取消</el-button>
-            <el-button type="success" @click="create()">保存</el-button>
+          <span slot="footer" class="dialog-footer" style="display: flex;justify-content: space-between;align-items: center;">
+            <div class="newBtn">
+              <span>没有找到相关业务？</span>
+              <span id="newService" @click="goNewService">申请新业务 ></span>
+            </div>
+            <div>
+              <el-button @click="dialogPvVisible = false">取消</el-button>
+              <el-button type="success" @click="create()">保存</el-button>
+            </div>
           </span>
         </el-dialog>
 
         <!-- 编辑 -->
-        <el-dialog :visible.sync="dialogUpdate" title="编辑业务">
+        <!-- <el-dialog :visible.sync="dialogUpdate" title="编辑业务">
           <div class="choseBusiness">
             <div class="title" style="font-size: 14PX;color: rgba(0,0,0,0.60);">选择业务</div>
             <div class="selectLine">
@@ -221,26 +239,28 @@
             <el-button @click="dialogUpdate = false">取消</el-button>
             <el-button type="success" @click="upDate()">保存</el-button>
           </span>
-        </el-dialog>
+        </el-dialog> -->
       </div>
     </div>
     <div class="business" v-show="noData">
       <div class="business_title">
-        <h4>主营业务批量添加</h4>
-        <!-- <span class="addBusiness" @click="handleFetchPv">+添加新业务</span> -->
+        <h4>业务管理</h4>
+      </div>
+      <div class="business_title" style="justify-content: flex-start;margin-top: 16PX;">
+        <h4 style="font-size: 14PX;">新增业务</h4>
+        <span style="font-size: 12PX;color: rgba(0,0,0,0.38);margin-left:16PX">(最多添加3个主营业务)</span>
       </div>
       <div class="business_content_noData">
         <div class="case">
           <div class="title">
             <span>一级服务</span>
-            <span>二级服务</span>
-            <span>三级服务</span>
+            <span v-show="showTwo">二级服务</span>
+            <span v-show="showThree">三级服务</span>
           </div>
-          <el-cascader-panel v-model="casList" :props="props" :options="options" @change="casa"></el-cascader-panel>
+          <el-cascader-panel v-model="casList" :props="props" :options="options" @change="casa" @expand-change="chose"></el-cascader-panel>
         </div>
-        <span slot="footer" class="dialog-footer" style="display: flex;justify-content: flex-end;width:100%;margin-top: 16PX;">
-          <!-- <el-button @click="dialogRefuseVisible = false">返回</el-button> -->
-          <el-button style="width: 120PX;" type="primary" @click="refuse">保存</el-button>
+        <span slot="footer" class="dialog-footer" style="display: flex;justify-content: flex-start;width:100%;margin-top: 16PX;">
+          <el-button style="width: 120PX;" type="primary" @click="refuse">添加</el-button>
         </span>
       </div>
     </div>
@@ -251,6 +271,7 @@ import api from '@/api/api'
 import qs from 'qs'
 import Pagination from '@/components/Pagination'
 import { parse } from 'path';
+import { get } from 'http';
 export default {
   name: 'mainBusinesss',
   components: { Pagination },
@@ -272,7 +293,7 @@ export default {
   },
   data(){
     return {
-      noData: true,
+      noData: false,
       listQuery: {
         pageNum: 1,
         pageSize: 20,
@@ -280,7 +301,43 @@ export default {
       total: 0,
       fileId: '',
       fileIdDetail: '',
-      list: [],
+      list: [
+        {
+          name: '一级',
+          code: 1,
+          childs: [
+            {
+              name: 'er级',
+              code: 1,
+              childs: [
+                {
+                  name: 'er级',
+                  code: 1,
+                }
+              ]
+            },
+            {
+              name: 'er级',
+              code: 1,
+              childs: [
+                {
+                  name: 'er级',
+                  code: 1,
+                },
+                {
+                  name: 'er级',
+                  code: 1,
+                },
+                {
+                  name: 'er级',
+                  code: 1,
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      listData: [],
       listLoading: false,
       dialogPvVisible: false,
       dialogUpdate: false,
@@ -304,7 +361,7 @@ export default {
       hideIntroduceContent: true,
       detailTitle: '',
       createData: {
-        code: '',
+        serviceCode: '',
         introduceContent: '',
         introduceType: ''
       },
@@ -322,212 +379,43 @@ export default {
       },
       //批量上架数据
       props: {
-        multiple: true
+        multiple: true,
+        value: 'code',
+        label: 'name',
+        children: 'childs'
       },
       casList: [],
       oneList: [],
-      options: [{
-        value: 'zhinan',
-        label: '指南',
-        children: [{
-          value: 'shejiyuanze',
-          label: '设计原则',
-          children: [{
-            value: 'yizhi',
-            label: '一致'
-          }, {
-            value: 'fankui',
-            label: '反馈'
-          }, {
-            value: 'xiaolv',
-            label: '效率'
-          }, {
-            value: 'kekong',
-            label: '可控'
-          }]
-        }, {
-          value: 'daohang',
-          label: '导航',
-          children: [{
-            value: 'cexiangdaohang',
-            label: '侧向导航'
-          }, {
-            value: 'dingbudaohang',
-            label: '顶部导航'
-          }]
-        }]
-      }, {
-        value: 'zujian',
-        label: '组件',
-        children: [{
-          value: 'basic',
-          label: 'Basic',
-          children: [{
-            value: 'layout',
-            label: 'Layout 布局'
-          }, {
-            value: 'color',
-            label: 'Color 色彩'
-          }, {
-            value: 'typography',
-            label: 'Typography 字体'
-          }, {
-            value: 'icon',
-            label: 'Icon 图标'
-          }, {
-            value: 'button',
-            label: 'Button 按钮'
-          }]
-        }, {
-          value: 'form',
-          label: 'Form',
-          children: [{
-            value: 'radio',
-            label: 'Radio 单选框'
-          }, {
-            value: 'checkbox',
-            label: 'Checkbox 多选框'
-          }, {
-            value: 'input',
-            label: 'Input 输入框'
-          }, {
-            value: 'input-number',
-            label: 'InputNumber 计数器'
-          }, {
-            value: 'select',
-            label: 'Select 选择器'
-          }, {
-            value: 'cascader',
-            label: 'Cascader 级联选择器'
-          }, {
-            value: 'switch',
-            label: 'Switch 开关'
-          }, {
-            value: 'slider',
-            label: 'Slider 滑块'
-          }, {
-            value: 'time-picker',
-            label: 'TimePicker 时间选择器'
-          }, {
-            value: 'date-picker',
-            label: 'DatePicker 日期选择器'
-          }, {
-            value: 'datetime-picker',
-            label: 'DateTimePicker 日期时间选择器'
-          }, {
-            value: 'upload',
-            label: 'Upload 上传'
-          }, {
-            value: 'rate',
-            label: 'Rate 评分'
-          }, {
-            value: 'form',
-            label: 'Form 表单'
-          }]
-        }, {
-          value: 'data',
-          label: 'Data',
-          children: [{
-            value: 'table',
-            label: 'Table 表格'
-          }, {
-            value: 'tag',
-            label: 'Tag 标签'
-          }, {
-            value: 'progress',
-            label: 'Progress 进度条'
-          }, {
-            value: 'tree',
-            label: 'Tree 树形控件'
-          }, {
-            value: 'pagination',
-            label: 'Pagination 分页'
-          }, {
-            value: 'badge',
-            label: 'Badge 标记'
-          }]
-        }, {
-          value: 'notice',
-          label: 'Notice',
-          children: [{
-            value: 'alert',
-            label: 'Alert 警告'
-          }, {
-            value: 'loading',
-            label: 'Loading 加载'
-          }, {
-            value: 'message',
-            label: 'Message 消息提示'
-          }, {
-            value: 'message-box',
-            label: 'MessageBox 弹框'
-          }, {
-            value: 'notification',
-            label: 'Notification 通知'
-          }]
-        }, {
-          value: 'navigation',
-          label: 'Navigation',
-          children: [{
-            value: 'menu',
-            label: 'NavMenu 导航菜单'
-          }, {
-            value: 'tabs',
-            label: 'Tabs 标签页'
-          }, {
-            value: 'breadcrumb',
-            label: 'Breadcrumb 面包屑'
-          }, {
-            value: 'dropdown',
-            label: 'Dropdown 下拉菜单'
-          }, {
-            value: 'steps',
-            label: 'Steps 步骤条'
-          }]
-        }, {
-          value: 'others',
-          label: 'Others',
-          children: [{
-            value: 'dialog',
-            label: 'Dialog 对话框'
-          }, {
-            value: 'tooltip',
-            label: 'Tooltip 文字提示'
-          }, {
-            value: 'popover',
-            label: 'Popover 弹出框'
-          }, {
-            value: 'card',
-            label: 'Card 卡片'
-          }, {
-            value: 'carousel',
-            label: 'Carousel 走马灯'
-          }, {
-            value: 'collapse',
-            label: 'Collapse 折叠面板'
-          }]
-        }]
-      }, {
-        value: 'ziyuan',
-        label: '资源',
-        children: [{
-          value: 'axure',
-          label: 'Axure Components'
-        }, {
-          value: 'sketch',
-          label: 'Sketch Templates'
-        }, {
-          value: 'jiaohu',
-          label: '组件交互文档'
-        }]
-      }],
+      codeList: [],
+      showTwo: false,
+      showThree: false,
+      options: [],
     }
   },
   created(){
     this.getList()
     this.getTypes()
+    this.getTree()
   },
   methods: {
+    objectSpanMethod({ row, column, rowIndex, columnIndex }) {
+      if (columnIndex === 1) {
+        if(row.index % row.count === 0){
+          return {
+            rowspan: columnIndex,
+            colspan: 1
+          };
+        }else {
+          return {
+            rowspan: 0,
+            colspan: 0
+          }
+        }
+      }
+    },
+    goNewService(){
+      this.$router.push({path: '/newBusiness'})
+    },
     //上传图片
     upload (files) {
       const loading = this.$loading({
@@ -588,11 +476,38 @@ export default {
       })
     },
     getList(){
+      this.listData  = []
       api.serviceList(this.listQuery).then(res => {
         console.log(res)
         if(res.code == 0){
-          this.list = res.data.items
+          // this.list = res.data.items
           this.total = res.data.total
+          // for (let i=0;i<this.list.length;i++) {
+          //   this.list[i].index = i
+          //   for (let j=0;j<this.list[i].parentCodes.length;j++) {
+          //     this.listData.push({
+          //       id: this.list[i].id,
+          //       firstCode: this.list[i].parentCodes[0],
+          //       index: j,
+          //       sendCode: this.list[i].parentCodes[1],
+          //       serviceCode: this.list[i].code,
+          //       shelf: this.list[i].shelf
+          //     })
+          //   }
+          // }
+          if(res.data.total == 0){
+            this.noData = true
+          }else{
+            this.noData = false
+          }
+        }
+      })
+    },
+    getTree(){
+      api.serviceTree().then(res => {
+        // console.log(res)
+        if(res.code == 0){
+          this.options = res.data
         }
       })
     },
@@ -675,7 +590,7 @@ export default {
         if(this.value != '' &&  this.value1 != ''){
           if(this.showOptions3 == true){
             if(this.value2 != ''){
-              this.createData.code = this.value2
+              this.createData.serviceCode = this.value2
               this.createData.introduceContent = ''
               this.submit(this.createData)
             }else{
@@ -687,7 +602,7 @@ export default {
               })
             }
           }else{
-            this.createData.code = this.value1
+            this.createData.serviceCode = this.value1
             this.submit(this.createData)
           }
         }else{
@@ -704,7 +619,7 @@ export default {
           if(this.value != '' &&  this.fileId != '' && this.value1 != ''){
             if(this.showOptions3 == true){
               if(this.value2 != ''){
-                this.createData.code = this.value2
+                this.createData.serviceCode = this.value2
                 let introduceContent = {
                   introduceImg: this.fileId,
                   detailJump: false
@@ -720,7 +635,7 @@ export default {
                 })
               }
             }else{
-              this.createData.code = this.value1
+              this.createData.serviceCode = this.value1
               let introduceContent = {
                 introduceImg: this.fileId,
                 detailJump: false
@@ -740,7 +655,7 @@ export default {
           if(this.value != '' &&  this.fileId != '' && this.value1 != '' && this.fileIdDetail != ''){
             if(this.showOptions3 == true){
               if(this.value2 != ''){
-                this.createData.code = this.value2
+                this.createData.serviceCode = this.value2
                 let introduceContent = {
                   introduceImg: this.fileId,
                   detailJump: true,
@@ -758,7 +673,7 @@ export default {
                 })
               }
             }else{
-              this.createData.code = this.value1
+              this.createData.serviceCode = this.value1
               let introduceContent = {
                 introduceImg: this.fileId,
                 detailJump: true,
@@ -779,235 +694,235 @@ export default {
         }
       }
     },
-    upDate(){
-      if(this.radio == '1'){
-        this.createData.introduceType = 'text'
-        if(this.value3 != '' &&  this.value4 != ''){
-          if(this.showOptions4 == true){
-            if(this.value5 != ''){
-              this.createData.code = this.value5
-              this.createData.id = this.id
-              this.createData.introduceContent = ''
-              console.log(this.createData)
-              this.submitUpdate(this.createData)
-            }else{
-              this.$message({
-                message: '请填写数据后保存',
-                type: 'warning',
-                showClose: true,
-                duration: 1000
-              })
-            }
-          }else{
-            this.createData.code = this.value4
-            this.createData.id = this.id
-            console.log(this.createData)
-            this.submitUpdate(this.createData)
-          }
-        }else{
-          this.$message({
-            message: '请填写数据后保存',
-            type: 'warning',
-            showClose: true,
-            duration: 1000
-          })
-        }
-      }else if(this.radio == '2'){
-        this.createData.introduceType = 'image'
-        if(this.checked == false){
-          if(this.value3 != '' && this.value4 != ''){
-            if(this.showOptions4 == true){
-              if(this.value5 != ''){
-                this.createData.code = this.value5
-                this.createData.id = this.id
-                let introduceContent = {}
-                introduceContent.detailJump = false
-                if(this.introduceImg == ''){
-                  if(this.fileId == ''){
-                    this.$message({
-                      message: '请填写数据后保存',
-                      type: 'warning',
-                      showClose: true,
-                      duration: 1000
-                    })
-                    return
-                  }else{
-                    introduceContent.introduceImg = this.fileId
-                  }
-                }else{
-                  if(this.fileId == ''){
-                    introduceContent.introduceImg = this.introduceImg
-                  }else{
-                    introduceContent.introduceImg = this.fileId
-                  }
-                }
-                this.createData.introduceContent = JSON.stringify(introduceContent)
-                console.log(this.createData)
-                this.submitUpdate(this.createData)
-              }else{
-                this.$message({
-                  message: '请填写数据后保存',
-                  type: 'warning',
-                  showClose: true,
-                  duration: 1000
-                })
-              }
-            }else{
-              this.createData.code = this.value4
-              this.createData.id = this.id
-              let introduceContent = {}
-              introduceContent.detailJump = false
-              if(this.introduceImg == ''){
-                if(this.fileId == ''){
-                  this.$message({
-                    message: '请填写数据后保存',
-                    type: 'warning',
-                    showClose: true,
-                    duration: 1000
-                  })
-                  return
-                }else{
-                  introduceContent.introduceImg = this.fileId
-                }
-              }else{
-                if(this.fileId == ''){
-                  introduceContent.introduceImg = this.introduceImg
-                }else{
-                  introduceContent.introduceImg = this.fileId
-                }
-              }
-              console.log(introduceContent)
-              this.createData.introduceContent = JSON.stringify(introduceContent)
-              this.submitUpdate(this.createData)
-            }
-          }else{
-            this.$message({
-              message: '请填写数据后保存',
-              type: 'warning',
-              showClose: true,
-              duration: 1000
-            })
-          }
-        }else {
-          if(this.value3 != '' &&  this.value4 != ''){
-            if(this.showOptions4 == true){
-              if(this.value5 != ''){
-                this.createData.code = this.value5
-                this.createData.id = this.id
-                let introduceContent = {}
-                introduceContent.detailJump = true
-                if(this.introduceImg == ''){
-                  if(this.fileId == ''){
-                    this.$message({
-                      message: '请填写数据后保存',
-                      type: 'warning',
-                      showClose: true,
-                      duration: 1000
-                    })
-                    return
-                  }else{
-                    introduceContent.introduceImg = this.fileId
-                  }
-                }else{
-                  if(this.fileId == ''){
-                    introduceContent.introduceImg = this.introduceImg
-                  }else{
-                    introduceContent.introduceImg = this.fileId
-                  }
-                }
-                //编辑判断图片是否自带
-                if(this.detailImg == ''){
-                  if(this.fileIdDetail == ''){
-                    this.$message({
-                      message: '请填写数据后保存',
-                      type: 'warning',
-                      showClose: true,
-                      duration: 1000
-                    })
-                    return
-                  }else{
-                    introduceContent.detailImg = this.fileIdDetail
-                  }
-                }else{
-                  if(this.fileIdDetail == ''){
-                    introduceContent.detailImg = this.detailImg
-                  }else{
-                    introduceContent.detailImg = this.fileIdDetail
-                  }
-                }
-                introduceContent.detailTitle = this.detailTitle
-                console.log(introduceContent)
-                this.createData.introduceContent = JSON.stringify(introduceContent)
-                this.submitUpdate(this.createData)
-              }else{
-                this.$message({
-                  message: '请填写数据后保存',
-                  type: 'warning',
-                  showClose: true,
-                  duration: 1000
-                })
-              }
-            }else{
-              this.createData.code = this.value4
-              this.createData.id = this.id
-              let introduceContent = {}
-              introduceContent.detailJump = true
-              //编辑判断图片是否自带
-              if(this.introduceImg == ''){
-                if(this.fileId == ''){
-                  this.$message({
-                    message: '请填写数据后保存',
-                    type: 'warning',
-                    showClose: true,
-                    duration: 1000
-                  })
-                  return
-                }else{
-                  introduceContent.introduceImg = this.fileId
-                }
-              }else{
-                if(this.fileId == ''){
-                  introduceContent.introduceImg = this.introduceImg
-                }else{
-                  introduceContent.introduceImg = this.fileId
-                }
-              }
-              //编辑判断图片是否自带
-              if(this.detailImg == ''){
-                if(this.fileIdDetail == ''){
-                  this.$message({
-                    message: '请填写数据后保存',
-                    type: 'warning',
-                    showClose: true,
-                    duration: 1000
-                  })
-                  return
-                }else{
-                  introduceContent.detailImg = this.fileIdDetail
-                }
-              }else{
-                if(this.fileIdDetail == ''){
-                  introduceContent.detailImg = this.detailImg
-                }else{
-                  introduceContent.detailImg = this.fileIdDetail
-                }
-              }
-              introduceContent.detailTitle = this.detailTitle
-              console.log(introduceContent)
-              this.createData.introduceContent = JSON.stringify(introduceContent)
-              this.submitUpdate(this.createData)
-            }
-          }else{
-            this.$message({
-              message: '请填写数据后保存',
-              type: 'warning',
-              showClose: true,
-              duration: 1000
-            })
-          }
-        }
-      }
-    },
+    // upDate(){
+    //   if(this.radio == '1'){
+    //     this.createData.introduceType = 'text'
+    //     if(this.value3 != '' &&  this.value4 != ''){
+    //       if(this.showOptions4 == true){
+    //         if(this.value5 != ''){
+    //           this.createData.code = this.value5
+    //           this.createData.id = this.id
+    //           this.createData.introduceContent = ''
+    //           console.log(this.createData)
+    //           this.submitUpdate(this.createData)
+    //         }else{
+    //           this.$message({
+    //             message: '请填写数据后保存',
+    //             type: 'warning',
+    //             showClose: true,
+    //             duration: 1000
+    //           })
+    //         }
+    //       }else{
+    //         this.createData.code = this.value4
+    //         this.createData.id = this.id
+    //         console.log(this.createData)
+    //         this.submitUpdate(this.createData)
+    //       }
+    //     }else{
+    //       this.$message({
+    //         message: '请填写数据后保存',
+    //         type: 'warning',
+    //         showClose: true,
+    //         duration: 1000
+    //       })
+    //     }
+    //   }else if(this.radio == '2'){
+    //     this.createData.introduceType = 'image'
+    //     if(this.checked == false){
+    //       if(this.value3 != '' && this.value4 != ''){
+    //         if(this.showOptions4 == true){
+    //           if(this.value5 != ''){
+    //             this.createData.code = this.value5
+    //             this.createData.id = this.id
+    //             let introduceContent = {}
+    //             introduceContent.detailJump = false
+    //             if(this.introduceImg == ''){
+    //               if(this.fileId == ''){
+    //                 this.$message({
+    //                   message: '请填写数据后保存',
+    //                   type: 'warning',
+    //                   showClose: true,
+    //                   duration: 1000
+    //                 })
+    //                 return
+    //               }else{
+    //                 introduceContent.introduceImg = this.fileId
+    //               }
+    //             }else{
+    //               if(this.fileId == ''){
+    //                 introduceContent.introduceImg = this.introduceImg
+    //               }else{
+    //                 introduceContent.introduceImg = this.fileId
+    //               }
+    //             }
+    //             this.createData.introduceContent = JSON.stringify(introduceContent)
+    //             console.log(this.createData)
+    //             this.submitUpdate(this.createData)
+    //           }else{
+    //             this.$message({
+    //               message: '请填写数据后保存',
+    //               type: 'warning',
+    //               showClose: true,
+    //               duration: 1000
+    //             })
+    //           }
+    //         }else{
+    //           this.createData.code = this.value4
+    //           this.createData.id = this.id
+    //           let introduceContent = {}
+    //           introduceContent.detailJump = false
+    //           if(this.introduceImg == ''){
+    //             if(this.fileId == ''){
+    //               this.$message({
+    //                 message: '请填写数据后保存',
+    //                 type: 'warning',
+    //                 showClose: true,
+    //                 duration: 1000
+    //               })
+    //               return
+    //             }else{
+    //               introduceContent.introduceImg = this.fileId
+    //             }
+    //           }else{
+    //             if(this.fileId == ''){
+    //               introduceContent.introduceImg = this.introduceImg
+    //             }else{
+    //               introduceContent.introduceImg = this.fileId
+    //             }
+    //           }
+    //           console.log(introduceContent)
+    //           this.createData.introduceContent = JSON.stringify(introduceContent)
+    //           this.submitUpdate(this.createData)
+    //         }
+    //       }else{
+    //         this.$message({
+    //           message: '请填写数据后保存',
+    //           type: 'warning',
+    //           showClose: true,
+    //           duration: 1000
+    //         })
+    //       }
+    //     }else {
+    //       if(this.value3 != '' &&  this.value4 != ''){
+    //         if(this.showOptions4 == true){
+    //           if(this.value5 != ''){
+    //             this.createData.code = this.value5
+    //             this.createData.id = this.id
+    //             let introduceContent = {}
+    //             introduceContent.detailJump = true
+    //             if(this.introduceImg == ''){
+    //               if(this.fileId == ''){
+    //                 this.$message({
+    //                   message: '请填写数据后保存',
+    //                   type: 'warning',
+    //                   showClose: true,
+    //                   duration: 1000
+    //                 })
+    //                 return
+    //               }else{
+    //                 introduceContent.introduceImg = this.fileId
+    //               }
+    //             }else{
+    //               if(this.fileId == ''){
+    //                 introduceContent.introduceImg = this.introduceImg
+    //               }else{
+    //                 introduceContent.introduceImg = this.fileId
+    //               }
+    //             }
+    //             //编辑判断图片是否自带
+    //             if(this.detailImg == ''){
+    //               if(this.fileIdDetail == ''){
+    //                 this.$message({
+    //                   message: '请填写数据后保存',
+    //                   type: 'warning',
+    //                   showClose: true,
+    //                   duration: 1000
+    //                 })
+    //                 return
+    //               }else{
+    //                 introduceContent.detailImg = this.fileIdDetail
+    //               }
+    //             }else{
+    //               if(this.fileIdDetail == ''){
+    //                 introduceContent.detailImg = this.detailImg
+    //               }else{
+    //                 introduceContent.detailImg = this.fileIdDetail
+    //               }
+    //             }
+    //             introduceContent.detailTitle = this.detailTitle
+    //             console.log(introduceContent)
+    //             this.createData.introduceContent = JSON.stringify(introduceContent)
+    //             this.submitUpdate(this.createData)
+    //           }else{
+    //             this.$message({
+    //               message: '请填写数据后保存',
+    //               type: 'warning',
+    //               showClose: true,
+    //               duration: 1000
+    //             })
+    //           }
+    //         }else{
+    //           this.createData.code = this.value4
+    //           this.createData.id = this.id
+    //           let introduceContent = {}
+    //           introduceContent.detailJump = true
+    //           //编辑判断图片是否自带
+    //           if(this.introduceImg == ''){
+    //             if(this.fileId == ''){
+    //               this.$message({
+    //                 message: '请填写数据后保存',
+    //                 type: 'warning',
+    //                 showClose: true,
+    //                 duration: 1000
+    //               })
+    //               return
+    //             }else{
+    //               introduceContent.introduceImg = this.fileId
+    //             }
+    //           }else{
+    //             if(this.fileId == ''){
+    //               introduceContent.introduceImg = this.introduceImg
+    //             }else{
+    //               introduceContent.introduceImg = this.fileId
+    //             }
+    //           }
+    //           //编辑判断图片是否自带
+    //           if(this.detailImg == ''){
+    //             if(this.fileIdDetail == ''){
+    //               this.$message({
+    //                 message: '请填写数据后保存',
+    //                 type: 'warning',
+    //                 showClose: true,
+    //                 duration: 1000
+    //               })
+    //               return
+    //             }else{
+    //               introduceContent.detailImg = this.fileIdDetail
+    //             }
+    //           }else{
+    //             if(this.fileIdDetail == ''){
+    //               introduceContent.detailImg = this.detailImg
+    //             }else{
+    //               introduceContent.detailImg = this.fileIdDetail
+    //             }
+    //           }
+    //           introduceContent.detailTitle = this.detailTitle
+    //           console.log(introduceContent)
+    //           this.createData.introduceContent = JSON.stringify(introduceContent)
+    //           this.submitUpdate(this.createData)
+    //         }
+    //       }else{
+    //         this.$message({
+    //           message: '请填写数据后保存',
+    //           type: 'warning',
+    //           showClose: true,
+    //           duration: 1000
+    //         })
+    //       }
+    //     }
+    //   }
+    // },
     submit(data){
       api.serviceSave(data).then(res =>{
         console.log(res)
@@ -1032,30 +947,30 @@ export default {
         }
       })
     },
-    submitUpdate(data){
-      api.serviceUpdate(data).then(res =>{
-        console.log(res)
-        if(res.code == 0){
-          this.$message({
-            message: '保存成功',
-            type: 'success',
-            showClose: true,
-            duration: 1000
-          })
-          this.getList()
-          this.dialogUpdate = false
-        }else{
-          this.$message({
-            message: '保存失败',
-            type: 'error',
-            showClose: true,
-            duration: 1000
-          })
-          this.getList()
-          this.dialogUpdate = false
-        }
-      })
-    },
+    // submitUpdate(data){
+    //   api.serviceUpdate(data).then(res =>{
+    //     console.log(res)
+    //     if(res.code == 0){
+    //       this.$message({
+    //         message: '保存成功',
+    //         type: 'success',
+    //         showClose: true,
+    //         duration: 1000
+    //       })
+    //       this.getList()
+    //       this.dialogUpdate = false
+    //     }else{
+    //       this.$message({
+    //         message: '保存失败',
+    //         type: 'error',
+    //         showClose: true,
+    //         duration: 1000
+    //       })
+    //       this.getList()
+    //       this.dialogUpdate = false
+    //     }
+    //   })
+    // },
     //调起添加页面
     handleFetchPv(){
       this.dialogPvVisible = true
@@ -1239,16 +1154,19 @@ export default {
       // console.log(e)
       console.log(e)
       let oneList = []
+      let codeList = []
       for (let i = 0; i < this.casList.length; i++) {
+        codeList.push(this.casList[i][this.casList[i].length -1])
+        this.codeList = codeList
+        console.log(this.codeList)
         if(oneList.indexOf(this.casList[i][0]) == -1){
           oneList.push(this.casList[i][0])
           this.oneList = oneList
-          console.log(this.oneList)
         }
       }
       if(this.oneList.length > 3){
         this.$message({
-          message: '最多三个',
+          message: '一级服务最多添加三个',
           type: 'error',
           showClose: true,
           duration: 1000
@@ -1256,7 +1174,41 @@ export default {
         return
       }
     },
-    refuse(){}
+    chose(e){
+      if(e.length == 1){
+        this.showTwo = true
+        this.showThree = false
+      }else if(e.length == 2){
+        this.showThree = true
+      }
+    },
+    refuse(){
+      if(this.oneList.length > 3){
+        this.$message({
+          message: '一级服务最多添加三个',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        return
+      }
+      let data = {
+        codeList: this.codeList
+      }
+      api.serviceBulkAdd(this.codeList).then(res => {
+        console.log(res)
+        if(res.code == 0){
+          this.$message({
+            message: '添加成功',
+            type: 'success',
+            showClose: true,
+            duration: 1000
+          })
+          this.getList()
+          this.casList = []
+        }
+      })
+    }
   }
 }
 </script>
@@ -1432,6 +1384,26 @@ export default {
           }
         }  
       }
+      .newBtn{
+        display: flex;
+        align-items: center;
+        font-family: PingFangSC-Regular;
+        font-size: 12PX;
+        color: rgba(0,0,0,0.60);
+        #newService{
+          background: #FF7F4A;
+          border-radius: 14PX;
+          width: 98PX;
+          text-align: center;
+          font-family: PingFangSC-Regular;
+          font-size: 12PX;
+          color: #FFFFFF;
+          height: 24PX;
+          line-height: 24PX;
+          cursor: pointer;
+          margin-left: 8PX;
+        }
+      }
     }
     .business_content_noData{
       width: 93.84%;
@@ -1451,10 +1423,12 @@ export default {
           display: flex;
           align-items: center;
           width: 100%;
-          justify-content: space-between;
+          justify-content: flex-start;
           span{
             display: block;
-            width: 33.33%;
+            width: 29.4%;
+            // max-width: 298PX;
+            margin-right: 40PX;
             height: 40PX;
             line-height: 40PX;
             text-align: center;
@@ -1466,12 +1440,25 @@ export default {
         .el-cascader-panel.is-bordered{
           width: 100%;
           display: flex;
-          // justify-content: space-between;
+          justify-content: flex-start;
           .el-cascader-menu{
-            width: 33.33%;
+            width: 29.4%;
+            // max-width: 298PX;
+            margin-right: 40PX;
           }
           .el-cascader-menu__wrap{
             height: 400PX;
+            border-bottom: solid 1PX #E4E7ED;
+            border-left: solid 1PX #E4E7ED;
+          }
+        }
+        .el-cascader-panel.is-bordered{
+          border: none;
+          .el-cascader-menu__list{
+            width: 100%;
+          }
+          .el-cascader-menu:last-child{
+            border-right: solid 1PX #E4E7ED;
           }
         }
       }

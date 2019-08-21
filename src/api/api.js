@@ -83,7 +83,7 @@ export default {
    * @type 'POST'
    */
   serviceList (data) {
-    return fetchPost('/service/list', data)
+    return fetchPost('/service_item/list', data)
   },
   /**
    * 服务类型数据
@@ -91,7 +91,7 @@ export default {
    * @type 'GET'
    */
   serviceType (data) {
-    return fetchGet('/service/service_types', data)
+    return fetchGet('/service_item/service_types', data)
   },
   /**
    * 服务保存
@@ -99,7 +99,7 @@ export default {
    * @type 'POST'
    */
   serviceSave (data) {
-    return fetchPost('/service/add', data)
+    return fetchPost('/service_item/add', data)
   },
   /**
    * 服务编辑
@@ -107,7 +107,7 @@ export default {
    * @type 'POST'
    */
   serviceUpdate (data) {
-    return fetchPost('/service/update', data)
+    return fetchPost('/service_item/update', data)
   },
   /**
    * 服务上下架
@@ -115,7 +115,7 @@ export default {
    * @type 'POST'
    */
   serviceChangeShelf (data) {
-    return fetchPost('/service/change_shelf', data)
+    return fetchPost('/service_item/change_shelf', data)
   },
   /**
    * 服务删除
@@ -123,6 +123,30 @@ export default {
    * @type 'POST'
    */
   serviceDelete (data) {
-    return fetchPost('/service/delete', data)
-  }
+    return fetchPost('/service_item/delete', data)
+  },
+  /**
+   * 服务删除
+   * @function refreshToken
+   * @type 'POST'
+   */
+  newBusinessSave (data) {
+    return fetchPost('/apply/business/save', data)
+  },
+  /**
+   * 全服务类目
+   * @function refreshToken
+   * @type 'POST'
+   */
+  serviceTree () {
+    return fetchGet('/serviceType/trees')
+  },
+  /**
+   * 批量添加业务
+   * @function refreshToken
+   * @type 'POST'
+   */
+  serviceBulkAdd (data) {
+    return fetchPost('/service_item/bulk_add',data)
+  },
 }
