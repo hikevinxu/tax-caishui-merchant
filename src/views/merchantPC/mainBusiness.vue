@@ -8,7 +8,7 @@
       <div class="business_content">
         <el-table
           v-loading="listLoading"
-          :data="list"
+          :data="listData"
           :span-method="objectSpanMethod"
           border
           fit
@@ -19,19 +19,19 @@
           
           <el-table-column label="一级业务类型" width="320PX" align="center">
             <template slot-scope="scope">
-              <span>{{ scope.row.name }}</span>
+              <span>{{ scope.row.firstName }}</span>
             </template>
           </el-table-column>
 
           <el-table-column label="二级业务类型" width="320PX" align="center">
             <template slot-scope="scope">
-              <span>{{ scope.row.name }}</span>
+              <span>{{ scope.row.secondName }}</span>
             </template>
           </el-table-column>
 
           <el-table-column label="三级业务类型" width="320PX" align="center">
             <template slot-scope="scope">
-              <span>{{ scope.row.name }}</span>
+              <span>{{ scope.row.thirdName }}</span>
             </template>
           </el-table-column>
 
@@ -41,20 +41,19 @@
             </template>
           </el-table-column> -->
 
-          <el-table-column label="状态" width="120PX" align="center">
+          <!-- <el-table-column label="状态" width="120PX" align="center">
             <template slot-scope="scope">
               <span>{{ scope.row.shelf | statusChange}}</span>
             </template>
-          </el-table-column>
+          </el-table-column> -->
 
-          <el-table-column label="操作" align="center" min-width="200PX" class-name="small-padding fixed-width">
+          <!-- <el-table-column label="操作" align="center" min-width="200PX" class-name="small-padding fixed-width">
             <template slot-scope="scope">
-              <!-- <el-button style="margin-left: 12PX;" type="success" size="small" @click="handleUpdate(scope.row)">编辑</el-button> -->
               <el-button v-show="scope.row.shelf == false" style="margin-left: 12PX;" type="warning" size="small" @click="changeShelfUp(scope.row)">上架</el-button>
               <el-button v-show="scope.row.shelf == false" style="margin-left: 12PX;" type="danger" size="small" @click="serviceDelete(scope.row)">删除</el-button>
               <el-button v-show="scope.row.shelf == true" style="margin-left: 12PX;" type="danger" size="small" @click="changeShelfDown(scope.row)">下架</el-button>
             </template>
-          </el-table-column>
+          </el-table-column> -->
 
         </el-table>
         <pagination :total="total" :page.sync="listQuery.pageNum" :limit.sync="listQuery.pageSize" @pagination="getList" />
@@ -270,8 +269,8 @@
 import api from '@/api/api'
 import qs from 'qs'
 import Pagination from '@/components/Pagination'
-import { parse } from 'path';
-import { get } from 'http';
+import { parse } from 'path'
+import { get } from 'http'
 export default {
   name: 'mainBusinesss',
   components: { Pagination },
@@ -307,29 +306,99 @@ export default {
           code: 1,
           childs: [
             {
-              name: 'er级',
+              name: '2级',
               code: 1,
               childs: [
                 {
-                  name: 'er级',
+                  name: '3级',
                   code: 1,
                 }
               ]
             },
             {
-              name: 'er级',
+              name: '2级',
               code: 1,
               childs: [
                 {
-                  name: 'er级',
+                  name: '3级',
                   code: 1,
                 },
                 {
-                  name: 'er级',
+                  name: '3级',
                   code: 1,
                 },
                 {
-                  name: 'er级',
+                  name: '3级',
+                  code: 1,
+                }
+              ]
+            }
+          ]
+        },
+        {
+          name: '一级',
+          code: 1,
+          childs: [
+            {
+              name: '2级',
+              code: 1,
+              childs: [
+                {
+                  name: '3级',
+                  code: 1,
+                }
+              ]
+            },
+            {
+              name: '2级',
+              code: 1,
+              childs: [
+                {
+                  name: '3级',
+                  code: 1,
+                },
+                {
+                  name: '3级',
+                  code: 1,
+                },
+                {
+                  name: '3级',
+                  code: 1,
+                }
+              ]
+            },
+            {
+              name: '2级',
+              code: 1,
+              childs: [
+                {
+                  name: '3级',
+                  code: 1,
+                },
+                {
+                  name: '3级',
+                  code: 1,
+                },
+                {
+                  name: '3级',
+                  code: 1,
+                }
+              ]
+            },
+            {
+              name: '2级',
+              code: 1,
+              childs: [
+                {
+                  name: '3级',
+                  code: 1,
+                },
+                {
+                  name: '3级',
+                  code: 1,
+                },
+                {
+                  name: '3级',
                   code: 1,
                 }
               ]
@@ -402,7 +471,19 @@ export default {
       if (columnIndex === 1) {
         if(row.index % row.count === 0){
           return {
-            rowspan: columnIndex,
+            rowspan: row.count,
+            colspan: 1
+          };
+        }else {
+          return {
+            rowspan: 0,
+            colspan: 0
+          }
+        }
+      } else if(columnIndex === 2){
+        if(row.childIndex % row.childCount === 0){
+          return {
+            rowspan: row.childCount,
             colspan: 1
           };
         }else {
@@ -482,19 +563,27 @@ export default {
         if(res.code == 0){
           // this.list = res.data.items
           this.total = res.data.total
-          // for (let i=0;i<this.list.length;i++) {
-          //   this.list[i].index = i
-          //   for (let j=0;j<this.list[i].parentCodes.length;j++) {
-          //     this.listData.push({
-          //       id: this.list[i].id,
-          //       firstCode: this.list[i].parentCodes[0],
-          //       index: j,
-          //       sendCode: this.list[i].parentCodes[1],
-          //       serviceCode: this.list[i].code,
-          //       shelf: this.list[i].shelf
-          //     })
-          //   }
-          // }
+          for (let i=0;i<this.list.length;i++) {
+            let num = 0
+            for(let a=0; a<this.list[i].childs.length; a++){
+              num += this.list[i].childs.length
+            }
+            for (let j=0;j<this.list[i].childs.length;j++) {
+              for (let k=0;k<this.list[i].childs[j].childs.length;k++) {
+                this.listData.push({
+                  id: this.list[i].id,
+                  firstName: this.list[i].name,
+                  index: j,
+                  count: num,
+                  childIndex: k,
+                  childCount: this.list[i].childs[j].childs.length,
+                  secondName: this.list[i].childs[j].name,
+                  thirdName: this.list[i].childs[j].childs[k].name
+                })
+              }
+            }
+          }
+          console.log(this.listData)
           if(res.data.total == 0){
             this.noData = true
           }else{
