@@ -51,7 +51,7 @@
             </div>
           </div>
           <div class="formItem upload">
-            <label for="fileList">机构Logo<span class="notNull">*</span></label>
+            <label for="fileList">机构Logo</label>
             <div class="input">
               <van-uploader v-model="fileList" multiple :max-count="1" @delete="deleteUpload" :before-read="beforeRead" 
               :after-read='upload'/>
@@ -488,11 +488,6 @@ export default {
 
       if(this.typeValue == ''){
         Toast.fail('机构类型不能为空')
-        return
-      }
-
-      if(this.fileList.length == 0 || this.fileList[0].fileId == ''){
-        Toast.fail('机构LOGO不能为空')
         return
       }
 
