@@ -126,6 +126,23 @@ export default new Router({
           }
         },
         {
+          path: '/serviceManager',
+          name: 'serviceManager',
+          component: () => import('../views/merchantPC/serviceManager.vue'),
+          meta: {
+            title: '服务管理'
+          }
+        },
+        {
+          path: '/serviceEdit',
+          name: 'serviceEdit',
+          component: () => import('../views/merchantPC/serviceEdit.vue'),
+          meta: {
+            title: '添加服务管理',
+            path: '/serviceManager'
+          }
+        },
+        {
           path: '/recordsCenter',
           name: 'recordsCenter',
           component: () => import('../views/merchantPC/recordsCenter.vue'),

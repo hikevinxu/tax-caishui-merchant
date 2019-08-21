@@ -37,6 +37,14 @@ export default {
     return fetchGet('/address/trees', params)
   },
   /**
+   * 获取所有省市列表
+   * @function getAddressCityTrees
+   * @type 'Get'
+   */
+  getAddressCityTrees (params) {
+    return fetchGet('/address/city_trees', params)
+  },
+  /**
    * 提问-获取问题分类
    * @function getFileuploadUpload
    * @type 'POST'

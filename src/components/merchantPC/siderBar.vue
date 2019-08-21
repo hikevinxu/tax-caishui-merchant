@@ -8,12 +8,13 @@
       @close="handleClose"
       @select="activeMenuSelect">
       <el-menu-item index="/home" route="/home">
-        <i class="el-icon-menu"></i>
+        <span v-if="activeMenu == '/home'" class="icon"><img src="@/assets/globalPc/ic_b_main_w.png" alt=""></span>
+        <span v-else class="icon"><img src="@/assets/globalPc/ic_b_main.png" alt=""></span>
         <span slot="title">商户主页</span>
       </el-menu-item>
       <el-submenu index="/merchantInfo">
         <template slot="title">
-          <i class="el-icon-s-custom"></i>
+          <span class="icon"><img src="@/assets/globalPc/ic_b_info.png" alt=""></span>
           <span>商户信息</span>
         </template>
         <el-menu-item-group>
@@ -23,15 +24,23 @@
         </el-menu-item-group>
       </el-submenu>
       <el-menu-item index="/mainBusiness" route="/mainBusiness">
-        <i class="el-icon-s-cooperation"></i>
+        <span v-if="activeMenu == '/mainBusiness'" class="icon"><img src="@/assets/globalPc/ic_b_business_w.png" alt=""></span>
+        <span v-else class="icon"><img src="@/assets/globalPc/ic_b_business.png" alt=""></span>
         <span slot="title">主营业务管理</span>
       </el-menu-item>
+      <el-menu-item index="/serviceManager" route="/serviceManager">
+        <span v-if="activeMenu == '/serviceManager'" class="icon"><img src="@/assets/globalPc/ic_b_service_w.png" alt=""></span>
+        <span v-else class="icon"><img src="@/assets/globalPc/ic_b_service.png" alt=""></span>
+        <span slot="title">服务管理</span>
+      </el-menu-item>
       <el-menu-item index="/recordsCenter" route="/recordsCenter">
-        <i class="el-icon-s-data"></i>
+        <span v-if="activeMenu == '/recordsCenter'" class="icon"><img src="@/assets/globalPc/ic_b_data_w.png" alt=""></span>
+        <span v-else class="icon"><img src="@/assets/globalPc/ic_b_data.png" alt=""></span>
         <span slot="title">数据中心</span>
       </el-menu-item>
       <el-menu-item class="msgUnreadItem" index="/messageCenter" route="/messageCenter">
-        <i class="el-icon-s-comment"></i>
+        <span v-if="activeMenu == '/messageCenter'" class="icon"><img src="@/assets/globalPc/ic_b_message_w.png" alt=""></span>
+        <span v-else class="icon"><img src="@/assets/globalPc/ic_b_message.png" alt=""></span>
         <span slot="title">消息中心 <span v-if="msg && unread > 0" class="msgUnread">{{unread}}</span></span>
       </el-menu-item>
     </el-menu>
@@ -52,14 +61,15 @@ export default {
     }
   },
   created () {
-    this.activeMenu = this.$route.path
+    console.log(this.$route)
+    this.activeMenu = this.$route.meta.path ? this.$route.meta.path : this.$route.path
     router.beforeEach((to,from,next) => {
-      this.activeMenu = to.path ? to.path : this.$route.path
+      this.activeMenu = to.meta.path ? to.meta.path : to.path
       next()
     })
     let that = this
     window.addEventListener("popstate", function() {
-      that.activeMenu = that.$route.path
+      that.activeMenu = that.$route.meta.path ? that.$route.meta.path : that.$route.path
     }, false)
     this.initIM()
   },
@@ -157,6 +167,17 @@ export default {
     }
     .el-menu-item-group .el-menu-item {
       padding-left: 56Px!important;
+    }
+    .icon {
+      display: inline-block;
+      width: 18Px;
+      height: 18Px;
+      margin-right: 16Px;
+      img {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
     }
   }
   .el-submenu__title,
