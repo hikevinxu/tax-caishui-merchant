@@ -44,7 +44,7 @@
                     </div>
                   </div>
                   <div class="formItem uploadImg">
-                    <label for="name">机构Logo<span>*</span></label>
+                    <label for="name">机构Logo</label>
                     <div class="input">
                       <div class="input">
                         <div class="imgList fl">
@@ -612,15 +612,6 @@ export default {
           duration: 1000
         })
         return
-      }
-      if (this.fileId == '') {
-        this.$message({
-          message: '机构LOGO不能为空',
-          type: 'error',
-          showClose: true,
-          duration: 1000
-        })
-        return 
       }
       if (!this.provinceCode || this.provinceCode == '' || !this.cityCode || this.cityCode == '' || !this.areaCode || this.areaCode == '') {
         this.$message({
