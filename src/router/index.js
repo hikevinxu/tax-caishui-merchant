@@ -208,6 +208,14 @@ export default new Router({
       }
     },
     {
+      path: '/newBusiness',
+      name: 'newBusiness',
+      component: () => import('../views/merchantPC/newBusiness.vue'),
+      meta: {
+        title: '新业务申请'
+      }
+    },
+    {
       path: '/netError',
       name: 'netError',
       component: () => import('../views/errorPage/netError.vue'),

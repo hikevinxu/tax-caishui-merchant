@@ -56,6 +56,16 @@ input::-moz-placeholder{
 input:-ms-input-placeholder{ 
   color: rgba(0,0,0,0.26);   
 }
+
+textarea::-webkit-input-placeholder{
+  color: rgba(0,0,0,0.26);
+}
+textarea::-moz-placeholder{
+  color: rgba(0,0,0,0.26);      
+}
+textarea:-ms-input-placeholder{ 
+  color: rgba(0,0,0,0.26);   
+}
 .el-message-box .el-button .el-button--primary {
   background-color: #FF7F4A;
   border-color: #FF7F4A;
