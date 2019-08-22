@@ -41,7 +41,7 @@
           </el-table-column>
           <el-table-column fixed="right" label="操作" width="200" align="center">
             <template slot-scope="scope">
-              <el-button style="color: #5AB3A4;" v-if="scope.row.status == 2" @click="serviceShelfUp(scope.row)" type="text" size="small">上架</el-button>
+              <el-button style="color: #FF7F4A;" v-if="scope.row.status == 2" @click="serviceShelfUp(scope.row)" type="text" size="small">上架</el-button>
               <el-button style="color: #5AB3A4;" v-if="scope.row.status == 1" @click="serviceShelfDown(scope.row)" type="text" size="small">下架</el-button>
               <el-button style="color: #5AB3A4;" type="text" size="small" @click="editService(scope.row)">编辑</el-button>
             </template>
