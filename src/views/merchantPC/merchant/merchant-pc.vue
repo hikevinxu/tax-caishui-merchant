@@ -632,6 +632,16 @@ export default {
         })
         return 
       }
+      
+      if(this.center[0] == 116.397477 && this.center[1] == 39.908692) {
+        this.$message({
+          message: '请先选择地图定位',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        return
+      } 
 
       if(this.address == ''){
         this.$message({
