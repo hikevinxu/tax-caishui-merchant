@@ -9,7 +9,7 @@
           <div class="formItem">
             <label for="firstServiceCode">关联业务</label>
             <div class="input" style="overflow: hidden;">
-              <el-select style="width: 213Px; float: left;" v-model="firstServiceCode" @change="firstServiceCodeChange" placeholder="请选择关联业务">
+              <el-select style="width: 213Px; float: left;" v-model="firstServiceCode" :disabled="editMark" @change="firstServiceCodeChange" placeholder="请选择关联业务">
                 <el-option
                   v-for="item in firstServiceCodeList"
                   :key="item.code"
@@ -17,7 +17,7 @@
                   :value="item.code">
                 </el-option>
               </el-select>
-              <el-select v-if="secondServiceCodeList.length > 0" style="width: 213Px; float: left; margin-left: 30Px;" v-model="secondServiceCode" @change="secondServiceCodeChange" placeholder="请选择关联业务">
+              <el-select v-if="secondServiceCodeList.length > 0" style="width: 213Px; float: left; margin-left: 30Px;" :disabled="editMark" v-model="secondServiceCode" @change="secondServiceCodeChange" placeholder="请选择关联业务">
                 <el-option
                   v-for="item in secondServiceCodeList"
                   :key="item.code"
@@ -25,7 +25,7 @@
                   :value="item.code">
                 </el-option>
               </el-select>
-              <el-select v-if="thirdServiceCodeList.length > 0" style="width: 213Px; float: left; margin-left: 30Px;" v-model="thirdServiceCode" @change="thirdServiceCodeChange" placeholder="请选择关联业务">
+              <el-select v-if="thirdServiceCodeList.length > 0" style="width: 213Px; float: left; margin-left: 30Px;" :disabled="editMark" v-model="thirdServiceCode" @change="thirdServiceCodeChange" placeholder="请选择关联业务">
                 <el-option
                   v-for="item in thirdServiceCodeList"
                   :key="item.code"
@@ -164,12 +164,14 @@ export default {
         name: '',
         price: ''
       }],
-      submitLoading: false
+      submitLoading: false,
+      editMark: false
     }
   },
   created() {
     console.log(this.$route.query.id)
     if (this.$route.query.id) {
+      this.editMark = true
       this.init()
     } else {
       this.getCityTree()
@@ -213,9 +215,9 @@ export default {
                       this.secondServiceCodeList = this.firstServiceCodeList[i].childs
                       this.secondServiceCode = parentCodes[1]
                       if(this.secondServiceCode && this.secondServiceCode != ''){
-                        for(let i=0;i<this.secondServiceCodeList.length;i++){
-                          if(this.secondServiceCodeList[i].code == this.firstServiceCode && this.secondServiceCodeList[i].childs) {
-                            this.thirdServiceCodeList = this.secondServiceCodeList[i].childs
+                        for(let j=0;j<this.secondServiceCodeList.length;j++){
+                          if(this.secondServiceCodeList[j].code == this.secondServiceCode && this.secondServiceCodeList[j].childs) {
+                            this.thirdServiceCodeList = this.secondServiceCodeList[j].childs
                             this.thirdServiceCode = this.serviceCode
                           }
                         }
@@ -288,36 +290,43 @@ export default {
       })
     },
     firstServiceCodeChange() {
+      this.serviceCode = ''
       this.secondServiceCode = ''
       this.thirdServiceCode = ''
       this.secondServiceCodeList = []
       this.thirdServiceCodeList = []
       if (this.firstServiceCode && this.firstServiceCode != '') {
         for(let i=0;i<this.firstServiceCodeList.length;i++){
-          if(this.firstServiceCodeList[i].code == this.firstServiceCode && this.firstServiceCodeList[i].childs) {
-            this.secondServiceCodeList = this.firstServiceCodeList[i].childs
-          } else {
-            this.serviceCode = this.firstServiceCode
+          if(this.firstServiceCodeList[i].code == this.firstServiceCode ) {
+            if (this.firstServiceCodeList[i].childs && this.firstServiceCodeList[i].childs.length != 0) {
+              this.secondServiceCodeList = this.firstServiceCodeList[i].childs
+            } else {
+              this.serviceCode = this.firstServiceCode
+            }
           }
         }
       }
     },
     secondServiceCodeChange() {
+      this.serviceCode = ''
       this.thirdServiceCode = ''
       this.thirdServiceCodeList = []
       if (this.secondServiceCode && this.secondServiceCode != '') {
         for(let i=0;i<this.secondServiceCodeList.length;i++){
-          if(this.secondServiceCodeList[i].code == this.secondServiceCode && this.secondServiceCodeList[i].childs) {
-            this.thirdServiceCodeList = this.secondServiceCodeList[i].childs
-          } else {
-            this.serviceCode = this.secondServiceCode
+          if(this.secondServiceCodeList[i].code == this.secondServiceCode) {
+            if (this.secondServiceCodeList[i].childs && this.secondServiceCodeList[i].childs.length != 0) {
+              this.thirdServiceCodeList = this.secondServiceCodeList[i].childs
+            } else {
+              this.serviceCode = this.secondServiceCode
+            }
           }
         }
       }
     },
     thirdServiceCodeChange() {
+      this.serviceCode = ''
       if (this.thirdServiceCode && this.secondServiceCode != '') {
-        this.serviceCode = this.secondServiceCode
+        this.serviceCode = this.thirdServiceCode
       }
     },
     getCityTree() {
