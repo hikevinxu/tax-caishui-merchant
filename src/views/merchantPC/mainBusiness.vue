@@ -41,19 +41,19 @@
             </template>
           </el-table-column> -->
 
-          <!-- <el-table-column label="状态" width="120PX" align="center">
+          <el-table-column label="状态" width="120PX" align="center">
             <template slot-scope="scope">
               <span>{{ scope.row.shelf | statusChange}}</span>
             </template>
-          </el-table-column> -->
+          </el-table-column>
 
-          <!-- <el-table-column label="操作" align="center" min-width="200PX" class-name="small-padding fixed-width">
+          <el-table-column label="操作" align="center" min-width="200PX" class-name="small-padding fixed-width">
             <template slot-scope="scope">
               <el-button v-show="scope.row.shelf == false" style="margin-left: 12PX;" type="warning" size="small" @click="changeShelfUp(scope.row)">上架</el-button>
               <el-button v-show="scope.row.shelf == false" style="margin-left: 12PX;" type="danger" size="small" @click="serviceDelete(scope.row)">删除</el-button>
               <el-button v-show="scope.row.shelf == true" style="margin-left: 12PX;" type="danger" size="small" @click="changeShelfDown(scope.row)">下架</el-button>
             </template>
-          </el-table-column> -->
+          </el-table-column>
 
         </el-table>
         <pagination :total="total" :page.sync="listQuery.pageNum" :limit.sync="listQuery.pageSize" @pagination="getList" />
@@ -267,6 +267,7 @@
 </template>
 <script>
 import api from '@/api/api'
+import service from '@/api/serviceManager'
 import qs from 'qs'
 import Pagination from '@/components/Pagination'
 import { parse } from 'path'
@@ -300,106 +301,7 @@ export default {
       total: 0,
       fileId: '',
       fileIdDetail: '',
-      list: [
-        {
-          name: '一级',
-          code: 1,
-          childs: [
-            {
-              name: '2级',
-              code: 1,
-              childs: [
-                {
-                  name: '3级',
-                  code: 1,
-                }
-              ]
-            },
-            {
-              name: '2级',
-              code: 1,
-              childs: [
-                {
-                  name: '3级',
-                  code: 1,
-                },
-                {
-                  name: '3级',
-                  code: 1,
-                },
-                {
-                  name: '3级',
-                  code: 1,
-                }
-              ]
-            }
-          ]
-        },
-        {
-          name: '一级',
-          code: 1,
-          childs: [
-            {
-              name: '2级',
-              code: 1
-            },
-            {
-              name: '2级',
-              code: 1,
-              childs: [
-                {
-                  name: '3级',
-                  code: 1,
-                },
-                {
-                  name: '3级',
-                  code: 1,
-                },
-                {
-                  name: '3级',
-                  code: 1,
-                }
-              ]
-            },
-            {
-              name: '2级',
-              code: 1,
-              childs: [
-                {
-                  name: '3级',
-                  code: 1,
-                },
-                {
-                  name: '3级',
-                  code: 1,
-                },
-                {
-                  name: '3级',
-                  code: 1,
-                }
-              ]
-            },
-            {
-              name: '2级',
-              code: 1,
-              childs: [
-                {
-                  name: '3级',
-                  code: 1,
-                },
-                {
-                  name: '3级',
-                  code: 1,
-                },
-                {
-                  name: '3级',
-                  code: 1,
-                }
-              ]
-            }
-          ]
-        }
-      ],
+      list: [],
       listData: [],
       listLoading: false,
       dialogPvVisible: false,
@@ -552,35 +454,44 @@ export default {
     },
     getList(){
       this.listData  = []
-      api.serviceList(this.listQuery).then(res => {
+      api.serviceList().then(res => {
         console.log(res)
         if(res.code == 0){
-          // this.list = res.data.items
-          this.total = res.data.total
+          this.list = res.data
+          // this.total = res.data.total
           for (let i=0;i<this.list.length;i++) {
             let num = 0
-            for(let a=0; a<this.list[i].childs.length; a++){
-              num += this.list[i].childs.length
+            let index = -1
+            for(let a = 0; a<this.list[i].childs.length; a++){
+              if(this.list[i].childs[a].childs.length){
+                num += this.list[i].childs[a].childs.length
+              }else {
+                num += 1
+              }
             }
+            console.log(num)
             for (let j=0;j<this.list[i].childs.length;j++) {
               if (!this.list[i].childs[j].childs || this.list[i].childs[j].childs.length == 0 ) {
                 this.list[i].childs[j].childs = [
                   {
                     name: '空',
-                    code: 2
+                    id: this.list[i].childs[j].id,
+                    shelf: this.list[i].childs[j].shelf
                   }
                 ]
               }
               for (let k=0;k<this.list[i].childs[j].childs.length;k++) {
+                index += 1
                 this.listData.push({
-                  id: this.list[i].id,
+                  id: this.list[i].childs[j].childs[k].id,
+                  shelf: this.list[i].childs[j].childs[k].shelf,
                   firstName: this.list[i].name,
-                  index: j,
+                  index: index,
                   count: num,
                   childIndex: k,
                   childCount: this.list[i].childs[j].childs.length,
                   secondName: this.list[i].childs[j].name,
-                  thirdName: this.list[i].childs[j].childs[k].name
+                  thirdName: this.list[i].childs[j].childs[k].name,
                 })
               }
             }

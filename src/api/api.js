@@ -80,10 +80,10 @@ export default {
   /**
    * 公司基础信息保存
    * @function refreshToken
-   * @type 'POST'
+   * @type 'GET'
    */
-  serviceList (data) {
-    return fetchPost('/service_item/list', data)
+  serviceList (params) {
+    return fetchGet('/service/service_items',params)
   },
   /**
    * 服务类型数据
