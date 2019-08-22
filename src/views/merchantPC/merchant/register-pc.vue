@@ -85,10 +85,16 @@ export default {
     }
   },
   created(){
-    let inviteCode = this.$route.query.inviteCode
-    if(inviteCode){
-        this.inviteCode = inviteCode
+    if(this.$route.query.inviteCode){
+        this.inviteCode = this.$route.query.inviteCode
         this.title = ''
+        console.log(this.inviteCode)
+    }else {
+        let inviteCode = cookie.readCookie('inviteCode')
+        if(inviteCode){
+             this.inviteCode = inviteCode
+             this.title = ''
+        }
     }
     var that = this
     // initNECaptcha为全局函数，可直接调用
