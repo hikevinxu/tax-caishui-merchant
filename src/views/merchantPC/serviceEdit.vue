@@ -180,7 +180,7 @@ export default {
     init() {
       const loading = this.$loading({
         lock: true,
-        text: '正在上传图片，请稍后...',
+        text: '正在获取数据，请稍后...',
         spinner: 'el-icon-loading',
         background: 'rgba(0, 0, 0, 0.7)'
       })
@@ -225,6 +225,8 @@ export default {
                 }
               }
             }
+          }).catch(err => {
+            loading.close()
           })
           globalApi.getAddressCityTrees().then(res => {
             if(res.code == 0) {
@@ -248,6 +250,8 @@ export default {
               this.serviceArea = cityArr
               this.cityCodes = cityCodes
             }
+          }).catch(err => {
+            loading.close()
           })
           this.content = res.data.introduce
           this.title = res.data.title
@@ -272,6 +276,8 @@ export default {
           this.fileList = fileList
           this.fileIntroList = fileIntroList
         }
+      }).catch(err => {
+        loading.close()
       })
     },
     getServiceType(){
@@ -463,6 +469,8 @@ export default {
             this.submitLoading = false
             this.$router.push('/serviceManager')
           }
+        }).catch(err => {
+          this.submitLoading = false
         })
       } else {
         let params = {
@@ -485,6 +493,8 @@ export default {
             this.submitLoading = false
             this.$router.push('/serviceManager')
           }
+        }).catch(err => {
+          this.submitLoading = false
         })
       }
     },
