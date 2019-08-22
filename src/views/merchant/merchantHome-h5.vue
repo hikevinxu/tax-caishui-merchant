@@ -40,6 +40,7 @@ export default {
     let inviteCode = this.$route.query.inviteCode
     if(inviteCode){
         this.inviteCode = inviteCode
+        cookie.setCookie("inviteCode", inviteCode)
     }
     // if (Terminal.deviceInfo().deviceType == 'pc') {
     //     this.h5 = false
