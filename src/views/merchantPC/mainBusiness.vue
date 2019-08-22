@@ -17,19 +17,19 @@
           <el-table-column type="index" label="序号" prop="id" align="center" width="80PX">
           </el-table-column>
           
-          <el-table-column label="一级业务类型" width="320PX" align="center">
+          <el-table-column label="一级业务类型" width="250PX" align="center">
             <template slot-scope="scope">
               <span>{{ scope.row.firstName }}</span>
             </template>
           </el-table-column>
 
-          <el-table-column label="二级业务类型" width="320PX" align="center">
+          <el-table-column label="二级业务类型" width="250PX" align="center">
             <template slot-scope="scope">
               <span>{{ scope.row.secondName }}</span>
             </template>
           </el-table-column>
 
-          <el-table-column label="三级业务类型" width="320PX" align="center">
+          <el-table-column label="三级业务类型" width="250PX" align="center">
             <template slot-scope="scope">
               <span>{{ scope.row.thirdName }}</span>
             </template>
@@ -43,20 +43,21 @@
 
           <el-table-column label="状态" width="120PX" align="center">
             <template slot-scope="scope">
-              <span>{{ scope.row.shelf | statusChange}}</span>
+              <el-tag v-if="scope.row.shelf == 0" type="success">{{ scope.row.shelf | statusChange }}</el-tag>
+              <el-tag v-if="scope.row.shelf == 1" type="danger">{{ scope.row.shelf | statusChange }}</el-tag>
             </template>
           </el-table-column>
 
           <el-table-column label="操作" align="center" min-width="200PX" class-name="small-padding fixed-width">
             <template slot-scope="scope">
-              <el-button v-show="scope.row.shelf == false" style="margin-left: 12PX;" type="warning" size="small" @click="changeShelfUp(scope.row)">上架</el-button>
-              <el-button v-show="scope.row.shelf == false" style="margin-left: 12PX;" type="danger" size="small" @click="serviceDelete(scope.row)">删除</el-button>
-              <el-button v-show="scope.row.shelf == true" style="margin-left: 12PX;" type="danger" size="small" @click="changeShelfDown(scope.row)">下架</el-button>
+              <el-button v-show="scope.row.shelf == false" style="margin-left: 12PX;color: #5AB3A4;" type="text" size="small" @click="changeShelfUp(scope.row)">上架</el-button>
+              <!-- <el-button v-show="scope.row.shelf == false" style="margin-left: 12PX;" type="danger" size="small" @click="serviceDelete(scope.row)">删除</el-button> -->
+              <el-button v-show="scope.row.shelf == true" style="margin-left: 12PX;" type="text" size="small" @click="changeShelfDown(scope.row)">下架</el-button>
             </template>
           </el-table-column>
 
         </el-table>
-        <pagination :total="total" :page.sync="listQuery.pageNum" :limit.sync="listQuery.pageSize" @pagination="getList" />
+        <!-- <pagination :total="total" :page.sync="listQuery.pageNum" :limit.sync="listQuery.pageSize" @pagination="getList" /> -->
         
         <!-- 添加 -->
         <el-dialog :visible.sync="dialogPvVisible" title="添加业务">
@@ -463,7 +464,7 @@ export default {
             let num = 0
             let index = -1
             for(let a = 0; a<this.list[i].childs.length; a++){
-              if(this.list[i].childs[a].childs.length){
+              if(this.list[i].childs[a].childs && this.list[i].childs[a].childs.length > 0){
                 num += this.list[i].childs[a].childs.length
               }else {
                 num += 1
@@ -474,7 +475,7 @@ export default {
               if (!this.list[i].childs[j].childs || this.list[i].childs[j].childs.length == 0 ) {
                 this.list[i].childs[j].childs = [
                   {
-                    name: '空',
+                    name: '无',
                     id: this.list[i].childs[j].id,
                     shelf: this.list[i].childs[j].shelf
                   }
@@ -1107,7 +1108,7 @@ export default {
           console.log(res)
           if(res.code == 0){
             this.$message({
-              message: '上架成功',
+              message: '下架成功',
               type: 'success',
               showClose: true,
               duration: 1000
@@ -1115,7 +1116,7 @@ export default {
             this.getList()
           }else{
             this.$message({
-              message: '上架失败',
+              message: '下架失败',
               type: 'success',
               showClose: true,
               duration: 1000
@@ -1237,6 +1238,23 @@ export default {
   flex-flow: column;
   align-items: center;
   justify-content: center;
+}
+.el-table {
+  .el-table__header {
+    tr {
+      background: #E0E0E0;
+      th {
+        background: #E0E0E0;
+      }
+    }
+  }
+  thead {
+    font-family: PingFangSC-Regular;
+    font-size: 13px;
+    color: rgba(0,0,0,0.87);
+    text-align: center;
+    line-height: 20px;
+  }
 }
 .mainBusinesss {
   // width: 100vw;

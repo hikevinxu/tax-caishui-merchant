@@ -83,7 +83,7 @@ export default {
    * @type 'GET'
    */
   serviceList (params) {
-    return fetchGet('/service/service_items',params)
+    return fetchGet('/service_item/trees',params)
   },
   /**
    * 服务类型数据
