@@ -498,7 +498,7 @@ export default {
             }
           }
           console.log(this.listData)
-          if(res.data.total == 0){
+          if(!res.data || res.data.length == 0){
             this.noData = true
           }else{
             this.noData = false
