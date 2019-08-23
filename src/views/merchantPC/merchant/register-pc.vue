@@ -487,6 +487,10 @@ export default {
                                 line-height: 40PX;
                                 width: 84%;
                                 font-size: 14PX;
+                                line-height: 20PX;
+                                padding-top: 10PX;
+                                padding-bottom: 10PX;
+                                box-sizing: border-box;
                                 color: rgba(0,0,0,0.60);
                             }
                         }
@@ -522,9 +526,12 @@ export default {
                                     border: none;
                                     background: #FAFAFA;
                                     height: 40PX;
-                                    line-height: 40PX;
                                     width: 84%;
+                                    line-height: 20PX;
+                                    padding-top: 10PX;
+                                    padding-bottom: 10PX;
                                     font-size: 14PX;
+                                    box-sizing: border-box;
                                     color: rgba(0,0,0,0.60);
                                 }
                             }

@@ -557,7 +557,10 @@ export default {
                                 border: none;
                                 background: #FAFAFA;
                                 height: 40PX;
-                                line-height: 40PX;
+                                line-height: 20PX;
+                                padding-top: 10PX;
+                                padding-bottom: 10PX;
+                                box-sizing: border-box;
                                 width: 300PX;
                                 padding-left: 16PX;
                                 background: #FAFAFA;

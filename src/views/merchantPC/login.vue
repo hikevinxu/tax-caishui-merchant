@@ -171,8 +171,11 @@ export default {
                                 display: block;
                                 width: 84%;
                                 height: 48PX;
-                                line-height: 48PX;
+                                line-height: 20PX;
+                                padding-top: 14PX;
+                                padding-bottom: 14PX;
                                 font-size: 14PX;
+                                box-sizing: border-box;
                                 color: rgba(0,0,0,0.87);
                                 outline: none;
                                 border: none;
