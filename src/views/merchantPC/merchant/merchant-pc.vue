@@ -102,7 +102,7 @@
                     </div>
                   </div>
                   <div class="formItem map">
-                    <label for="name">地址定位</label>
+                    <label for="name">地址定位<span>*</span></label>
                     <div class="input">
                       <el-select class="selectAddress" v-model="searchInput" :loading="loading" :remote-method="selectAddressInput" @change="selectAddressChange" reserve-keyword filterable remote placeholder="请选择">
                         <el-option
@@ -622,6 +622,27 @@ export default {
         })
         return 
       }
+
+      if(!this.center || this.center.length == 0 || this.center.length < 2){
+        this.$message({
+          message: '请先选择地图定位',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        return 
+      }
+      
+      if(this.center[0] == 116.397477 && this.center[1] == 39.908692) {
+        this.$message({
+          message: '请先选择地图定位',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        return
+      } 
+
       if(this.address == ''){
         this.$message({
           message: '详细地址不能为空',
