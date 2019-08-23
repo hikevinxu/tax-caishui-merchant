@@ -401,7 +401,11 @@ export default {
               display: block;
               width: 92%;
               height: 40PX;
-              line-height: 40PX;
+              line-height: 20PX;
+              padding-top: 10PX;
+              padding-bottom: 10PX;
+              font-size: 14PX;
+              box-sizing: border-box;
               outline: none;
               border: none;
               background: #FAFAFA;

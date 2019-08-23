@@ -312,9 +312,12 @@ export default {
             outline: none;
             border: none;
             height: 40PX;
-            line-height: 40PX;
-            color: rgba(0,0,0,0.87);
+            line-height: 20PX;
+            padding-top: 10PX;
+            padding-bottom: 10PX;
             font-size: 14PX;
+            box-sizing: border-box;
+            color: rgba(0,0,0,0.87);
           }
           .codeInput{
             width: 200PX;

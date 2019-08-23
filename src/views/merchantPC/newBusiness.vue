@@ -182,12 +182,15 @@ export default {
             outline: none;
             border: none;
             height: 40PX;
-            line-height: 40PX;
-            color: rgba(0,0,0,0.87);
+            line-height: 20PX;
+            padding-top: 10PX;
+            padding-bottom: 10PX;
             font-size: 14PX;
+            box-sizing: border-box;
+            color: rgba(0,0,0,0.87);
           }
           textarea{
-            width: 300PX;
+            width: 284PX;
             padding-left: 16PX;
             background: #FAFAFA;
             border-radius: 4PX;
@@ -237,7 +240,7 @@ export default {
         }
         .next{
           display: block;
-          width: 216PX;
+          width: 200PX;
           height: 36PX;
           line-height: 36PX;
           text-align: center;
