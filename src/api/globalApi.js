@@ -45,7 +45,7 @@ export default {
     return fetchGet('/address/city_trees', params)
   },
   /**
-   * 提问-获取问题分类
+   * 上传图片
    * @function getFileuploadUpload
    * @type 'POST'
    */
@@ -68,5 +68,14 @@ export default {
    */
   loginOut () {
     return fetchGet('/auth/logout')
+  },
+
+  /**
+   * 上传图片到正式
+   * @function fileUploadGetUrl
+   * @type 'POST'
+   */
+  fileUploadGetUrl (params) {
+    return fetchPost('/service/upload', params)
   },
 }
