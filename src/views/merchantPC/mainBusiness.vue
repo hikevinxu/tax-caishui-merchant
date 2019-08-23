@@ -253,9 +253,9 @@
       <div class="business_content_noData">
         <div class="case">
           <div class="title">
-            <span>一级服务</span>
-            <span v-show="showTwo">二级服务</span>
-            <span v-show="showThree">三级服务</span>
+            <span>一级业务</span>
+            <span v-show="showTwo">二级业务</span>
+            <span v-show="showThree">三级业务</span>
           </div>
           <el-cascader-panel v-model="casList" :props="props" :options="options" @change="casa" @expand-change="chose"></el-cascader-panel>
         </div>
@@ -1160,16 +1160,15 @@ export default {
       let codeList = []
       for (let i = 0; i < this.casList.length; i++) {
         codeList.push(this.casList[i][this.casList[i].length -1])
-        this.codeList = codeList
-        console.log(this.codeList)
         if(oneList.indexOf(this.casList[i][0]) == -1){
           oneList.push(this.casList[i][0])
           this.oneList = oneList
         }
       }
+      this.codeList = codeList
       if(this.oneList.length > 3){
         this.$message({
-          message: '一级服务最多添加三个',
+          message: '一级业务最多添加三个',
           type: 'error',
           showClose: true,
           duration: 1000
@@ -1188,7 +1187,7 @@ export default {
     refuse(){
       if(this.oneList.length > 3){
         this.$message({
-          message: '一级服务最多添加三个',
+          message: '一级业务最多添加三个',
           type: 'error',
           showClose: true,
           duration: 1000
@@ -1198,19 +1197,20 @@ export default {
       let data = {
         codeList: this.codeList
       }
-      api.serviceBulkAdd(this.codeList).then(res => {
-        console.log(res)
-        if(res.code == 0){
-          this.$message({
-            message: '添加成功',
-            type: 'success',
-            showClose: true,
-            duration: 1000
-          })
-          this.getList()
-          this.casList = []
-        }
-      })
+      console.log(data)
+      // api.serviceBulkAdd(this.codeList).then(res => {
+      //   console.log(res)
+      //   if(res.code == 0){
+      //     this.$message({
+      //       message: '添加成功',
+      //       type: 'success',
+      //       showClose: true,
+      //       duration: 1000
+      //     })
+      //     this.getList()
+      //     this.casList = []
+      //   }
+      // })
     }
   }
 }
