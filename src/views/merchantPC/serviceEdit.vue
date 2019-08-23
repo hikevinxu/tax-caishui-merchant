@@ -7,7 +7,7 @@
       <div class="serviceManager_form">
         <div class="form">
           <div class="formItem">
-            <label for="firstServiceCode">关联业务</label>
+            <label for="firstServiceCode">关联业务 <span>*</span></label>
             <div class="input" style="overflow: hidden;">
               <el-select style="width: 213Px; float: left;" v-model="firstServiceCode" :disabled="editMark" @change="firstServiceCodeChange" placeholder="请选择关联业务">
                 <el-option
@@ -58,10 +58,11 @@
               </div>
             </div>
           </div>
-          <div class="formItem">
-            <label for="name">服务标题</label>
+          <div class="formItem title">
+            <label for="name">服务标题 <span>*</span></label>
             <div class="input">
-              <input style="width: 700Px;" type="text" v-model="title" placeholder="请输入服务标题" />
+              <input style="width: 700Px;" maxlength="30" type="text" v-model="title" placeholder="请输入服务标题" />
+              <span class="wordNum">{{title.length}}/30</span>
             </div>
           </div>
           <div class="formItem uploadImg">
@@ -90,13 +91,13 @@
             </div>
           </div>
           <div class="formItem serviceArea">
-            <label for="serviceArea">服务区域</label>
+            <label for="serviceArea">服务区域<span>*</span></label>
             <div class="input">
               <el-cascader-panel v-model="serviceArea" :props="props" :options="cityTree" @change="selectAreaChange"></el-cascader-panel>
             </div>
           </div>
           <div class="formItem tinymce">
-            <label for="content">服务介绍</label>
+            <label for="content">服务介绍<span>*</span></label>
             <div class="input">
               <Tinymce ref="editor" :height="400" v-model="content" />
             </div>
@@ -426,7 +427,7 @@ export default {
       this.submitLoading = true
       if(!this.serviceCode || this.serviceCode == '') {
         this.$message({
-          message: '请先选择关联类目',
+          message: '请先选择关联业务',
           type: 'error',
           showClose: true,
           duration: 1000
@@ -448,6 +449,17 @@ export default {
       if(!this.cityCodes || this.cityCodes.length == 0) {
         this.$message({
           message: '请先选择服务区域',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        this.submitLoading = false
+        return
+      }
+
+      if(!this.content || this.content == '') {
+        this.$message({
+          message: '请先填写服务介绍',
           type: 'error',
           showClose: true,
           duration: 1000
@@ -570,10 +582,28 @@ export default {
               box-sizing: border-box;
               background: #FAFAFA;
               height: 100%;
-              line-height: 40PX;
+              line-height: 20PX;
               font-size: 14PX;
               color: rgba(0,0,0,0.60);
-              padding: 0 16Px;
+              padding: 10Px 16Px;
+              position: relative;
+            }
+            
+          }
+        }
+        .formItem.title {
+          .input {
+            flex: 0;
+            width: 700Px;
+            position: relative;
+            .wordNum {
+              position: absolute;
+              top: 0;
+              right: 10Px;
+              font-family: PingFangSC-Regular;
+              font-size: 14PX;
+              color: rgba(0,0,0,0.60);
+              line-height: 40Px;
             }
           }
         }
@@ -613,7 +643,7 @@ export default {
                 box-sizing: border-box;
                 background: #FAFAFA;
                 height: 40Px;
-                line-height: 40PX;
+                line-height: 20PX;
                 font-size: 14PX;
                 color: rgba(0,0,0,0.60);
                 padding: 10Px 16Px;

@@ -10,12 +10,10 @@
           v-loading="listLoading"
           :data="list"
           class="tableClass"
-          stripe
+          border
+          highlight-current-row
           style="width: 100%">
-          <el-table-column label="序号" align="center">
-            <template slot-scope="scope">
-              <span>{{ scope.row.id }}</span>
-            </template>
+          <el-table-column type="index" label="序号" align="center" width="80">
           </el-table-column>
           <el-table-column label="关联类目" align="center">
             <template slot-scope="scope">

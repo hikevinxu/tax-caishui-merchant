@@ -915,10 +915,10 @@ export default {
                 box-sizing: border-box;
                 background: #FAFAFA;
                 height: 100%;
-                line-height: 40PX;
+                line-height: 20PX;
                 font-size: 14PX;
                 color: rgba(0,0,0,0.60);
-                padding: 0 16Px;
+                padding: 10Px 16Px;
               }
             }
           }
