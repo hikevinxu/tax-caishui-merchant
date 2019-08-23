@@ -1097,7 +1097,7 @@ export default {
     //公司业务下架
     changeShelfDown(row){
       console.log(row)
-      this.$confirm('确认下架该业务?', '提示', {}).then(() => {
+      this.$confirm('业务下架后，关联服务将同时被下架，确认下架？', '提示', {}).then(() => {
         let data = {
           id: row.id,
           shelf: false
