@@ -1065,7 +1065,7 @@ export default {
     //公司业务上架
     changeShelfUp(row){
       console.log(row)
-      this.$confirm('确认上架该业务?', '提示', {}).then(() => {
+      // this.$confirm('确认上架该业务?', '提示', {}).then(() => {
         let data = {
           id: row.id,
           shelf: true
@@ -1092,7 +1092,7 @@ export default {
             this.getList()
           }
         })
-      })
+      // })
     },
     //公司业务下架
     changeShelfDown(row){
