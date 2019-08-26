@@ -1198,19 +1198,19 @@ export default {
         codeList: this.codeList
       }
       console.log(data)
-      // api.serviceBulkAdd(this.codeList).then(res => {
-      //   console.log(res)
-      //   if(res.code == 0){
-      //     this.$message({
-      //       message: '添加成功',
-      //       type: 'success',
-      //       showClose: true,
-      //       duration: 1000
-      //     })
-      //     this.getList()
-      //     this.casList = []
-      //   }
-      // })
+      api.serviceBulkAdd(this.codeList).then(res => {
+        console.log(res)
+        if(res.code == 0){
+          this.$message({
+            message: '添加成功',
+            type: 'success',
+            showClose: true,
+            duration: 1000
+          })
+          this.getList()
+          this.casList = []
+        }
+      })
     }
   }
 }
