@@ -258,7 +258,7 @@ export default {
           })
           this.content = res.data.introduce
           this.title = res.data.title
-          this.servicePrice = res.data.items
+          this.servicePrice = res.data.items.length > 0 ? res.data.items : [{name: '', price: ''}]
           this.serviceLogo = res.data.logo
           this.serviceLogoId = res.data.logo
           let fileList = []
@@ -468,6 +468,13 @@ export default {
         return
       }
 
+      let items = []
+      if (this.servicePrice.length == 1 && this.servicePrice[0].name == '' && this.servicePrice[0].price == '') {
+        items = []
+      } else {
+        items = this.servicePrice
+      }
+
       if (this.$route.query.id) {
         let params = {
           id: this.$route.query.id,
@@ -477,7 +484,7 @@ export default {
           logo: this.serviceLogoId,
           serviceCode: this.serviceCode,
           title: this.title,
-          items: this.servicePrice
+          items: items
         }
         serviceManager.serviceUpdate(params).then(res => {
           if(res.code == 0){
