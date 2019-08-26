@@ -252,9 +252,9 @@
       <div class="business_content_noData">
         <div class="case">
           <div class="title">
-            <span>一级业务</span>
-            <span v-show="showTwo">二级业务</span>
-            <span v-show="showThree">三级业务</span>
+            <span>主业务</span>
+            <span v-show="showTwo">子业务</span>
+            <span v-show="showThree">子子业务</span>
           </div>
           <el-cascader-panel v-model="casList" :props="props" :options="options" @change="casa" @expand-change="chose"></el-cascader-panel>
         </div>
