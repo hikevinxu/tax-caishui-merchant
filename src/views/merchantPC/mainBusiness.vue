@@ -12,24 +12,23 @@
           :span-method="objectSpanMethod"
           border
           fit
-          highlight-current-row
           style="width: 100%;">
           <el-table-column type="index" label="序号" prop="id" align="center" width="80PX">
           </el-table-column>
           
-          <el-table-column label="一级业务类型" width="250PX" align="center">
+          <el-table-column label="主业务" width="250PX" align="center">
             <template slot-scope="scope">
               <span>{{ scope.row.firstName }}</span>
             </template>
           </el-table-column>
 
-          <el-table-column label="二级业务类型" width="250PX" align="center">
+          <el-table-column label="子业务" width="250PX" align="center">
             <template slot-scope="scope">
               <span>{{ scope.row.secondName }}</span>
             </template>
           </el-table-column>
 
-          <el-table-column label="三级业务类型" width="250PX" align="center">
+          <el-table-column label="子子业务" width="250PX" align="center">
             <template slot-scope="scope">
               <span>{{ scope.row.thirdName }}</span>
             </template>

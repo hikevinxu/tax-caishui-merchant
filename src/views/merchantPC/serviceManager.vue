@@ -11,7 +11,6 @@
           :data="list"
           class="tableClass"
           border
-          highlight-current-row
           style="width: 100%">
           <el-table-column type="index" label="序号" align="center" width="80">
           </el-table-column>
