@@ -107,8 +107,8 @@
             <div class="input">
               <ul>
                 <li v-for="(item, index) in servicePrice" :key="'quote' + index">
-                  <input class="serviceTitle" v-model="item.name"  type="text" placeholder="服务项">
-                  <input class="servicePrice" v-model="item.price" type="text" placeholder="报价">
+                  <input class="serviceTitle" v-model.trim="item.name"  type="text" placeholder="服务项">
+                  <input class="servicePrice" v-model.trim="item.price" type="text" placeholder="报价">
                   <div class="serviceDelete" @click="deleteServicePrice(index)"><img src="@/assets/globalPc/ic_b_deletelist.png" alt=""></div>
                 </li>
               </ul>
@@ -469,10 +469,12 @@ export default {
       }
 
       let items = []
-      if (this.servicePrice.length == 1 && this.servicePrice[0].name == '' && this.servicePrice[0].price == '') {
-        items = []
-      } else {
-        items = this.servicePrice
+      if (this.servicePrice.length > 0) {
+        for(let i=0;i<this.servicePrice.length;i++){
+          if (this.servicePrice[i].price != '' || this.servicePrice[i].name != '') {
+            items.push(this.servicePrice[i])
+          }
+        }
       }
 
       if (this.$route.query.id) {
