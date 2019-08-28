@@ -249,7 +249,6 @@ export default {
                   }
                 }
               }
-              console.log(cityCodes)
               this.serviceArea = cityArr
               this.cityCodes = cityCodes
             }
@@ -338,7 +337,6 @@ export default {
       })
     },
     logoUpload(files) {
-      console.log(files)
       const loading = this.$loading({
         lock: true,
         text: '正在上传图片，请稍后...',
@@ -367,15 +365,19 @@ export default {
       this.serviceLogoId = ''
     },
     handleRemoveBefore(file,fileList) {
-      console.log(file)
+      const loading = this.$loading({
+        lock: true,
+        text: '正在删除图片，请稍后...',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
       for(let i=0;i<fileList.length;i++){
-        console.log(fileList[i])
         if(file.uid == fileList[i].uid){
           this.fileIntroList.splice(i, 1)
         }
       }
-      console.log(this.fileIntroList)
       this.imgTotal = this.fileIntroList.length
+      loading.close()
     },
     handleRemove(file,fileList){
       // console.log(file)
@@ -394,7 +396,6 @@ export default {
       formData.append('files', files.file)
       apiPC.fileupload(formData).then(res => {
         if (res.code == 0) {
-          console.log(res)
           let img =  res.data[0].fileId
           this.fileIntroList.push(img)
           this.imgTotal = this.fileIntroList.length
@@ -406,7 +407,6 @@ export default {
       })
     },
     selectAreaChange(val) {
-      console.log(val)
       let arr = []
       for(let i=0;i<val.length;i++) {
         arr.push(val[i][val[i].length - 1])
@@ -414,7 +414,6 @@ export default {
       this.cityCodes = arr
     },
     addServicePrice() {
-      console.log(this.servicePrice)
       this.servicePrice.push({
         name: '',
         price: ''
