@@ -1171,6 +1171,7 @@ export default {
     }
   }
   .location {
+    display: none;
     width: 38Px;
     height: 38Px;
     background-color: #fff;
