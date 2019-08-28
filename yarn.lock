@@ -2996,9 +2996,9 @@ electron-to-chromium@^1.3.124:
   resolved "https://registry.npm.taobao.org/electron-to-chromium/download/electron-to-chromium-1.3.125.tgz#dbde0e95e64ebe322db0eca764d951f885a5aff2"
   integrity sha1-294OleZOvjItsOynZNlR+IWlr/I=
 
-element-ui@^2.10.1:
+element-ui@^2.11.0:
   version "2.11.1"
-  resolved "https://registry.npm.taobao.org/element-ui/download/element-ui-2.11.1.tgz#2b67f9eee3eda2e6884873c1c589cbe30d9a9d60"
+  resolved "https://registry.npm.taobao.org/element-ui/download/element-ui-2.11.1.tgz?cache=0&sync_timestamp=1564126738326&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Felement-ui%2Fdownload%2Felement-ui-2.11.1.tgz#2b67f9eee3eda2e6884873c1c589cbe30d9a9d60"
   integrity sha1-K2f57uPtouaISHPBxYnL4w2anWA=
   dependencies:
     async-validator "~1.8.1"
