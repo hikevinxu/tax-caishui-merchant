@@ -107,8 +107,8 @@
             <div class="input">
               <ul>
                 <li v-for="(item, index) in servicePrice" :key="'quote' + index">
-                  <input class="serviceTitle" v-model="item.name"  type="text" placeholder="服务项">
-                  <input class="servicePrice" v-model="item.price" type="text" placeholder="报价">
+                  <input class="serviceTitle" v-model.trim="item.name"  type="text" placeholder="服务项">
+                  <input class="servicePrice" v-model.trim="item.price" type="text" placeholder="报价">
                   <div class="serviceDelete" @click="deleteServicePrice(index)"><img src="@/assets/globalPc/ic_b_deletelist.png" alt=""></div>
                 </li>
               </ul>
@@ -249,7 +249,6 @@ export default {
                   }
                 }
               }
-              console.log(cityCodes)
               this.serviceArea = cityArr
               this.cityCodes = cityCodes
             }
@@ -338,7 +337,6 @@ export default {
       })
     },
     logoUpload(files) {
-      console.log(files)
       const loading = this.$loading({
         lock: true,
         text: '正在上传图片，请稍后...',
@@ -367,15 +365,19 @@ export default {
       this.serviceLogoId = ''
     },
     handleRemoveBefore(file,fileList) {
-      console.log(file)
+      const loading = this.$loading({
+        lock: true,
+        text: '正在删除图片，请稍后...',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
       for(let i=0;i<fileList.length;i++){
-        console.log(fileList[i])
         if(file.uid == fileList[i].uid){
           this.fileIntroList.splice(i, 1)
         }
       }
-      console.log(this.fileIntroList)
       this.imgTotal = this.fileIntroList.length
+      loading.close()
     },
     handleRemove(file,fileList){
       // console.log(file)
@@ -394,7 +396,6 @@ export default {
       formData.append('files', files.file)
       apiPC.fileupload(formData).then(res => {
         if (res.code == 0) {
-          console.log(res)
           let img =  res.data[0].fileId
           this.fileIntroList.push(img)
           this.imgTotal = this.fileIntroList.length
@@ -406,7 +407,6 @@ export default {
       })
     },
     selectAreaChange(val) {
-      console.log(val)
       let arr = []
       for(let i=0;i<val.length;i++) {
         arr.push(val[i][val[i].length - 1])
@@ -414,7 +414,6 @@ export default {
       this.cityCodes = arr
     },
     addServicePrice() {
-      console.log(this.servicePrice)
       this.servicePrice.push({
         name: '',
         price: ''
@@ -469,10 +468,12 @@ export default {
       }
 
       let items = []
-      if (this.servicePrice.length == 1 && this.servicePrice[0].name == '' && this.servicePrice[0].price == '') {
-        items = []
-      } else {
-        items = this.servicePrice
+      if (this.servicePrice.length > 0) {
+        for(let i=0;i<this.servicePrice.length;i++){
+          if (this.servicePrice[i].price != '' || this.servicePrice[i].name != '') {
+            items.push(this.servicePrice[i])
+          }
+        }
       }
 
       if (this.$route.query.id) {

@@ -128,7 +128,7 @@ export default {
           events: {
             init: (o) => {
               // o 是高德地图定位插件实例
-              
+              console.log(123)
             }
           }
         }
@@ -197,6 +197,7 @@ export default {
     //   this.$router.back(-1)
     // },
     getCurrentPositionLaglng(){
+      console.log(222)
       this.getLocationLoading = true
       var geolocation = new AMap.Geolocation({
         // 是否使用高精度定位，默认：true
@@ -212,11 +213,13 @@ export default {
       })
 
       geolocation.getCurrentPosition()
+
       AMap.event.addListener(geolocation, 'complete', (data) => {
         this.center = [data.position.lng, data.position.lat]
         this.getLocationLoading = false
       })
       AMap.event.addListener(geolocation, 'error', (data) => {
+        console.log(data)
         this.$message({
           message: '获取位置信息超时',
           type: 'error',
@@ -390,6 +393,7 @@ export default {
             }
           }
           .location {
+            display: none;
             width: 38Px;
             height: 38Px;
             background-color: #fff;
