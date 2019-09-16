@@ -522,10 +522,16 @@ export default {
         return 
       }
 
+      if(this.fileList.length == 0){
+        this.fileId = ''
+      }else {
+        this.fileId = this.fileList[0].fileId
+      }
+
       let data = {
         name: this.name,
         type: this.typeValue,
-        logo: this.fileList[0].fileId,
+        logo: this.fileId,
         bindCompanyId: this.companyId,
         cityCode:this.cityCode,
         areaCode: this.areaCode,
