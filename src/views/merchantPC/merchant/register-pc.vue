@@ -175,7 +175,7 @@ export default {
     codeClick(){
         this.isCode = false
         let phone = this.phone
-        if(!(/^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/.test(phone))){
+        if(!(/^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|19[012356789]|14[57])[0-9]{8}$/.test(phone))){
             this.$message({
               message: '请输入正确的手机号',
               type: 'error',

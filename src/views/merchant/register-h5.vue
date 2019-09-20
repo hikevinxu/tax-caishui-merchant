@@ -157,7 +157,7 @@ export default {
         // console.log(this.captchaIns)
         this.isCode = false
         let phone = this.phone
-        if(!(/^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/.test(phone))){
+        if(!(/^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|19[012356789]|14[57])[0-9]{8}$/.test(phone))){
             Toast('请输入正确的手机号')
             this.isCode = true
             return
