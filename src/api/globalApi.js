@@ -45,6 +45,14 @@ export default {
     return fetchGet('/address/city_trees', params)
   },
   /**
+   * 获取全球地区列表
+   * @function getGlobalTrees
+   * @type 'Get'
+   */
+  getGlobalTrees (params) {
+    return fetchGet('/address/globalTrees', params)
+  },
+  /**
    * 上传图片
    * @function getFileuploadUpload
    * @type 'POST'

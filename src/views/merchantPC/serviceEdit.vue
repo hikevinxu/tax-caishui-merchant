@@ -25,14 +25,14 @@
                   :value="item.code">
                 </el-option>
               </el-select>
-              <el-select v-if="thirdServiceCodeList.length > 0" style="width: 213Px; float: left; margin-left: 30Px;" :disabled="editMark" v-model="thirdServiceCode" @change="thirdServiceCodeChange" placeholder="请选择关联业务">
+              <!-- <el-select v-if="thirdServiceCodeList.length > 0" style="width: 213Px; float: left; margin-left: 30Px;" :disabled="editMark" v-model="thirdServiceCode" @change="thirdServiceCodeChange" placeholder="请选择关联业务">
                 <el-option
                   v-for="item in thirdServiceCodeList"
                   :key="item.code"
                   :label="item.name"
                   :value="item.code">
                 </el-option>
-              </el-select>
+              </el-select> -->
             </div>
           </div>
           <div class="formItem logoImg">
@@ -96,10 +96,31 @@
               <el-cascader-panel v-model="serviceArea" :props="props" :options="cityTree" @change="selectAreaChange"></el-cascader-panel>
             </div>
           </div>
-          <div class="formItem tinymce">
+          <!-- <div class="formItem tinymce">
             <label for="content">服务介绍<span>*</span></label>
             <div class="input">
               <Tinymce ref="editor" :height="400" v-model="content" />
+            </div>
+          </div> -->
+          <div class="formItem textArea">
+            <label for="name">服务信息 <span>*</span></label>
+            <div class="input">
+              <div class="inputItem">
+                <span>办理步骤及所需时间</span>
+                <textarea style="width: 325Px;" maxlength="400" rows="5" type="text" v-model="handleProcessDuration" placeholder="请输入办理步骤及所需时间"></textarea>
+              </div>
+              <div class="inputItem">
+                <span>办理所需材料</span>
+                <textarea style="width: 325Px;" maxlength="400" rows="5" type="text" v-model="handleMaterial" placeholder="请输入办理所需材料"></textarea>
+              </div>
+              <div class="inputItem">
+                <span>交付材料</span>
+                <textarea style="width: 325Px;" maxlength="400" rows="5" type="text" v-model="deliveryMaterial" placeholder="请输入交付材料"></textarea>
+              </div>
+              <div class="inputItem">
+                <span>交付时长</span>
+                <textarea style="width: 325Px;" maxlength="400" rows="5" type="text" v-model="deliveryDuration" placeholder="请输入交付时长"></textarea>
+              </div>
             </div>
           </div>
           <div class="formItem quote">
@@ -155,6 +176,8 @@ export default {
       //批量上架数据
       props: {
         multiple: true,
+        emitPath: true,
+        checkStrictly: false,
         children: 'childs',
         label: 'name',
         value: 'code'
@@ -166,11 +189,15 @@ export default {
         price: ''
       }],
       submitLoading: false,
-      editMark: false
+      editMark: false,
+      deliveryDuration: '',
+      deliveryMaterial: '',
+      handleMaterial: '',
+      handleProcessDuration: ''
     }
   },
   created() {
-    console.log(this.$route.query.id)
+    // console.log(this.$route.query.id)
     if (this.$route.query.id) {
       this.editMark = true
       this.init()
@@ -194,7 +221,7 @@ export default {
         if(res.code == 0) {
           this.serviceCode = res.data.serviceCode
           let parentCodes = res.data.parentCodes
-          let cityTree = res.data.cityTrees
+          let serviceDistrictList = res.data.serviceDistrictList
           serviceManager.serviceItemTrees().then(res => {
             if(res.code == 0){
               this.firstServiceCodeList = res.data
@@ -208,55 +235,47 @@ export default {
                     }
                   }
                 }
-              } else if (parentCodes.length == 2){
-                this.firstServiceCode = parentCodes[0]
-                if(this.firstServiceCode && this.firstServiceCode != '') {
-                  for(let i=0;i<this.firstServiceCodeList.length;i++){
-                    if(this.firstServiceCodeList[i].code == this.firstServiceCode && this.firstServiceCodeList[i].childs) {
-                      this.secondServiceCodeList = this.firstServiceCodeList[i].childs
-                      this.secondServiceCode = parentCodes[1]
-                      if(this.secondServiceCode && this.secondServiceCode != ''){
-                        for(let j=0;j<this.secondServiceCodeList.length;j++){
-                          if(this.secondServiceCodeList[j].code == this.secondServiceCode && this.secondServiceCodeList[j].childs) {
-                            this.thirdServiceCodeList = this.secondServiceCodeList[j].childs
-                            this.thirdServiceCode = this.serviceCode
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
               }
             }
           }).catch(err => {
             loading.close()
           })
-          globalApi.getAddressCityTrees().then(res => {
+          globalApi.getGlobalTrees().then(res => {
             if(res.code == 0) {
               this.cityTree = res.data
               let cityArr = []
-              let cityCodes = []
-              if (cityTree && cityTree.length > 0) {
-                for (let j=0;j<cityTree.length;j++) {
-                  let firstCode = cityTree[j].code
-                  if (cityTree[j].childs) {
-                    for(let i=0;i<cityTree[j].childs.length;i++){
-                      let secondCode = cityTree[j].childs[i].code
-                      cityArr.push([firstCode, secondCode])
-                      cityCodes.push(secondCode)
-                      loading.close()
+              if (serviceDistrictList && serviceDistrictList.length > 0) {
+                for(let i=0;i<serviceDistrictList.length;i++){
+                  if (serviceDistrictList[i].cityCode && serviceDistrictList[i].cityCode != null) {
+                    if (serviceDistrictList[i].districtCodes && serviceDistrictList[i].districtCodes != null) {
+                      cityArr.push([serviceDistrictList[i].countryCode, serviceDistrictList[i].provinceCode, serviceDistrictList[i].cityCode, serviceDistrictList[i].districtCodes])
+                    } else {
+                      let areaList = this.checkTotalAreaInCity([serviceDistrictList[i].countryCode, serviceDistrictList[i].provinceCode, serviceDistrictList[i].cityCode, null])
+                      for(let j=0;j<areaList.length;j++) {
+                        cityArr.push([serviceDistrictList[i].countryCode, serviceDistrictList[i].provinceCode, serviceDistrictList[i].cityCode, areaList[j]])
+                      }
+                    }
+                  } else {
+                    if (serviceDistrictList[i].provinceCode && serviceDistrictList[i].provinceCode != null) {
+                      cityArr.push([serviceDistrictList[i].countryCode, serviceDistrictList[i].provinceCode])
+                    } else {
+                      cityArr.push([serviceDistrictList[i].countryCode])
                     }
                   }
                 }
               }
               this.serviceArea = cityArr
-              this.cityCodes = cityCodes
+              loading.close()
             }
           }).catch(err => {
             loading.close()
           })
-          this.content = res.data.introduce
+          // this.content = res.data.introduce
           this.title = res.data.title
+          this.deliveryDuration = res.data.deliveryDuration
+          this.deliveryMaterial = res.data.deliveryMaterial
+          this.handleMaterial = res.data.handleMaterial
+          this.handleProcessDuration = res.data.handleProcessDuration
           this.servicePrice = res.data.items.length > 0 ? res.data.items : [{name: '', price: ''}]
           this.serviceLogo = res.data.logo
           this.serviceLogoId = res.data.logo
@@ -277,6 +296,7 @@ export default {
           }
           this.fileList = fileList
           this.fileIntroList = fileIntroList
+          loading.close()
         }
       }).catch(err => {
         loading.close()
@@ -312,15 +332,16 @@ export default {
       this.thirdServiceCode = ''
       this.thirdServiceCodeList = []
       if (this.secondServiceCode && this.secondServiceCode != '') {
-        for(let i=0;i<this.secondServiceCodeList.length;i++){
-          if(this.secondServiceCodeList[i].code == this.secondServiceCode) {
-            if (this.secondServiceCodeList[i].childs && this.secondServiceCodeList[i].childs.length != 0) {
-              this.thirdServiceCodeList = this.secondServiceCodeList[i].childs
-            } else {
-              this.serviceCode = this.secondServiceCode
-            }
-          }
-        }
+        this.serviceCode = this.secondServiceCode
+        // for(let i=0;i<this.secondServiceCodeList.length;i++){
+        //   if(this.secondServiceCodeList[i].code == this.secondServiceCode) {
+        //     if (this.secondServiceCodeList[i].childs && this.secondServiceCodeList[i].childs.length != 0) {
+        //       this.thirdServiceCodeList = this.secondServiceCodeList[i].childs
+        //     } else {
+        //       this.serviceCode = this.secondServiceCode
+        //     }
+        //   }
+        // }
       }
     },
     thirdServiceCodeChange() {
@@ -330,7 +351,7 @@ export default {
       }
     },
     getCityTree() {
-      globalApi.getAddressCityTrees().then(res => {
+      globalApi.getGlobalTrees().then(res => {
         if(res.code == 0) {
           this.cityTree = res.data
         }
@@ -407,11 +428,54 @@ export default {
       })
     },
     selectAreaChange(val) {
-      let arr = []
-      for(let i=0;i<val.length;i++) {
-        arr.push(val[i][val[i].length - 1])
+      // console.log(val)
+      // let arr = []
+      // for(let i=0;i<val.length;i++) {
+      //   arr.push({
+      //     countryCode: val[i][0] || '',
+      //     provinceCode: val[i][1] || '',
+      //     cityCode: val[i][2] || '',
+      //     areaCode: val[i][3] || ''
+      //   })
+      // }
+      // this.cityCodes = arr
+      // console.log(arr)
+    },
+    checkSelectAreaInCity(code) {
+      let num = 0
+      for(let i=0;i<this.serviceArea.length;i++) {
+        if(this.serviceArea[i].length > 2 && this.serviceArea[i][2] == code) {
+          num++
+        }
       }
-      this.cityCodes = arr
+      return num
+    },
+    checkTotalAreaInCity(selectArr) {
+      let arr = []
+      if(selectArr.length > 0) {
+        for(let i=0;i<this.cityTree.length;i++) {
+          if(selectArr[0] && selectArr[0] != '') {
+            if(selectArr[0] == this.cityTree[i].code) {
+              for(let j=0;j<this.cityTree[i].childs.length;j++) {
+                if(selectArr[1] && selectArr[1] != '') {
+                  if(selectArr[1] == this.cityTree[i].childs[j].code) {
+                    for(let k=0;k<this.cityTree[i].childs[j].childs.length;k++) {
+                      if(selectArr[2] && selectArr[2] != '') {
+                        if(selectArr[2] == this.cityTree[i].childs[j].childs[k].code) {
+                          for(let l=0;l<this.cityTree[i].childs[j].childs[k].childs.length;l++) {
+                            arr.push(this.cityTree[i].childs[j].childs[k].childs[l].code)
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      return arr
     },
     addServicePrice() {
       this.servicePrice.push({
@@ -424,6 +488,48 @@ export default {
     },
     submit() {
       this.submitLoading = true
+      let arr = []
+      if(this.serviceArea && this.serviceArea.length > 0) {
+        for (let i=0;i<this.serviceArea.length;i++) {
+          if (this.serviceArea[i].length > 2) {
+            if(this.checkSelectAreaInCity(this.serviceArea[i][2]) == this.checkTotalAreaInCity(this.serviceArea[i]).length){
+              arr.push({
+                countryCode: this.serviceArea[i][0] || null,
+                provinceCode: this.serviceArea[i][1] || null,
+                cityCode: this.serviceArea[i][2] || null,
+                districtCodes: null
+              })
+            } else {
+              arr.push({
+                countryCode: this.serviceArea[i][0] || null,
+                provinceCode: this.serviceArea[i][1] || null,
+                cityCode: this.serviceArea[i][2] || null,
+                districtCodes: this.serviceArea[i][3] || null
+              })
+            }
+          } else {
+            arr.push({
+              countryCode: this.serviceArea[i][0] || null,
+              provinceCode: this.serviceArea[i][1] || null,
+              cityCode: null,
+              districtCodes: null
+            })
+          }
+        }
+      }
+      for (let i=0, len=arr.length; i<len; i++) {
+        for (let j=i+1; j<len; j++) {
+          if(arr[i].cityCode && arr[i].cityCode != null) {
+            if (arr[i].cityCode == arr[j].cityCode && arr[i].districtCodes == arr[j].districtCodes) {
+              arr.splice(j, 1)
+              // splice 会改变数组长度，所以要将数组长度 len 和下标 j 减一
+              len--
+              j--
+            }
+          }
+        }
+      }
+      this.cityCodes = arr
       if(!this.serviceCode || this.serviceCode == '') {
         this.$message({
           message: '请先选择关联业务',
@@ -456,17 +562,6 @@ export default {
         return
       }
 
-      if(!this.content || this.content == '') {
-        this.$message({
-          message: '请先填写服务介绍',
-          type: 'error',
-          showClose: true,
-          duration: 1000
-        })
-        this.submitLoading = false
-        return
-      }
-
       let items = []
       if (this.servicePrice.length > 0) {
         for(let i=0;i<this.servicePrice.length;i++){
@@ -479,13 +574,18 @@ export default {
       if (this.$route.query.id) {
         let params = {
           id: this.$route.query.id,
-          cityCodes: this.cityCodes,
+          // cityCodes: this.cityCodes,
           imgs: this.fileIntroList,
           introduce: this.content,
           logo: this.serviceLogoId,
           serviceCode: this.serviceCode,
           title: this.title,
-          items: items
+          items: items,
+          deliveryDuration: this.deliveryDuration,
+          deliveryMaterial: this.deliveryMaterial,
+          handleMaterial: this.handleMaterial,
+          handleProcessDuration: this.handleProcessDuration,
+          serviceDistrictVos: this.cityCodes
         }
         serviceManager.serviceUpdate(params).then(res => {
           if(res.code == 0){
@@ -503,13 +603,18 @@ export default {
         })
       } else {
         let params = {
-          cityCodes: this.cityCodes,
+          // cityCodes: this.cityCodes,
           imgs: this.fileIntroList,
           introduce: this.content,
           logo: this.serviceLogoId,
           serviceCode: this.serviceCode,
           title: this.title,
-          items: this.servicePrice
+          items: this.servicePrice,
+          deliveryDuration: this.deliveryDuration,
+          deliveryMaterial: this.deliveryMaterial,
+          handleMaterial: this.handleMaterial,
+          handleProcessDuration: this.handleProcessDuration,
+          serviceDistrictVos: this.cityCodes
         }
         serviceManager.serviceAdd(params).then(res => {
           if(res.code == 0){
@@ -696,6 +801,27 @@ export default {
             }
           }
         }
+        .formItem.textArea {
+          height: auto;
+          width: 800Px;
+          .input {
+            height: auto;
+            overflow: hidden;
+            .inputItem {
+              width: 350Px;
+              float: left;
+              span {
+                display: block;
+                font-family: PingFangSC-Regular;
+                font-size: 14Px;
+                line-height: 40Px;
+              }
+              textarea {
+                resize: none;
+              }
+            }
+          }
+        }
       }
     }
     .submit {
@@ -827,13 +953,13 @@ export default {
           }
         }
         .formItem.serviceArea {
-          width: 800Px;
+          width: 900Px;
           height: 200Px;
           .el-cascader-panel.is-bordered {
             display: flex;
             .el-cascader-menu {
               width: auto;
-              width: 50%;
+              width: 200Px;
             }
           }
         }
