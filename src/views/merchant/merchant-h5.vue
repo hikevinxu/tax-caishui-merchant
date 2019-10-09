@@ -361,7 +361,7 @@ export default {
     beforeRead(file) {
       let reg = regExp.imgNameEx
       if (reg.test(file.name)) {
-        Toast('文件名不能包含特殊字符！')
+        Toast('文件名不能包含回车符，\\，/，：，*，？，“，<，>，|等特殊字符，请修改文件名后重新上传！')
         return false
       }
       return true;
@@ -372,13 +372,13 @@ export default {
       if (file instanceof Array) {
         for(let i=0;i<file.length;i++){
           if(reg.test(file[i].name)){
-            Toast('文件名不能包含特殊字符！')
+            Toast('文件名不能包含回车符，\\，/，：，*，？，“，<，>，|等特殊字符，请修改文件名后重新上传！')
             return false
           }
         }
       } else {
         if (reg.test(file.name)) {
-          Toast('文件名不能包含特殊字符！')
+          Toast('文件名不能包含回车符，\\，/，：，*，？，“，<，>，|等特殊字符，请修改文件名后重新上传！')
           return false
         }
       }

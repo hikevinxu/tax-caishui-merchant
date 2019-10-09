@@ -139,7 +139,7 @@ export default {
       console.log(file)
       let reg = regExp.imgNameEx
       if (reg.test(file.name)) {
-        Toast('文件名不能包含特殊字符！')
+        Toast('文件名不能包含回车符，\\，/，：，*，？，“，<，>，|等特殊字符，请修改文件名后重新上传！')
         return false
       } else {
         return true
