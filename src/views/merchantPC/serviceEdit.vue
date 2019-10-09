@@ -562,6 +562,50 @@ export default {
         return
       }
 
+      if(!this.handleProcessDuration || this.handleProcessDuration == '') {
+        this.$message({
+          message: '办理步骤及所需时间不能为空',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        this.submitLoading = false
+        return
+      }
+
+      if(!this.handleMaterial || this.handleMaterial == '') {
+        this.$message({
+          message: '办理所需材料不能为空',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        this.submitLoading = false
+        return
+      }
+
+      if(!this.deliveryMaterial || this.deliveryMaterial == '') {
+        this.$message({
+          message: '交付材料不能为空',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        this.submitLoading = false
+        return
+      }
+
+      if(!this.deliveryDuration || this.deliveryDuration == '') {
+        this.$message({
+          message: '交付时长不能为空',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        this.submitLoading = false
+        return
+      }
+
       let items = []
       if (this.servicePrice.length > 0) {
         for(let i=0;i<this.servicePrice.length;i++){
