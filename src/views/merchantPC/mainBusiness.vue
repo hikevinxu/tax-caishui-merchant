@@ -34,12 +34,6 @@
             </template>
           </el-table-column>
 
-          <!-- <el-table-column label="介绍类型" width="300PX" align="center">
-            <template slot-scope="scope">
-              <span>{{ scope.row.introduceType | typeChange }}</span>
-            </template>
-          </el-table-column> -->
-
           <el-table-column label="状态" width="120PX" align="center">
             <template slot-scope="scope">
               <el-tag v-if="scope.row.shelf == 1" type="success">{{ scope.row.shelf | statusChange }}</el-tag>
@@ -91,54 +85,6 @@
                 </el-option>
               </el-select>
             </div>
-            <!-- <div class="title" style="font-size: 14PX;color: rgba(0,0,0,0.60);">业务描述</div> -->
-            <!-- <div class="describeContent">
-              <div class="describe">
-                <div class="choseType">
-                  <div class="chose_radio">
-                    <el-radio v-model="radio" label="1">空</el-radio>
-                    <el-radio v-model="radio" label="2">自定义图片</el-radio>
-                  </div>
-                  <span style="display: block;color:rgba(0,0,0,0.12);margin-left: 8PX;margin-right: 8PX;">|</span>
-                  <div class="chose_checkbox">
-                    <el-checkbox v-model="checked">添加跳转详情</el-checkbox>
-                  </div>
-                </div>
-                <div class="textDescribe" v-show="radio == '1'">
-                  <textarea v-show="!hideIntroduceContent" class="introduceInput" v-model="introduceContent" name="" id="" cols="30" rows="10" maxlength="500"></textarea>
-                  <span v-show="!hideIntroduceContent" class="default">使用默认描述</span>
-                </div>
-                <el-upload
-                  class="upload-demo"
-                  action=""
-                  :http-request="upload"
-                  :multiple="false"
-                  :show-file-list="false">
-                  <div class="imgDesrcibe" v-show="radio == '2'">
-                    <img class="introduceImg" v-show="introduceImgUpload" :src="introduceImg" alt="" srcset="">
-                    <img v-show="!introduceImgUpload" style="display: block;width: 24PX;height: 24PX" src="@/assets/globalPc/ic_form_addphoto@3x.png" alt="">
-                    <span v-show="!introduceImgUpload">添加图片</span>
-                    <span v-show="!introduceImgUpload">尺寸建议:宽800PX, 长1000PX以内</span>
-                  </div>  
-                </el-upload>
-              </div>
-              <div class="details_img" v-show="radio == '2' && checked == true">
-                <el-input style="margin-left: 40PX;display: block; width: 90%;height: 40PX" maxlength="15" v-model="detailTitle" placeholder="请输入详情页标题"></el-input>
-                <el-upload
-                  class="upload-demo"
-                  action=""
-                  :http-request="uploadDetail"
-                  :multiple="false"
-                  :show-file-list="false">
-                  <div class="addImg">
-                    <img class="detailImg" v-show="detailImgUpload" :src="detailImg" alt="" srcset="">
-                    <img v-show="!detailImgUpload" style="display: block;width: 24PX;height: 24PX" src="@/assets/globalPc/ic_form_addphoto@3x.png" alt="">
-                    <span v-show="!detailImgUpload">添加图片</span>
-                    <span v-show="!detailImgUpload">尺寸建议:宽800PX, 长1000PX以内</span>
-                  </div>  
-                </el-upload>
-              </div>
-            </div> -->
           </div>
           <span slot="footer" class="dialog-footer" style="display: flex;justify-content: space-between;align-items: center;">
             <div class="newBtn">
@@ -151,94 +97,6 @@
             </div>
           </span>
         </el-dialog>
-
-        <!-- 编辑 -->
-        <!-- <el-dialog :visible.sync="dialogUpdate" title="编辑业务">
-          <div class="choseBusiness">
-            <div class="title" style="font-size: 14PX;color: rgba(0,0,0,0.60);">选择业务</div>
-            <div class="selectLine">
-              <el-select :disabled='disabled' style="width: 33%" @change="getType3" v-model="value3" placeholder="请选择">
-                <el-option
-                  v-for="item in options1"
-                  :key="item.code"
-                  :label="item.name"
-                  :value="item.code"
-                  >
-                </el-option>
-              </el-select>
-
-              <el-select :disabled='disabled' style="width: 33%" @change="getType4" v-model="value4" placeholder="请选择">
-                <el-option
-                  v-for="item in options5"
-                  :key="item.code"
-                  :label="item.name"
-                  :value="item.code">
-                </el-option>
-              </el-select>
-
-              <el-select :disabled='disabled' v-show="showOptions4" style="width: 33%" v-model="value5" placeholder="请选择">
-                <el-option
-                  v-for="item in options6"
-                  :key="item.code"
-                  :label="item.name"
-                  :value="item.code">
-                </el-option>
-              </el-select>
-            </div>
-            <div class="title" style="font-size: 14PX;color: rgba(0,0,0,0.60);">业务描述</div>
-            <div class="describeContent">
-              <div class="describe">
-                <div class="choseType">
-                  <div class="chose_radio">
-                    <el-radio v-model="radio" label="1">空</el-radio>
-                    <el-radio v-model="radio" label="2">自定义图片</el-radio>
-                  </div>
-                  <span style="display: block;color:rgba(0,0,0,0.12);margin-left: 8PX;margin-right: 8PX;">|</span>
-                  <div class="chose_checkbox">
-                    <el-checkbox v-model="checked">添加跳转详情</el-checkbox>
-                  </div>
-                </div>
-                <div class="textDescribe" v-show="radio == '1'">
-                  <textarea v-show="!hideIntroduceContent"  class="introduceInput" v-model="introduceContent" name="" id="" cols="30" rows="10" maxlength="500"></textarea>
-                  <span v-show="!hideIntroduceContent" class="default">使用默认描述</span>
-                </div>
-                <el-upload
-                  class="upload-demo"
-                  action=""
-                  :http-request="upload"
-                  :multiple="false"
-                  :show-file-list="false">
-                  <div class="imgDesrcibe" v-show="radio == '2'">
-                    <img class="introduceImg" v-show="introduceImgUpload" :src="introduceImg" alt="" srcset="">
-                    <img v-show="!introduceImgUpload" style="display: block;width: 24PX;height: 24PX" src="@/assets/globalPc/ic_form_addphoto@3x.png" alt="">
-                    <span v-show="!introduceImgUpload">添加图片</span>
-                    <span v-show="!introduceImgUpload">尺寸建议:宽800PX, 长1000PX以内</span>
-                  </div>  
-                </el-upload>
-              </div>
-              <div class="details_img" v-show="radio == '2' && checked == true">
-                <el-input style="margin-left: 40PX;display: block; width: 90%;height: 40PX" maxlength="15" v-model="detailTitle" placeholder="请输入详情页标题"></el-input>
-                <el-upload
-                  class="upload-demo"
-                  action=""
-                  :http-request="uploadDetail"
-                  :multiple="false"
-                  :show-file-list="false">
-                  <div class="addImg">
-                    <img class="detailImg" v-show="detailImgUpload" :src="detailImg" alt="" srcset="">
-                    <img v-show="!detailImgUpload" style="display: block;width: 24PX;height: 24PX" src="@/assets/globalPc/ic_form_addphoto@3x.png" alt="">
-                    <span v-show="!detailImgUpload">添加图片</span>
-                    <span v-show="!detailImgUpload">尺寸建议:宽800PX, 长1000PX以内</span>
-                  </div>  
-                </el-upload>
-              </div>
-            </div>
-          </div>
-          <span slot="footer" class="dialog-footer">
-            <el-button @click="dialogUpdate = false">取消</el-button>
-            <el-button type="success" @click="upDate()">保存</el-button>
-          </span>
-        </el-dialog> -->
       </div>
     </div>
     <div class="business" v-show="noData">
@@ -596,12 +454,9 @@ export default {
               this.createData.introduceContent = ''
               this.submit(this.createData)
             }else{
-              this.$message({
-                message: '请填写数据后保存',
-                type: 'warning',
-                showClose: true,
-                duration: 1000
-              })
+              this.createData.serviceCode = this.value1
+              this.createData.introduceContent = ''
+              this.submit(this.createData)
             }
           }else{
             this.createData.serviceCode = this.value1
@@ -696,235 +551,6 @@ export default {
         }
       }
     },
-    // upDate(){
-    //   if(this.radio == '1'){
-    //     this.createData.introduceType = 'text'
-    //     if(this.value3 != '' &&  this.value4 != ''){
-    //       if(this.showOptions4 == true){
-    //         if(this.value5 != ''){
-    //           this.createData.code = this.value5
-    //           this.createData.id = this.id
-    //           this.createData.introduceContent = ''
-    //           console.log(this.createData)
-    //           this.submitUpdate(this.createData)
-    //         }else{
-    //           this.$message({
-    //             message: '请填写数据后保存',
-    //             type: 'warning',
-    //             showClose: true,
-    //             duration: 1000
-    //           })
-    //         }
-    //       }else{
-    //         this.createData.code = this.value4
-    //         this.createData.id = this.id
-    //         console.log(this.createData)
-    //         this.submitUpdate(this.createData)
-    //       }
-    //     }else{
-    //       this.$message({
-    //         message: '请填写数据后保存',
-    //         type: 'warning',
-    //         showClose: true,
-    //         duration: 1000
-    //       })
-    //     }
-    //   }else if(this.radio == '2'){
-    //     this.createData.introduceType = 'image'
-    //     if(this.checked == false){
-    //       if(this.value3 != '' && this.value4 != ''){
-    //         if(this.showOptions4 == true){
-    //           if(this.value5 != ''){
-    //             this.createData.code = this.value5
-    //             this.createData.id = this.id
-    //             let introduceContent = {}
-    //             introduceContent.detailJump = false
-    //             if(this.introduceImg == ''){
-    //               if(this.fileId == ''){
-    //                 this.$message({
-    //                   message: '请填写数据后保存',
-    //                   type: 'warning',
-    //                   showClose: true,
-    //                   duration: 1000
-    //                 })
-    //                 return
-    //               }else{
-    //                 introduceContent.introduceImg = this.fileId
-    //               }
-    //             }else{
-    //               if(this.fileId == ''){
-    //                 introduceContent.introduceImg = this.introduceImg
-    //               }else{
-    //                 introduceContent.introduceImg = this.fileId
-    //               }
-    //             }
-    //             this.createData.introduceContent = JSON.stringify(introduceContent)
-    //             console.log(this.createData)
-    //             this.submitUpdate(this.createData)
-    //           }else{
-    //             this.$message({
-    //               message: '请填写数据后保存',
-    //               type: 'warning',
-    //               showClose: true,
-    //               duration: 1000
-    //             })
-    //           }
-    //         }else{
-    //           this.createData.code = this.value4
-    //           this.createData.id = this.id
-    //           let introduceContent = {}
-    //           introduceContent.detailJump = false
-    //           if(this.introduceImg == ''){
-    //             if(this.fileId == ''){
-    //               this.$message({
-    //                 message: '请填写数据后保存',
-    //                 type: 'warning',
-    //                 showClose: true,
-    //                 duration: 1000
-    //               })
-    //               return
-    //             }else{
-    //               introduceContent.introduceImg = this.fileId
-    //             }
-    //           }else{
-    //             if(this.fileId == ''){
-    //               introduceContent.introduceImg = this.introduceImg
-    //             }else{
-    //               introduceContent.introduceImg = this.fileId
-    //             }
-    //           }
-    //           console.log(introduceContent)
-    //           this.createData.introduceContent = JSON.stringify(introduceContent)
-    //           this.submitUpdate(this.createData)
-    //         }
-    //       }else{
-    //         this.$message({
-    //           message: '请填写数据后保存',
-    //           type: 'warning',
-    //           showClose: true,
-    //           duration: 1000
-    //         })
-    //       }
-    //     }else {
-    //       if(this.value3 != '' &&  this.value4 != ''){
-    //         if(this.showOptions4 == true){
-    //           if(this.value5 != ''){
-    //             this.createData.code = this.value5
-    //             this.createData.id = this.id
-    //             let introduceContent = {}
-    //             introduceContent.detailJump = true
-    //             if(this.introduceImg == ''){
-    //               if(this.fileId == ''){
-    //                 this.$message({
-    //                   message: '请填写数据后保存',
-    //                   type: 'warning',
-    //                   showClose: true,
-    //                   duration: 1000
-    //                 })
-    //                 return
-    //               }else{
-    //                 introduceContent.introduceImg = this.fileId
-    //               }
-    //             }else{
-    //               if(this.fileId == ''){
-    //                 introduceContent.introduceImg = this.introduceImg
-    //               }else{
-    //                 introduceContent.introduceImg = this.fileId
-    //               }
-    //             }
-    //             //编辑判断图片是否自带
-    //             if(this.detailImg == ''){
-    //               if(this.fileIdDetail == ''){
-    //                 this.$message({
-    //                   message: '请填写数据后保存',
-    //                   type: 'warning',
-    //                   showClose: true,
-    //                   duration: 1000
-    //                 })
-    //                 return
-    //               }else{
-    //                 introduceContent.detailImg = this.fileIdDetail
-    //               }
-    //             }else{
-    //               if(this.fileIdDetail == ''){
-    //                 introduceContent.detailImg = this.detailImg
-    //               }else{
-    //                 introduceContent.detailImg = this.fileIdDetail
-    //               }
-    //             }
-    //             introduceContent.detailTitle = this.detailTitle
-    //             console.log(introduceContent)
-    //             this.createData.introduceContent = JSON.stringify(introduceContent)
-    //             this.submitUpdate(this.createData)
-    //           }else{
-    //             this.$message({
-    //               message: '请填写数据后保存',
-    //               type: 'warning',
-    //               showClose: true,
-    //               duration: 1000
-    //             })
-    //           }
-    //         }else{
-    //           this.createData.code = this.value4
-    //           this.createData.id = this.id
-    //           let introduceContent = {}
-    //           introduceContent.detailJump = true
-    //           //编辑判断图片是否自带
-    //           if(this.introduceImg == ''){
-    //             if(this.fileId == ''){
-    //               this.$message({
-    //                 message: '请填写数据后保存',
-    //                 type: 'warning',
-    //                 showClose: true,
-    //                 duration: 1000
-    //               })
-    //               return
-    //             }else{
-    //               introduceContent.introduceImg = this.fileId
-    //             }
-    //           }else{
-    //             if(this.fileId == ''){
-    //               introduceContent.introduceImg = this.introduceImg
-    //             }else{
-    //               introduceContent.introduceImg = this.fileId
-    //             }
-    //           }
-    //           //编辑判断图片是否自带
-    //           if(this.detailImg == ''){
-    //             if(this.fileIdDetail == ''){
-    //               this.$message({
-    //                 message: '请填写数据后保存',
-    //                 type: 'warning',
-    //                 showClose: true,
-    //                 duration: 1000
-    //               })
-    //               return
-    //             }else{
-    //               introduceContent.detailImg = this.fileIdDetail
-    //             }
-    //           }else{
-    //             if(this.fileIdDetail == ''){
-    //               introduceContent.detailImg = this.detailImg
-    //             }else{
-    //               introduceContent.detailImg = this.fileIdDetail
-    //             }
-    //           }
-    //           introduceContent.detailTitle = this.detailTitle
-    //           console.log(introduceContent)
-    //           this.createData.introduceContent = JSON.stringify(introduceContent)
-    //           this.submitUpdate(this.createData)
-    //         }
-    //       }else{
-    //         this.$message({
-    //           message: '请填写数据后保存',
-    //           type: 'warning',
-    //           showClose: true,
-    //           duration: 1000
-    //         })
-    //       }
-    //     }
-    //   }
-    // },
     submit(data){
       api.serviceSave(data).then(res =>{
         console.log(res)
@@ -949,30 +575,6 @@ export default {
         }
       })
     },
-    // submitUpdate(data){
-    //   api.serviceUpdate(data).then(res =>{
-    //     console.log(res)
-    //     if(res.code == 0){
-    //       this.$message({
-    //         message: '保存成功',
-    //         type: 'success',
-    //         showClose: true,
-    //         duration: 1000
-    //       })
-    //       this.getList()
-    //       this.dialogUpdate = false
-    //     }else{
-    //       this.$message({
-    //         message: '保存失败',
-    //         type: 'error',
-    //         showClose: true,
-    //         duration: 1000
-    //       })
-    //       this.getList()
-    //       this.dialogUpdate = false
-    //     }
-    //   })
-    // },
     //调起添加页面
     handleFetchPv(){
       this.dialogPvVisible = true
