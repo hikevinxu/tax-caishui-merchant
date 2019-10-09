@@ -247,8 +247,8 @@ export default {
               if (serviceDistrictList && serviceDistrictList.length > 0) {
                 for(let i=0;i<serviceDistrictList.length;i++){
                   if (serviceDistrictList[i].cityCode && serviceDistrictList[i].cityCode != null) {
-                    if (serviceDistrictList[i].districtCodes && serviceDistrictList[i].districtCodes != null) {
-                      cityArr.push([serviceDistrictList[i].countryCode, serviceDistrictList[i].provinceCode, serviceDistrictList[i].cityCode, serviceDistrictList[i].districtCodes])
+                    if (serviceDistrictList[i].districtCode && serviceDistrictList[i].districtCode != null) {
+                      cityArr.push([serviceDistrictList[i].countryCode, serviceDistrictList[i].provinceCode, serviceDistrictList[i].cityCode, serviceDistrictList[i].districtCode])
                     } else {
                       let areaList = this.checkTotalAreaInCity([serviceDistrictList[i].countryCode, serviceDistrictList[i].provinceCode, serviceDistrictList[i].cityCode, null])
                       for(let j=0;j<areaList.length;j++) {
@@ -497,14 +497,14 @@ export default {
                 countryCode: this.serviceArea[i][0] || null,
                 provinceCode: this.serviceArea[i][1] || null,
                 cityCode: this.serviceArea[i][2] || null,
-                districtCodes: null
+                districtCode: null
               })
             } else {
               arr.push({
                 countryCode: this.serviceArea[i][0] || null,
                 provinceCode: this.serviceArea[i][1] || null,
                 cityCode: this.serviceArea[i][2] || null,
-                districtCodes: this.serviceArea[i][3] || null
+                districtCode: this.serviceArea[i][3] || null
               })
             }
           } else {
@@ -512,7 +512,7 @@ export default {
               countryCode: this.serviceArea[i][0] || null,
               provinceCode: this.serviceArea[i][1] || null,
               cityCode: null,
-              districtCodes: null
+              districtCode: null
             })
           }
         }
@@ -520,7 +520,7 @@ export default {
       for (let i=0, len=arr.length; i<len; i++) {
         for (let j=i+1; j<len; j++) {
           if(arr[i].cityCode && arr[i].cityCode != null) {
-            if (arr[i].cityCode == arr[j].cityCode && arr[i].districtCodes == arr[j].districtCodes) {
+            if (arr[i].cityCode == arr[j].cityCode && arr[i].districtCode == arr[j].districtCode) {
               arr.splice(j, 1)
               // splice 会改变数组长度，所以要将数组长度 len 和下标 j 减一
               len--
