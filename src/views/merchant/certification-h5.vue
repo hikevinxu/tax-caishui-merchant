@@ -137,13 +137,14 @@ export default {
     },
     beforeRead(file) {
       console.log(file)
-      let reg = regExp.imgNameEx
-      if (reg.test(file.name)) {
-        Toast('文件名不能包含回车符，\\，/，：，*，？，“，<，>，|等特殊字符，请修改文件名后重新上传！')
-        return false
-      } else {
-        return true
-      }
+      // let reg = regExp.imgNameEx
+      // if (reg.test(file.name)) {
+      //   Toast('文件名不能包含回车符，\\，/，：，*，？，“，<，>，|等特殊字符，请修改文件名后重新上传！')
+      //   return false
+      // } else {
+      //   return true
+      // }
+      return true
     },
     upload(file){
       Toast.loading({
