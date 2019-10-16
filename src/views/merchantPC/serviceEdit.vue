@@ -219,6 +219,7 @@ export default {
       }
       serviceManager.serviceEdit(params).then(res => {
         if(res.code == 0) {
+          loading.close()
           this.serviceCode = res.data.serviceCode
           let parentCodes = res.data.parentCodes
           let serviceDistrictList = res.data.serviceDistrictList
