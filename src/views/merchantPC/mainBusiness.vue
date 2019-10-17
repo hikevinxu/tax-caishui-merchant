@@ -112,7 +112,7 @@
           <div class="title">
             <span>主业务</span>
             <span v-show="showTwo">子业务</span>
-            <span v-show="showThree">子子业务</span>
+            <!-- <span v-show="showThree">子子业务</span> -->
           </div>
           <el-cascader-panel v-model="casList" :props="props" :options="options" @change="casa" @expand-change="chose"></el-cascader-panel>
         </div>
