@@ -33,7 +33,7 @@
         <span v-else class="icon"><img src="@/assets/globalPc/ic_b_service.png" alt=""></span>
         <span slot="title">服务管理</span>
       </el-menu-item>
-      <el-menu-item index="/recordsCenter" route="/recordsCenter">
+      <!-- <el-menu-item index="/recordsCenter" route="/recordsCenter">
         <span v-if="activeMenu == '/recordsCenter'" class="icon"><img src="@/assets/globalPc/ic_b_data_w.png" alt=""></span>
         <span v-else class="icon"><img src="@/assets/globalPc/ic_b_data.png" alt=""></span>
         <span slot="title">数据中心</span>
@@ -42,7 +42,7 @@
         <span v-if="activeMenu == '/messageCenter'" class="icon"><img src="@/assets/globalPc/ic_b_message_w.png" alt=""></span>
         <span v-else class="icon"><img src="@/assets/globalPc/ic_b_message.png" alt=""></span>
         <span slot="title">消息中心 <span v-if="msg && unread > 0" class="msgUnread">{{unread}}</span></span>
-      </el-menu-item>
+      </el-menu-item> -->
     </el-menu>
   </div>
 </template>
@@ -71,7 +71,7 @@ export default {
     window.addEventListener("popstate", function() {
       that.activeMenu = that.$route.meta.path ? that.$route.meta.path : that.$route.path
     }, false)
-    this.initIM()
+    // this.initIM()
   },
   methods: {
     handleOpen(key, keyPath) {

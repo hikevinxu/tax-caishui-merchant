@@ -45,7 +45,7 @@
           </div>
         </div>
       </div>
-      <div class="data">
+      <!-- <div class="data">
         <div class="data_title">
           <h4>当月数据</h4>
           <div class="compile" @click="goMessage">
@@ -76,8 +76,8 @@
             </div>
           </div>
         </div>
-      </div>
-      <div class="new">
+      </div> -->
+      <!-- <div class="new">
         <div class="container">
           <div class="new_title">
             <h4>商家新鲜事</h4>
@@ -92,7 +92,7 @@
             <el-button type="success" @click="save()">保存</el-button>
           </span>
         </div>
-      </div>
+      </div> -->
   </div>
 </template>
 <script>
