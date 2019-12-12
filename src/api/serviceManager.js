@@ -76,5 +76,13 @@ export default {
    */
   serviceTemplate (params) {
     return fetchGet('/service/template', params)
+  },
+  /**
+   * 服务类型数据
+   * @function serviceTypeTrees
+   * @type 'GET'
+   */
+  serviceTypeTrees (data) {
+    return fetchGet('/serviceType/trees', data)
   }
 }
