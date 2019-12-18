@@ -51,7 +51,7 @@
                     <!-- <img style="display: block;width: 120PX;height: 120PX;margin-bottom: 8PX;" src="@/assets/globalPc/qrcode.png" alt=""> -->
                     <!-- <span style="font-size: 12PX;color: #FFFFFF;">下载财税鱼APP</span> -->
                 </div>
-                <span class="line">Copyright 2019  |  杭州税牛科技有限公司  |  浙ICP备19028668号  |  <a href="https://res.caishuiyu.com/common/h5/privacy_agreement.html" style="text-decoration-line: none;color: #ffffff;">用户隐私协议</a>  |  All Rights Reserved</span>
+                <span class="line">Copyright 2019  |  杭州税牛科技有限公司  |  <a target="_blank" href="http://www.beian.miit.gov.cn" style="display:inline-block;text-decoration:none;height:20px;line-height:20px;color: #FFFFFF;">浙ICP备19028668号</a>  |  <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=33010602010368" style="display:inline-block;text-decoration:none;height:20px;line-height:20px; color: #FFFFFF;"><img src="@/assets/globalPc/beian.png" style="float:left;"/>浙公网安备 33010602010368号</a>  |  <a href="https://res.caishuiyu.com/common/h5/privacy_agreement.html" style="text-decoration-line: none;color: #ffffff;">用户隐私协议</a>  |  All Rights Reserved</span>
                 <span class="line">  地址：杭州市西湖区金色西溪商务中心B座</span>
             </div>
         </div>
